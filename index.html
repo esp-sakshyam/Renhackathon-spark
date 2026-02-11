@@ -150,21 +150,24 @@
           </li>
         </ul>
 
-        <!-- Desktop CTA -->
-        <a href="#cta" class="btn btn--primary btn--sm navbar__cta">
-          Get Started
-          <svg
-            class="btn__icon"
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M3 8h10M9 4l4 4-4 4" />
-          </svg>
-        </a>
+        <!-- Desktop Auth Links -->
+        <div class="navbar__auth" style="display:flex;align-items:center;gap:.5rem">
+          <a href="login.html" class="btn btn--ghost btn--sm navbar__cta" style="border:1px solid rgba(255,255,255,.25);color:#fff">Log In</a>
+          <a href="signup.html" class="btn btn--primary btn--sm navbar__cta">
+            Sign Up
+            <svg
+              class="btn__icon"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M3 8h10M9 4l4 4-4 4" />
+            </svg>
+          </a>
+        </div>
 
         <!-- Mobile hamburger -->
         <button
@@ -187,14 +190,8 @@
           <li><a href="#community">Community</a></li>
           <li><a href="#alerts">Alerts</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
-          <li>
-            <a
-              href="#cta"
-              class="btn btn--primary btn--sm"
-              style="text-align: center"
-              >Get Started</a
-            >
-          </li>
+          <li><a href="login.html" class="btn btn--ghost btn--sm" style="text-align:center;border:1px solid rgba(255,255,255,.25);color:#fff;width:100%">Log In</a></li>
+          <li><a href="signup.html" class="btn btn--primary btn--sm" style="text-align:center;width:100%">Sign Up</a></li>
         </ul>
       </div>
     </nav>

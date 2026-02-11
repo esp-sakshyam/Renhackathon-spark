@@ -49,7 +49,7 @@
         if (!unix) return 'Unknown';
         var d = new Date(unix * 1000);
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
-               ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            ' at ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     }
 
     function showAlert(msg, type) {
@@ -201,16 +201,16 @@
             user_id: currentUser.user_id,
             password: pwd
         })
-        .then(function (res) {
-            if (res.success) {
-                showAlert('Password changed successfully!');
-                newPassword.value = '';
-                confirmPassword.value = '';
-            } else {
-                showAlert(res.message || 'Password change failed.', 'danger');
-            }
-        })
-        .catch(function () { showAlert('Network error. Try again.', 'danger'); });
+            .then(function (res) {
+                if (res.success) {
+                    showAlert('Password changed successfully!');
+                    newPassword.value = '';
+                    confirmPassword.value = '';
+                } else {
+                    showAlert(res.message || 'Password change failed.', 'danger');
+                }
+            })
+            .catch(function () { showAlert('Network error. Try again.', 'danger'); });
     });
 
 
