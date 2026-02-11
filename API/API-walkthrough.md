@@ -18,6 +18,8 @@
 - [5. Questions API](#5-questions-api)
 - [6. Answers API](#6-answers-api)
 - [7. Warnings API (Emergency Alerts)](#7-warnings-api-emergency-alerts)
+- [8. Emails API (Subscriber Notifications)](#8-emails-api-subscriber-notifications)
+- [Email Notification Triggers](#email-notification-triggers)
 - [Error Handling](#error-handling)
 - [Status Codes](#status-codes)
 
@@ -84,6 +86,7 @@ On error:
 | `data`      | `data_id`     | Sensor readings uploaded by devices   |
 | `questions` | `question_id` | Community forum questions             |
 | `answers`   | `answer_id`   | Replies to forum questions            |
+| `emails`    | `email_id`    | Subscribed emails for notifications   |
 | `warnings`  | `warning_id`  | Admin-broadcast emergency alerts      |
 
 ---
@@ -92,19 +95,22 @@ On error:
 
 ```
 API/
+├── database.php         ← Shared PDO connection + helpers
 ├── create/
 │   ├── users.php
 │   ├── crops.php
 │   ├── devices.php
-│   ├── data.php
+│   ├── data.php         ← Triggers email notifications
+│   ├── emails.php
 │   ├── questions.php
 │   ├── answers.php
-│   └── warnings.php
+│   └── warnings.php     ← Triggers email notifications
 ├── read/
 │   ├── users.php
 │   ├── crops.php
 │   ├── devices.php
 │   ├── data.php
+│   ├── emails.php
 │   ├── questions.php
 │   ├── answers.php
 │   └── warnings.php
@@ -113,6 +119,7 @@ API/
 │   ├── crops.php
 │   ├── devices.php
 │   ├── data.php
+│   ├── emails.php
 │   ├── questions.php
 │   ├── answers.php
 │   └── warnings.php
@@ -121,6 +128,7 @@ API/
 │   ├── crops.php
 │   ├── devices.php
 │   ├── data.php
+│   ├── emails.php
 │   ├── questions.php
 │   ├── answers.php
 │   └── warnings.php
@@ -1368,6 +1376,180 @@ Remove an emergency alert.
 
 ---
 
+## 8. Emails API (Subscriber Notifications)
+
+> Manages email subscriptions for receiving sensor data and emergency alert notifications.
+
+### `emails` Table Schema
+
+| Column          | Type                      | Description                                  |
+| --------------- | ------------------------- | -------------------------------------------- |
+| `email_id`      | `int(11)` AUTO_INCREMENT  | Primary key                                  |
+| `email`         | `text`                    | Subscriber's email address                   |
+| `name`          | `text`                    | Subscriber's display name                    |
+| `subscribed_at` | `text`                    | Timestamp when the subscriber signed up      |
+| `is_active`     | `tinyint(1)` DEFAULT `1`  | `1` = active, `0` = unsubscribed             |
+
+---
+
+### CREATE — `POST /create/emails.php`
+
+Register a new email subscriber.
+
+**Request Body:**
+
+```json
+{
+  "email": "farmer.ram@example.com",
+  "name": "Ram Thapa",
+  "subscribed_at": "2026-02-11 07:00:00"
+}
+```
+
+| Field           | Required | Type   | Description                  |
+| --------------- | -------- | ------ | ---------------------------- |
+| `email`         | **Yes**  | string | Subscriber email address     |
+| `name`          | **Yes**  | string | Subscriber display name      |
+| `subscribed_at` | **Yes**  | string | Signup timestamp             |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Email subscriber registered successfully",
+  "data": {
+    "email_id": 1
+  }
+}
+```
+
+---
+
+### READ — `POST /read/emails.php`
+
+Fetch one subscriber by ID, or all active subscribers.
+
+**Request Body (single):**
+
+```json
+{
+  "email_id": 1
+}
+```
+
+**Request Body (all active):**
+
+```json
+{}
+```
+
+| Field      | Required | Type | Description                                     |
+| ---------- | -------- | ---- | ----------------------------------------------- |
+| `email_id` | No       | int  | Specific subscriber ID; omit to fetch all active |
+
+**Success Response (all):**
+
+```json
+{
+  "success": true,
+  "message": "Subscribers fetched successfully",
+  "data": [
+    {
+      "email_id": 1,
+      "email": "farmer.ram@example.com",
+      "name": "Ram Thapa",
+      "subscribed_at": "2026-02-11 07:00:00",
+      "is_active": 1
+    }
+  ]
+}
+```
+
+---
+
+### UPDATE — `POST /update/emails.php`
+
+Update a subscriber's details or toggle their active status (unsubscribe/resubscribe).
+
+**Request Body:**
+
+```json
+{
+  "email_id": 1,
+  "is_active": 0
+}
+```
+
+| Field      | Required | Type   | Description                          |
+| ---------- | -------- | ------ | ------------------------------------ |
+| `email_id` | **Yes**  | int    | ID of the subscriber to update       |
+| `email`    | No       | string | Updated email address                |
+| `name`     | No       | string | Updated display name                 |
+| `is_active`| No       | int    | `1` to resubscribe, `0` to unsubscribe |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Subscriber updated successfully"
+}
+```
+
+---
+
+### DELETE — `POST /delete/emails.php`
+
+Permanently remove a subscriber from the database.
+
+**Request Body:**
+
+```json
+{
+  "email_id": 1
+}
+```
+
+| Field      | Required | Type | Description                     |
+| ---------- | -------- | ---- | ------------------------------- |
+| `email_id` | **Yes**  | int  | ID of the subscriber to delete  |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Subscriber deleted successfully"
+}
+```
+
+---
+
+---
+
+## Email Notification Triggers
+
+Two endpoints automatically send email notifications to **all active subscribers** (`is_active = 1` in the `emails` table):
+
+| Trigger Endpoint       | When                                   | Email Subject Prefix        |
+| ---------------------- | -------------------------------------- | --------------------------- |
+| `/create/data.php`     | New sensor reading uploaded by a device | `AgroPan — New Sensor Data` |
+| `/create/warnings.php` | New emergency alert issued by admin     | `AgroPan Emergency Alert`   |
+
+The `notifyAllSubscribers()` helper function in `database.php` handles the fan-out:
+
+1. Queries all active subscribers from the `emails` table
+2. Personalises each email with the subscriber's name
+3. Sends via PHP's `mail()` function
+4. Silently logs failures — email errors never break the main API response
+
+> **Note:** For production, replace `mail()` with a proper SMTP library (e.g., PHPMailer) or a transactional email API (SendGrid, Mailgun, etc.).
+
+---
+
+---
+
 ## Error Handling
 
 All endpoints return errors in a consistent format:
@@ -1435,7 +1617,11 @@ All endpoints return errors in a consistent format:
 | `/read/warnings.php`    | POST   | Fetch alert(s)          |
 | `/update/warnings.php`  | POST   | Update an alert         |
 | `/delete/warnings.php`  | POST   | Remove an alert         |
+| `/create/emails.php`   | POST   | Subscribe an email      |
+| `/read/emails.php`     | POST   | Fetch subscriber(s)     |
+| `/update/emails.php`   | POST   | Update/unsubscribe      |
+| `/delete/emails.php`   | POST   | Delete a subscriber     |
 
 ---
 
-_Document version: 1.0 · Last updated: February 2026_
+_Document version: 2.0 · Last updated: February 2026_
