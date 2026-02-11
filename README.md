@@ -83,18 +83,18 @@ This is the complete, step-by-step guide to build the AgroPan IoT sensor node fr
 
 ## 1. Bill of Materials (BOM)
 
-| # | Component | Specification | Qty | Approx. Cost (NPR) | Notes |
-|---|-----------|---------------|-----|---------------------|-------|
-| 1 | **ESP32-S3 Dev Module** | ESP32-S3-DevKitC-1 or N16R8 variant | 1 | ₹800–1200 | Must be S3 variant (not ESP32 or S2) |
-| 2 | **MQ135 Gas Sensor Module** | Breakout board with AO (analog out) pin | 1 | ₹200–350 | Has on-board comparator + analog output |
-| 3 | **Capacitive Soil Moisture Sensor v1.2** | Corrosion-resistant, analog output | 1 | ₹150–250 | Do NOT use resistive type (corrodes fast) |
-| 4 | **DHT22 Sensor** (AM2302) | Temperature + Humidity, digital output | 1 | ₹300–500 | DHT22 is more accurate than DHT11 |
-| 5 | **1.3" OLED Display** | SSD1306 driver, I2C, 128×64 pixels | 1 | ₹250–400 | Must be I2C (4-pin: VCC, GND, SDA, SCL) |
-| 6 | **Breadboard** | Full-size 830 tie-point | 1 | ₹100 | For prototyping |
-| 7 | **Jumper Wires** | Male-to-Male and Male-to-Female | 20+ | ₹80 | Assorted colors recommended |
-| 8 | **USB-C Cable** | Data + Power capable | 1 | ₹100 | Some cheap cables are charge-only — avoid those |
-| 9 | **10kΩ Resistor** | 1/4W through-hole | 1 | ₹5 | Pull-up for DHT22 data line |
-| 10 | **5V Power Supply** (optional) | USB adapter or LiPo + regulator | 1 | ₹150 | For field deployment (USB power bank works too) |
+| #   | Component                                | Specification                           | Qty | Approx. Cost (NPR) | Notes                                           |
+| --- | ---------------------------------------- | --------------------------------------- | --- | ------------------ | ----------------------------------------------- |
+| 1   | **ESP32-S3 Dev Module**                  | ESP32-S3-DevKitC-1 or N16R8 variant     | 1   | ₹800–1200          | Must be S3 variant (not ESP32 or S2)            |
+| 2   | **MQ135 Gas Sensor Module**              | Breakout board with AO (analog out) pin | 1   | ₹200–350           | Has on-board comparator + analog output         |
+| 3   | **Capacitive Soil Moisture Sensor v1.2** | Corrosion-resistant, analog output      | 1   | ₹150–250           | Do NOT use resistive type (corrodes fast)       |
+| 4   | **DHT22 Sensor** (AM2302)                | Temperature + Humidity, digital output  | 1   | ₹300–500           | DHT22 is more accurate than DHT11               |
+| 5   | **1.3" OLED Display**                    | SSD1306 driver, I2C, 128×64 pixels      | 1   | ₹250–400           | Must be I2C (4-pin: VCC, GND, SDA, SCL)         |
+| 6   | **Breadboard**                           | Full-size 830 tie-point                 | 1   | ₹100               | For prototyping                                 |
+| 7   | **Jumper Wires**                         | Male-to-Male and Male-to-Female         | 20+ | ₹80                | Assorted colors recommended                     |
+| 8   | **USB-C Cable**                          | Data + Power capable                    | 1   | ₹100               | Some cheap cables are charge-only — avoid those |
+| 9   | **10kΩ Resistor**                        | 1/4W through-hole                       | 1   | ₹5                 | Pull-up for DHT22 data line                     |
+| 10  | **5V Power Supply** (optional)           | USB adapter or LiPo + regulator         | 1   | ₹150               | For field deployment (USB power bank works too) |
 
 **Total Estimated Cost: ₹2,000 – ₹3,200** (~$15–25 USD)
 
@@ -129,17 +129,17 @@ This is the complete, step-by-step guide to build the AgroPan IoT sensor node fr
 1. Go to **Tools** → **Board** → **esp32** → **ESP32S3 Dev Module**
 2. Configure these settings under **Tools** menu:
 
-| Setting | Value |
-|---|---|
-| **Board** | ESP32S3 Dev Module |
-| **USB CDC On Boot** | Enabled |
-| **CPU Frequency** | 240MHz (WiFi) |
-| **Flash Mode** | QIO 80MHz |
-| **Flash Size** | 16MB (or match your board) |
-| **Partition Scheme** | Default 4MB with spiffs (or Huge APP if needed) |
-| **PSRAM** | OPI PSRAM (if your board has PSRAM, else Disabled) |
-| **Upload Mode** | UART0 / Hardware CDC |
-| **Upload Speed** | 921600 |
+| Setting              | Value                                              |
+| -------------------- | -------------------------------------------------- |
+| **Board**            | ESP32S3 Dev Module                                 |
+| **USB CDC On Boot**  | Enabled                                            |
+| **CPU Frequency**    | 240MHz (WiFi)                                      |
+| **Flash Mode**       | QIO 80MHz                                          |
+| **Flash Size**       | 16MB (or match your board)                         |
+| **Partition Scheme** | Default 4MB with spiffs (or Huge APP if needed)    |
+| **PSRAM**            | OPI PSRAM (if your board has PSRAM, else Disabled) |
+| **Upload Mode**      | UART0 / Hardware CDC                               |
+| **Upload Speed**     | 921600                                             |
 
 ### Step 2.5 — Install USB Drivers (if needed)
 
@@ -158,14 +158,14 @@ Open **Arduino IDE** → **Sketch** → **Include Library** → **Manage Librari
 
 Install each of the following (search by name):
 
-| # | Library Name | Author | Version | Search Term |
-|---|---|---|---|---|
-| 1 | **WiFiManager** | tzapu / tablatronix | ≥ 2.0.x | `WiFiManager` |
-| 2 | **ArduinoJson** | Benoît Blanchon | ≥ 6.x or 7.x | `ArduinoJson` |
-| 3 | **Adafruit SSD1306** | Adafruit | ≥ 2.5.x | `Adafruit SSD1306` |
-| 4 | **Adafruit GFX Library** | Adafruit | ≥ 1.11.x | `Adafruit GFX` (auto-installed with SSD1306) |
-| 5 | **DHT sensor library** | Adafruit | ≥ 1.4.x | `DHT sensor` |
-| 6 | **Adafruit Unified Sensor** | Adafruit | ≥ 1.1.x | `Adafruit Unified Sensor` (dependency of DHT) |
+| #   | Library Name                | Author              | Version      | Search Term                                   |
+| --- | --------------------------- | ------------------- | ------------ | --------------------------------------------- |
+| 1   | **WiFiManager**             | tzapu / tablatronix | ≥ 2.0.x      | `WiFiManager`                                 |
+| 2   | **ArduinoJson**             | Benoît Blanchon     | ≥ 6.x or 7.x | `ArduinoJson`                                 |
+| 3   | **Adafruit SSD1306**        | Adafruit            | ≥ 2.5.x      | `Adafruit SSD1306`                            |
+| 4   | **Adafruit GFX Library**    | Adafruit            | ≥ 1.11.x     | `Adafruit GFX` (auto-installed with SSD1306)  |
+| 5   | **DHT sensor library**      | Adafruit            | ≥ 1.4.x      | `DHT sensor`                                  |
+| 6   | **Adafruit Unified Sensor** | Adafruit            | ≥ 1.1.x      | `Adafruit Unified Sensor` (dependency of DHT) |
 
 > **Tip**: When you install "Adafruit SSD1306", the IDE will prompt to install dependencies (GFX, BusIO). Click **"Install All"**.
 
@@ -201,22 +201,22 @@ After installation, go to **Sketch** → **Include Library** — you should see 
 
 ### Master Wiring Table
 
-| Wire # | From (Component Pin) | To (ESP32-S3 Pin) | Wire Color (Suggested) | Notes |
-|--------|----------------------|--------------------|------------------------|-------|
-| 1 | MQ135 → **VCC** | **5V** (VIN pin) | 🔴 Red | MQ135 needs 5V for heater |
-| 2 | MQ135 → **GND** | **GND** | ⚫ Black | Common ground |
-| 3 | MQ135 → **AO** | **GPIO 4** | 🟡 Yellow | Analog output (0–3.3V via onboard divider) |
-| 4 | Soil Sensor → **VCC** | **3V3** | 🔴 Red | 3.3V powered (do NOT use 5V) |
-| 5 | Soil Sensor → **GND** | **GND** | ⚫ Black | Common ground |
-| 6 | Soil Sensor → **AOUT** | **GPIO 5** | 🟠 Orange | Analog output |
-| 7 | DHT22 → **VCC** (Pin 1) | **3V3** | 🔴 Red | 3.3V power |
-| 8 | DHT22 → **DATA** (Pin 2) | **GPIO 16** | 🟢 Green | Digital data line |
-| 9 | DHT22 → **GND** (Pin 4) | **GND** | ⚫ Black | Pin 3 is not connected |
-| 10 | **10kΩ Resistor** | DHT22 **VCC** ↔ DHT22 **DATA** | — | Pull-up resistor between Pin 1 and Pin 2 |
-| 11 | OLED → **VCC** | **3V3** | 🔴 Red | 3.3V power |
-| 12 | OLED → **GND** | **GND** | ⚫ Black | Common ground |
-| 13 | OLED → **SDA** | **GPIO 8** | 🔵 Blue | I2C Data |
-| 14 | OLED → **SCL** | **GPIO 9** | ⚪ White | I2C Clock |
+| Wire # | From (Component Pin)     | To (ESP32-S3 Pin)              | Wire Color (Suggested) | Notes                                      |
+| ------ | ------------------------ | ------------------------------ | ---------------------- | ------------------------------------------ |
+| 1      | MQ135 → **VCC**          | **5V** (VIN pin)               | 🔴 Red                 | MQ135 needs 5V for heater                  |
+| 2      | MQ135 → **GND**          | **GND**                        | ⚫ Black               | Common ground                              |
+| 3      | MQ135 → **AO**           | **GPIO 4**                     | 🟡 Yellow              | Analog output (0–3.3V via onboard divider) |
+| 4      | Soil Sensor → **VCC**    | **3V3**                        | 🔴 Red                 | 3.3V powered (do NOT use 5V)               |
+| 5      | Soil Sensor → **GND**    | **GND**                        | ⚫ Black               | Common ground                              |
+| 6      | Soil Sensor → **AOUT**   | **GPIO 5**                     | 🟠 Orange              | Analog output                              |
+| 7      | DHT22 → **VCC** (Pin 1)  | **3V3**                        | 🔴 Red                 | 3.3V power                                 |
+| 8      | DHT22 → **DATA** (Pin 2) | **GPIO 16**                    | 🟢 Green               | Digital data line                          |
+| 9      | DHT22 → **GND** (Pin 4)  | **GND**                        | ⚫ Black               | Pin 3 is not connected                     |
+| 10     | **10kΩ Resistor**        | DHT22 **VCC** ↔ DHT22 **DATA** | —                      | Pull-up resistor between Pin 1 and Pin 2   |
+| 11     | OLED → **VCC**           | **3V3**                        | 🔴 Red                 | 3.3V power                                 |
+| 12     | OLED → **GND**           | **GND**                        | ⚫ Black               | Common ground                              |
+| 13     | OLED → **SDA**           | **GPIO 8**                     | 🔵 Blue                | I2C Data                                   |
+| 14     | OLED → **SCL**           | **GPIO 9**                     | ⚪ White               | I2C Clock                                  |
 
 ---
 
@@ -235,6 +235,7 @@ After installation, go to **Sketch** → **Include Library** — you should see 
 ```
 
 **Important Notes:**
+
 - The MQ135 **requires 5V** for its internal heating element. Connect VCC to the ESP32-S3's **5V/VIN** pin (USB power rail), NOT the 3.3V pin.
 - We only use the **AO (Analog Output)** pin. The DO (Digital Output) pin is not needed.
 - The MQ135 has a **24–48 hour burn-in** period for first use. Readings stabilize after warm-up.
@@ -252,6 +253,7 @@ After installation, go to **Sketch** → **Include Library** — you should see 
 ```
 
 **Important Notes:**
+
 - Use **3.3V** (not 5V) to power this sensor when using ESP32-S3 ADC.
 - **Do NOT** immerse the electronics/header part in water — only the probe section goes into soil.
 - The corrosion-resistant capacitive type (v1.2+) is essential for field deployment.
@@ -288,6 +290,7 @@ After installation, go to **Sketch** → **Include Library** — you should see 
 ```
 
 **Important Notes:**
+
 - The **10kΩ pull-up resistor** between VCC and DATA is **required**. Without it, you'll get intermittent read failures (NaN values).
 - Some DHT22 breakout boards have the resistor **built-in**. Check your board — if it has 3 pins (VCC, DATA, GND) with a small SMD resistor on the PCB, you may not need the external one.
 - **Pin 3 is not connected** (leave it floating or don't connect at all).
@@ -306,6 +309,7 @@ After installation, go to **Sketch** → **Include Library** — you should see 
 ```
 
 **Important Notes:**
+
 - This MUST be the **I2C version** (4 pins: VCC, GND, SDA, SCL). The SPI version (7 pins) will NOT work with this firmware.
 - Default I2C address is **0x3C**. If your display uses 0x3D, change `OLED_I2C_ADDR` in the firmware.
 - Keep I2C wires **short** (< 20 cm) for reliable communication.
@@ -346,14 +350,14 @@ After installation, go to **Sketch** → **Include Library** — you should see 
 
 ### Power Considerations
 
-| Component | Voltage | Current Draw |
-|---|---|---|
-| ESP32-S3 | 5V (USB) / 3.3V (internal LDO) | ~240 mA (WiFi active) |
-| MQ135 | 5V | ~150 mA (heater active) |
-| DHT22 | 3.3V | ~1.5 mA |
-| Soil Sensor | 3.3V | ~5 mA |
-| OLED SSD1306 | 3.3V | ~20 mA |
-| **Total** | — | **~420 mA** |
+| Component    | Voltage                        | Current Draw            |
+| ------------ | ------------------------------ | ----------------------- |
+| ESP32-S3     | 5V (USB) / 3.3V (internal LDO) | ~240 mA (WiFi active)   |
+| MQ135        | 5V                             | ~150 mA (heater active) |
+| DHT22        | 3.3V                           | ~1.5 mA                 |
+| Soil Sensor  | 3.3V                           | ~5 mA                   |
+| OLED SSD1306 | 3.3V                           | ~20 mA                  |
+| **Total**    | —                              | **~420 mA**             |
 
 > **A standard USB port provides 500 mA** — this is enough for prototyping. For field deployment, use a **USB power bank** (10,000 mAh = ~23 hours runtime) or a **5V/2A adapter**.
 
@@ -390,12 +394,12 @@ Before uploading, review these constants at the top of the file:
 
 **Common compilation errors:**
 
-| Error | Fix |
-|---|---|
-| `WiFiManager.h: No such file` | Install WiFiManager library (Step 3) |
+| Error                              | Fix                                       |
+| ---------------------------------- | ----------------------------------------- |
+| `WiFiManager.h: No such file`      | Install WiFiManager library (Step 3)      |
 | `Adafruit_SSD1306.h: No such file` | Install Adafruit SSD1306 library (Step 3) |
-| `DHT.h: No such file` | Install DHT sensor library (Step 3) |
-| `Board not found` | Install ESP32 board package (Step 2.3) |
+| `DHT.h: No such file`              | Install DHT sensor library (Step 3)       |
+| `Board not found`                  | Install ESP32 board package (Step 2.3)    |
 
 ### Step 7.4 — Upload
 
@@ -488,15 +492,19 @@ The raw ADC values vary between sensor units. You MUST calibrate yours:
 
 1. **Open Serial Monitor** (115200 baud).
 2. **Dry reading**: Hold the sensor in open air. Note the raw ADC value printed:
+
    ```
    Soil Moisture : 0.0 %  (raw 3280)
    ```
+
    → Set `SOIL_DRY_VALUE` to this number (e.g., `3280`).
 
 3. **Wet reading**: Submerge the probe in a glass of water (up to the water line mark). Note:
+
    ```
    Soil Moisture : 100.0 %  (raw 1150)
    ```
+
    → Set `SOIL_WET_VALUE` to this number (e.g., `1150`).
 
 4. Re-upload the firmware with updated values.
@@ -514,6 +522,7 @@ The raw ADC values vary between sensor units. You MUST calibrate yours:
 ### 9C. DHT22
 
 No calibration needed — factory calibrated. If readings seem off:
+
 - Verify the **10kΩ pull-up** is connected.
 - Ensure adequate **ventilation** (don't enclose in a sealed box).
 - Accuracy: ±0.5°C temperature, ±2% humidity.
@@ -522,23 +531,23 @@ No calibration needed — factory calibrated. If readings seem off:
 
 ## 10. Troubleshooting
 
-| Problem | Possible Cause | Solution |
-|---|---|---|
-| **OLED is blank** | Wrong I2C address | Run an I2C scanner sketch; change `OLED_I2C_ADDR` to 0x3D if needed |
-| **OLED is blank** | SDA/SCL swapped | Swap the blue and white wires |
-| **DHT22 reads NaN** | Missing pull-up resistor | Add 10kΩ between VCC and DATA |
-| **DHT22 reads NaN** | Wrong pin | Verify GPIO 16 connection |
-| **Soil reads 0% always** | Wrong calibration values | Re-calibrate dry/wet values (see 9A) |
-| **Soil reads 100% always** | Sensor powered at 5V | Use 3.3V for the soil sensor |
-| **MQ135 reads very high** | Sensor not warmed up | Wait 2–3 minutes after power-on |
-| **MQ135 reads very high** | First use without burn-in | Run for 24–48 hours continuously |
-| **WiFi portal doesn't appear** | Credentials already saved | Add `wifiManager.resetSettings();` to clear them |
-| **Upload fails** | Wrong board selected | Ensure "ESP32S3 Dev Module" is selected |
-| **Upload fails** | Board not in boot mode | Hold BOOT → press RESET → release BOOT, then upload |
-| **COM port not showing** | Driver issue | Install CP210x or CH340 driver for your board |
-| **HTTP POST fails** | No internet | Check WiFi connection; verify API URL |
-| **Compile error: library not found** | Library not installed | Install all 6 libraries from Step 3 |
-| **Random reboots** | Power insufficient | Use a 5V/2A power supply; MQ135 draws ~150 mA |
+| Problem                              | Possible Cause            | Solution                                                            |
+| ------------------------------------ | ------------------------- | ------------------------------------------------------------------- |
+| **OLED is blank**                    | Wrong I2C address         | Run an I2C scanner sketch; change `OLED_I2C_ADDR` to 0x3D if needed |
+| **OLED is blank**                    | SDA/SCL swapped           | Swap the blue and white wires                                       |
+| **DHT22 reads NaN**                  | Missing pull-up resistor  | Add 10kΩ between VCC and DATA                                       |
+| **DHT22 reads NaN**                  | Wrong pin                 | Verify GPIO 16 connection                                           |
+| **Soil reads 0% always**             | Wrong calibration values  | Re-calibrate dry/wet values (see 9A)                                |
+| **Soil reads 100% always**           | Sensor powered at 5V      | Use 3.3V for the soil sensor                                        |
+| **MQ135 reads very high**            | Sensor not warmed up      | Wait 2–3 minutes after power-on                                     |
+| **MQ135 reads very high**            | First use without burn-in | Run for 24–48 hours continuously                                    |
+| **WiFi portal doesn't appear**       | Credentials already saved | Add `wifiManager.resetSettings();` to clear them                    |
+| **Upload fails**                     | Wrong board selected      | Ensure "ESP32S3 Dev Module" is selected                             |
+| **Upload fails**                     | Board not in boot mode    | Hold BOOT → press RESET → release BOOT, then upload                 |
+| **COM port not showing**             | Driver issue              | Install CP210x or CH340 driver for your board                       |
+| **HTTP POST fails**                  | No internet               | Check WiFi connection; verify API URL                               |
+| **Compile error: library not found** | Library not installed     | Install all 6 libraries from Step 3                                 |
+| **Random reboots**                   | Power insufficient        | Use a 5V/2A power supply; MQ135 draws ~150 mA                       |
 
 ### I2C Scanner Sketch (for debugging OLED)
 
@@ -569,27 +578,27 @@ void loop() {}
 
 ## Design Philosophy
 
-| Principle | Application |
-|---|---|
-| **Minimal & calm** | Muted earth tones, generous whitespace, no visual noise |
-| **Data over decoration** | Every element communicates information, nothing is ornamental |
-| **Documentary-style** | Real Nepali agriculture photography, not stock images |
-| **Trustworthy** | Professional typography, policy-grade presentation |
-| **Nepal-first** | Crop names, district-specific data, Nepali agriculture context |
+| Principle                | Application                                                    |
+| ------------------------ | -------------------------------------------------------------- |
+| **Minimal & calm**       | Muted earth tones, generous whitespace, no visual noise        |
+| **Data over decoration** | Every element communicates information, nothing is ornamental  |
+| **Documentary-style**    | Real Nepali agriculture photography, not stock images          |
+| **Trustworthy**          | Professional typography, policy-grade presentation             |
+| **Nepal-first**          | Crop names, district-specific data, Nepali agriculture context |
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| **Markup** | Semantic HTML5 |
-| **Styling** | CSS3 (Custom Properties, Flexbox, Grid) |
-| **Logic** | Vanilla JavaScript (ES5+ compatible) |
-| **Animations** | Intersection Observer API |
-| **Fonts** | Poppins, Inter, Noto Sans |
+| Layer                | Technology                                       |
+| -------------------- | ------------------------------------------------ |
+| **Markup**           | Semantic HTML5                                   |
+| **Styling**          | CSS3 (Custom Properties, Flexbox, Grid)          |
+| **Logic**            | Vanilla JavaScript (ES5+ compatible)             |
+| **Animations**       | Intersection Observer API                        |
+| **Fonts**            | Poppins, Inter, Noto Sans                        |
 | **Web Dependencies** | **Zero** — no frameworks, no build tools, no npm |
-| **IoT Firmware** | Arduino C++ (ESP32-S3), WiFiManager, ArduinoJson |
+| **IoT Firmware**     | Arduino C++ (ESP32-S3), WiFiManager, ArduinoJson |
 
 ---
 
@@ -617,12 +626,14 @@ agropan/
 ## How to Run the Landing Page
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/your-team/agropan.git
    cd agropan
    ```
 
 2. **Open in browser** — no build step required
+
    ```bash
    # Option A: Just double-click index.html
 
@@ -638,6 +649,7 @@ agropan/
 ## Key Features
 
 ### IoT Sensor Node
+
 - Real-time soil, air, temperature monitoring
 - 1.3" OLED field display with 3-screen rotation
 - Smart threshold alerts (Low Moisture, Heat, Gas)
@@ -645,21 +657,25 @@ agropan/
 - JSON API data upload every 30 seconds
 
 ### Marketplace
+
 - **Farmer accounts** — list produce, view market prices, connect with buyers
 - **Merchant accounts** — browse listings, compare prices across districts, contact farmers directly
 - Real-time crop price analysis for informed trading decisions
 
 ### Community Forum
+
 - 6 topic categories: Crop Diseases, Market Trends, Weather Advisories, Equipment Tips, Success Stories, Seasonal Guides
 - Open to all registered farmers and merchants
 - Knowledge sharing across Nepal's diverse agricultural regions
 
 ### Emergency Alerts
+
 - Admin-broadcast alerts for disease outbreaks, pest invasions, landslides, and severe weather
 - Multi-channel delivery: platform notifications, SMS, and email
 - Color-coded severity levels (Warning, Danger, Info)
 
 ### UI/UX
+
 - Mobile-first responsive design
 - Scroll-reveal animations with stagger effects
 - Glass-morphism navigation bar
@@ -674,9 +690,10 @@ agropan/
 
 **Problem:** 3.4M Nepali farming households make high-stakes planting decisions without data. One bad season can mean food insecurity.
 
-**Solution:** A zero-dependency web simulator that projects yield, risk, and profit *before planting* — paired with an affordable ESP32-S3 IoT sensor node for real-time field monitoring. Both use Nepal-specific data.
+**Solution:** A zero-dependency web simulator that projects yield, risk, and profit _before planting_ — paired with an affordable ESP32-S3 IoT sensor node for real-time field monitoring. Both use Nepal-specific data.
 
 **Differentiation:**
+
 - Not a monitoring dashboard — it's a **pre-decision** simulator + **real hardware**
 - Not a global tool — it's **calibrated to Nepal** (districts, monsoon patterns, local crop economics)
 - Not a complex app — the web tool runs in **any browser with zero setup**
@@ -699,4 +716,4 @@ Built with purpose at **Ren Hackathon Spark** — for Nepal, by people who care 
 
 MIT — Open source & policy-grade.
 
-*© 2026 AgroPan*
+_© 2026 AgroPan_

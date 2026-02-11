@@ -1,59 +1,72 @@
 ================================================================================
   AGROPAN — PROJECT PROGRESS LOG
-  Nepal's Smart Agriculture Intelligence Platform
+  Nepal's Smart Agriculture Platform
   Ren Hackathon Spark
 ================================================================================
 
-Last Updated: 2026-02-11
+Last Updated: 2026-02-12
 
 ================================================================================
   PROJECT OVERVIEW
 ================================================================================
 
-AgroPan is a Nepal-focused IoT-enabled smart agriculture platform combining
-ESP32-S3 field sensors, cloud monitoring, smart alerts, and predictive
-simulation. Built as a zero-dependency, client-side single-page application
-targeting 3.4M Nepali farming households.
+AgroPan is a Nepal-focused smart agriculture platform combining ESP32-S3
+IoT field sensors with a digital marketplace, community forum, and
+emergency alert system. Connects farmers, merchants, and administrators
+on a single platform. Built as a zero-dependency, client-side landing
+page with plans for full-stack backend integration.
 
 Tech Stack: HTML5 + CSS3 (Custom Properties) + Vanilla JS (ES5+)
 Dependencies: Zero (no frameworks, no build tools, no npm)
 CSS Architecture: variables.css (tokens) + index.css (unified stylesheet)
 
+Platform Pillars:
+  1. IoT Field Device — ESP32-S3 sensor node → web API
+  2. Marketplace — crop prices, farmer ↔ merchant accounts
+  3. Community Forum — registered farmer & merchant discussions
+  4. Emergency Alerts — admin-broadcast disease/disaster warnings
+
 ================================================================================
   COMPLETION STATUS
 ================================================================================
 
-  Overall Progress: ~80%
+  Overall Progress: ~85%
 
-  [DONE] Core HTML Structure (index.html)                         — 100%
+  [DONE] Core HTML Structure (index.html — fully rewritten)       — 100%
   [DONE] CSS Design System (variables + unified index.css)        — 100%
   [DONE] Navigation (desktop + mobile hamburger + glass-morphism) — 100%
-  [DONE] Hero Section (background, overlays, stats strip)         — 100%
-  [DONE] Smart Field Device Section (ESP32, sensors explained)    — 100%
-  [DONE] Live Cloud Monitoring Dashboard (mock UI)                — 100%
-  [DONE] Smart Alert System (4 alert types + channels)            — 100%
+  [DONE] Hero Section (background, preview card, stats strip)     — 100%
+  [DONE] Features Overview (4 cards: IoT, Market, Forum, Alerts)  — 100%
+  [DONE] Smart Field Device Section (ESP32, sensors, specs)       — 100%
+  [DONE] Marketplace Section (farmer/merchant role split)         — 100%
+  [DONE] Community Forum Section (6 topic cards)                  — 100%
+  [DONE] Emergency Alerts (4 alert types + delivery channels)     — 100%
+  [DONE] How It Works (4-step process flow, updated)              — 100%
   [DONE] Insight Gallery (8-card image grid)                      — 100%
-  [DONE] How It Works (4-step process flow)                       — 100%
-  [DONE] Why AgroPan for Nepal (6 challenge cards)                — 100%
-  [DONE] Simulation Panel (form + results UI)                     — 100%
-  [DONE] Simulation Engine (10 crops, 10 districts, logic)        — 100%
+  [DONE] CTA Section (farmer/merchant dual CTAs)                  — 100%
+  [DONE] Footer (brand, links, no Nepal flag)                     — 100%
   [DONE] Scroll Reveal Animations (Intersection Observer)         — 100%
-  [DONE] Main App Controller (nav, smooth scroll, form handler)   — 100%
-  [DONE] CTA Section                                              — 100%
-  [DONE] Footer (brand, links, Nepal positioning)                 — 100%
+  [DONE] Main App Controller (nav, smooth scroll, counters)       — 100%
   [DONE] Responsive Design (mobile-first, 3 breakpoints)          — 100%
   [DONE] Accessibility (ARIA, focus states, reduced-motion)       — 100%
-  [DONE] README & Architecture Docs                               — 100%
+  [DONE] README & Architecture Docs (updated for new features)    — 100%
   [DONE] Gallery image naming & organization                      — 100%
   [DONE] CSS optimization & consolidation                         — 100%
   [DONE] SEO (meta, OG, Twitter, JSON-LD, favicon)                — 100%
   [DONE] Logo integration (navbar + footer)                       — 100%
 
-  [TODO] Real API integration (Nepal DOA)                         —   0%
-  [TODO] Offline PWA support (Service Worker)                     —   0%
+  [REMOVED] Simulation Panel — replaced by Marketplace feature
+  [REMOVED] Simulation Engine (simulate.js) — no longer loaded
+  [REMOVED] Live Monitoring Dashboard — no mock data on landing page
+  [REMOVED] Why Nepal Section — replaced by Features Overview
+  [REMOVED] Nepal Flag SVG in footer — removed per user request
+
+  [TODO] Backend API (marketplace, user auth, forum)              —   0%
+  [TODO] Real-time forum w/ thread creation & replies             —   0%
+  [TODO] Admin dashboard for alert broadcasting                   —   0%
   [TODO] Multi-language support (English + Nepali i18n)           —   0%
-  [TODO] District-level heatmap visualization                     —   0%
-  [TODO] Policy dashboard for aggregate analytics                 —   0%
+  [TODO] IoT data dashboard with historical charts                —   0%
+  [TODO] Mobile app (PWA) with push notifications                 —   0%
 
 ================================================================================
   CHANGE LOG
@@ -64,7 +77,7 @@ CSS Architecture: variables.css (tokens) + index.css (unified stylesheet)
   FEATURE: Gallery Image Rename & Organization
   STATUS:  COMPLETED
   DETAILS:
-    - Audited all 34 gallery images (mixed naming: UUIDs, stock IDs, 
+    - Audited all 34 gallery images (mixed naming: UUIDs, stock IDs,
       random strings, spaces in filenames)
     - Renamed all images to a consistent format:
         category-description.ext
@@ -88,52 +101,101 @@ CSS Architecture: variables.css (tokens) + index.css (unified stylesheet)
   DETAILS:
     - Merged base.css, layout.css, components.css content into index.css
     - Restructured CSS in correct cascade order:
-        1. Reset & Base (was incorrectly at the bottom)
+        1. Reset & Base
         2. Layout (container, sections, navbar, grids)
-        3. Components (buttons, hero, platform, monitoring, alerts,
-           gallery, process, nepal, simulation, CTA, footer)
+        3. Components (buttons, hero, platform, alerts, gallery, etc.)
         4. Animations (scroll reveal, stagger effects)
         5. Responsive breakpoints (consolidated at end)
     - Removed all duplicate rules and scattered media queries
     - Consolidated media queries into 3 breakpoint blocks (640/768/1024px)
     - Deleted empty base.css, layout.css, components.css files
-    - Final: variables.css (tokens) + index.css (unified styles)
-    - Reduced from 2352 lines to ~1500 lines (optimized)
 
   FEATURE: Logo Integration
   STATUS:  COMPLETED
   DETAILS:
-    - Replaced inline SVG logo in navbar with <img> using gallery/logo-agropan.jpg
-    - Replaced inline SVG logo in footer with <img> using gallery/logo-agropan.jpg
-    - Updated favicon from SVG data URI to gallery/logo-agropan.jpg
-    - Added apple-touch-icon for iOS bookmark support
-    - Updated CSS to support img inside .navbar__brand-icon and .footer__brand-icon
+    - Replaced inline SVG logo in navbar with <img> using logo-agropan.jpg
+    - Replaced inline SVG logo in footer with <img> using logo-agropan.jpg
+    - Updated favicon and apple-touch-icon
 
   FEATURE: SEO Enhancements
   STATUS:  COMPLETED
   DETAILS:
-    - Added Open Graph meta tags (title, description, image, url, locale)
-    - Added Twitter Card meta tags (summary_large_image)
-    - Added canonical URL link element
-    - Added robots meta tag (index, follow)
-    - Added author meta tag
+    - Added Open Graph, Twitter Card, canonical URL, robots, author meta
     - Added JSON-LD structured data (WebApplication schema)
-    - Updated CSS <link> references (2 instead of 4)
+
+--- [2026-02-12] Session #3 — Landing Page Overhaul ---
+
+  FEATURE: Complete Landing Page Reimagining
+  STATUS:  COMPLETED
+  DETAILS:
+    - Removed simulation form/panel entirely
+    - Removed live monitoring dashboard (mock data)
+    - Removed Nepal flag SVG from footer
+    - Removed "Why Nepal" section
+    - Removed simulate.js script reference from HTML
+
+    - Added Features Overview section (4 cards: IoT, Marketplace,
+      Community Forum, Emergency Alerts)
+    - Added Marketplace section with farmer/merchant role split,
+      dedicated feature lists per role
+    - Added Community Forum section with 6 topic cards (Disease,
+      Market Trends, Weather, Equipment, Success Stories, Seasonal)
+    - Updated Emergency Alerts to be admin-driven (disease outbreaks,
+      pest invasions, landslides, severe weather)
+    - Updated Hero to reflect full platform ("Monitor Your Fields.
+      Connect with the Market.")
+    - Updated How It Works steps (Create Account → Connect Device →
+      Trade & Discuss → Grow Together)
+    - Updated CTA with farmer/merchant dual CTAs
+    - Updated footer (removed flag, cleaned positioning text)
+    - Updated navbar links (Features, Marketplace, Community, Alerts,
+      How It Works)
+
+  FEATURE: CSS Rebuild for New Sections
+  STATUS:  COMPLETED
+  DETAILS:
+    - Deleted old index.css and created new unified stylesheet
+    - Added .feature-card styles with 4 color icon variants
+    - Added .marketplace__layout, .marketplace__role,
+      .marketplace__role-header (farmer/merchant variants),
+      .marketplace__list
+    - Added .community__grid, .community__card
+    - Removed all .sim__* styles (~245 lines)
+    - Removed all .monitoring__* styles (~220 lines)
+    - Removed .footer__nepal*, .nepal__* styles
+    - Updated responsive breakpoints for new grid sections
+
+  FEATURE: JavaScript Cleanup
+  STATUS:  COMPLETED
+  DETAILS:
+    - Removed entire Simulation Form Handler from main.js
+      (sim-form, sim-placeholder, sim-results, all res-* references)
+    - Removed shake animation injection
+    - Removed simulate.js dependency
+    - Kept: nav scroll, mobile menu, smooth scroll, active section
+      highlighting, counter animation
+
+  FEATURE: Documentation Update
+  STATUS:  COMPLETED
+  DETAILS:
+    - Rewrote architecture.md to reflect 4-pillar platform
+    - Updated README.md: system overview, architecture diagram,
+      folder structure, key features (marketplace, forum, alerts)
+    - Updated progress.log (this file)
+    - Hardware guide in README preserved as-is
 
 ================================================================================
   FILE INVENTORY
 ================================================================================
 
-  index.html              — 1293 lines, single-page application
+  index.html              — Landing page (single-page, fully rewritten)
   css/variables.css       — Design tokens (colors, spacing, typography)
-  css/base.css            — CSS reset + element defaults
-  css/layout.css          — Containers, grids, navbar layout
-  css/components.css      — UI components (buttons, cards, sim panel)
+  css/index.css           — Unified stylesheet (reset → responsive)
   js/animations.js        — Scroll reveal via Intersection Observer
-  js/simulate.js          — 279 lines, simulation engine (10 crops, 10 districts)
-  js/main.js              — 297 lines, app controller (nav, forms, counters)
-  docs/architecture.md    — Detailed architecture documentation
-  README.md               — Project overview, pitch summary, team info
+  js/main.js              — App controller (nav, scroll, counters)
+  js/simulate.js          — DEPRECATED (no longer loaded, kept on disk)
+  docs/architecture.md    — Architecture documentation (v2.0)
+  README.md               — Project overview, hardware guide, features
   gallery/                — 34 image assets (Nepali agriculture photography)
   progress.log            — This file
 
@@ -141,11 +203,13 @@ CSS Architecture: variables.css (tokens) + index.css (unified stylesheet)
   NOTES
 ================================================================================
 
-  - Project is a hackathon prototype; simulation uses placeholder data
-    calibrated to realistic Nepal agriculture ranges
+  - Landing page is now a feature showcase for the full platform
+    (no mock data or simulation on the landing page)
+  - Four platform pillars: IoT, Marketplace, Forum, Admin Alerts
+  - simulate.js still exists on disk but is not loaded — can be deleted
+  - Backend API integration (user auth, marketplace, forum, alerts)
+    is the next major development phase
   - All images are real Nepali agriculture photography (no stock/AI)
-  - The simulation engine (simulate.js) is structured so CROP_DATA and
-    DISTRICT_DATA can be replaced with real API responses in production
   - CSS architecture is token-driven: changing --color-primary updates
     the entire design system
 
