@@ -101,7 +101,8 @@
 
     function renderCrops(crops) {
         list.innerHTML = crops.map(function (c) {
-            var imgSrc = c.image || '';
+            var rawImg = c.image || '';
+            var imgSrc = rawImg && rawImg.indexOf('http') !== 0 ? '../../' + rawImg : rawImg;
             var imgHtml = imgSrc
                 ? '<img class="crop-card__image" src="' + escapeHtml(imgSrc) + '" alt="' + escapeHtml(c.name) + '" onerror="this.style.display=\'none\'" />'
                 : '<div class="crop-card__image" style="display:flex;align-items:center;justify-content:center;color:var(--color-text-light);font-size:2rem"><i class="fa-solid fa-wheat-awn"></i></div>';
@@ -130,8 +131,9 @@
 
         detailTitle.textContent = crop.name || 'Crop Details';
 
-        var imgHtml = crop.image
-            ? '<img src="' + escapeHtml(crop.image) + '" alt="' + escapeHtml(crop.name) + '" style="width:100%;max-height:240px;object-fit:cover;border-radius:var(--radius-md);margin-bottom:var(--space-lg)" onerror="this.style.display=\'none\'" />'
+        var detailImg = crop.image && crop.image.indexOf('http') !== 0 ? '../../' + crop.image : (crop.image || '');
+        var imgHtml = detailImg
+            ? '<img src="' + escapeHtml(detailImg) + '" alt="' + escapeHtml(crop.name) + '" style="width:100%;max-height:240px;object-fit:cover;border-radius:var(--radius-md);margin-bottom:var(--space-lg)" onerror="this.style.display=\'none\'" />'
             : '';
 
         detailBody.innerHTML =

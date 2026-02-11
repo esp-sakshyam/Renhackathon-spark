@@ -79,7 +79,8 @@
     function renderCrops(crops) {
         var defaultImg = '../../gallery/iot';
         list.innerHTML = crops.map(function (c) {
-            var imgSrc = c.image || defaultImg;
+            var rawImg = c.image || '';
+            var imgSrc = rawImg && rawImg.indexOf('http') !== 0 ? '../../' + rawImg : (rawImg || defaultImg);
             return '<div class="item-card">' +
                 '<img class="crop-card__image" src="' + escapeHtml(imgSrc) + '" alt="' + escapeHtml(c.name) + '" onerror="this.style.display=\'none\'" />' +
                 '<div class="crop-card__name">' + escapeHtml(c.name) + '</div>' +
