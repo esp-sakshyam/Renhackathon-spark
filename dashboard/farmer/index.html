@@ -3,21 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="AgroPan Farmer Dashboard — monitor fields, manage devices, trade crops." />
+    <meta
+      name="description"
+      content="AgroPan Farmer Dashboard — monitor fields, manage devices, trade crops."
+    />
     <meta name="theme-color" content="#2E7D65" />
     <title>Dashboard — AgroPan</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Font Awesome Pro 7.1.0 -->
-    <link rel="stylesheet" media="print" onload="this.media='all'" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/fontawesome.css" />
-    <link rel="stylesheet" media="print" onload="this.media='all'" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/solid.css" />
+    <link
+      rel="stylesheet"
+      media="print"
+      onload="this.media = 'all'"
+      href="https://site-assets.fontawesome.com/releases/v7.1.0/css/fontawesome.css"
+    />
+    <link
+      rel="stylesheet"
+      media="print"
+      onload="this.media = 'all'"
+      href="https://site-assets.fontawesome.com/releases/v7.1.0/css/solid.css"
+    />
     <noscript>
-      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/fontawesome.css" />
-      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/solid.css" />
+      <link
+        rel="stylesheet"
+        href="https://site-assets.fontawesome.com/releases/v7.1.0/css/fontawesome.css"
+      />
+      <link
+        rel="stylesheet"
+        href="https://site-assets.fontawesome.com/releases/v7.1.0/css/solid.css"
+      />
     </noscript>
 
     <!-- Dashboard Styles -->
@@ -32,15 +54,29 @@
     <!-- ── Top Header ── -->
     <header class="dash-header">
       <a href="../../index.html" class="dash-header__brand">
-        <img src="../../gallery/logo-agropan.jpg" alt="AgroPan" width="32" height="32" />
-        <span class="dash-header__brand-text">Agro<span class="dash-header__brand-accent">Pan</span></span>
+        <img
+          src="../../gallery/logo-agropan.jpg"
+          alt="AgroPan"
+          width="32"
+          height="32"
+        />
+        <span class="dash-header__brand-text"
+          >Agro<span class="dash-header__brand-accent">Pan</span></span
+        >
       </a>
 
       <div class="dash-header__right">
-        <button class="dash-header__user" id="userMenuBtn" aria-label="User menu">
+        <button
+          class="dash-header__user"
+          id="userMenuBtn"
+          aria-label="User menu"
+        >
           <div class="dash-header__avatar" id="userAvatar">F</div>
           <span id="userDisplayName">Farmer</span>
-          <i class="fa-solid fa-chevron-down" style="font-size:10px; opacity:0.5;"></i>
+          <i
+            class="fa-solid fa-chevron-down"
+            style="font-size: 10px; opacity: 0.5"
+          ></i>
         </button>
       </div>
 
@@ -53,7 +89,10 @@
         <a href="../../index.html" class="user-dropdown__item">
           <i class="fa-solid fa-house"></i> Back to Home
         </a>
-        <button class="user-dropdown__item user-dropdown__item--danger" id="logoutBtn">
+        <button
+          class="user-dropdown__item user-dropdown__item--danger"
+          id="logoutBtn"
+        >
           <i class="fa-solid fa-right-from-bracket"></i> Log Out
         </button>
       </div>
@@ -65,7 +104,11 @@
       <aside class="dash-sidebar">
         <div class="dash-sidebar__label">Main Menu</div>
         <nav class="dash-sidebar__nav">
-          <a href="#" class="dash-sidebar__link is-active" data-page="dashboard">
+          <a
+            href="#"
+            class="dash-sidebar__link is-active"
+            data-page="dashboard"
+          >
             <i class="fa-solid fa-grid-2"></i> Overview
           </a>
           <a href="#" class="dash-sidebar__link" data-page="devices">
@@ -82,7 +125,9 @@
           </a>
         </nav>
 
-        <div class="dash-sidebar__label" style="margin-top: var(--space-lg);">Account</div>
+        <div class="dash-sidebar__label" style="margin-top: var(--space-lg)">
+          Account
+        </div>
         <nav class="dash-sidebar__nav">
           <a href="#" class="dash-sidebar__link" data-page="profile">
             <i class="fa-solid fa-user-gear"></i> Profile
