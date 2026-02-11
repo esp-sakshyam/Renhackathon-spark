@@ -10,19 +10,19 @@
     var deleteId = null;
     var nowUnix = Math.floor(Date.now() / 1000);
 
-    var tableBody     = document.getElementById('tableBody');
-    var searchInput   = document.getElementById('searchInput');
-    var filterStatus  = document.getElementById('filterStatus');
-    var rowCount      = document.getElementById('rowCount');
-    var addBtn        = document.getElementById('addBtn');
-    var formModal     = document.getElementById('formModal');
-    var modalTitle    = document.getElementById('modalTitle');
-    var modalClose    = document.getElementById('modalClose');
-    var modalCancel   = document.getElementById('modalCancel');
-    var modalSave     = document.getElementById('modalSave');
+    var tableBody = document.getElementById('tableBody');
+    var searchInput = document.getElementById('searchInput');
+    var filterStatus = document.getElementById('filterStatus');
+    var rowCount = document.getElementById('rowCount');
+    var addBtn = document.getElementById('addBtn');
+    var formModal = document.getElementById('formModal');
+    var modalTitle = document.getElementById('modalTitle');
+    var modalClose = document.getElementById('modalClose');
+    var modalCancel = document.getElementById('modalCancel');
+    var modalSave = document.getElementById('modalSave');
     var deleteConfirm = document.getElementById('deleteConfirm');
-    var deleteCancel  = document.getElementById('deleteCancel');
-    var deleteOk      = document.getElementById('deleteOk');
+    var deleteCancel = document.getElementById('deleteCancel');
+    var deleteOk = document.getElementById('deleteOk');
 
     function api(endpoint, body) {
         return fetch(API + endpoint, {
@@ -94,8 +94,8 @@
                 '<td style="font-size:var(--text-xs);color:var(--color-text-muted)">' + ts(w.timestamp) + '</td>' +
                 '<td style="font-size:var(--text-xs);color:var(--color-text-muted)">' + ts(w.valid_till) + '</td>' +
                 '<td><div class="actions-cell">' +
-                    '<button class="btn btn--icon-sm btn--ghost" title="Edit" data-edit="' + w.warning_id + '"><i class="fa-solid fa-pen"></i></button>' +
-                    '<button class="btn btn--icon-sm btn--danger" title="Delete" data-del="' + w.warning_id + '"><i class="fa-solid fa-trash"></i></button>' +
+                '<button class="btn btn--icon-sm btn--ghost" title="Edit" data-edit="' + w.warning_id + '"><i class="fa-solid fa-pen"></i></button>' +
+                '<button class="btn btn--icon-sm btn--danger" title="Delete" data-del="' + w.warning_id + '"><i class="fa-solid fa-trash"></i></button>' +
                 '</div></td></tr>';
         }).join('');
 
