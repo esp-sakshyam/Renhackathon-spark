@@ -9,28 +9,28 @@
     'use strict';
 
     // ── DOM References ──────────────────────────────────────
-    const form             = document.getElementById('signupForm');
-    const submitBtn        = document.getElementById('signupSubmit');
-    const alertBox         = document.getElementById('signupAlert');
-    const alertText        = document.getElementById('signupAlertText');
+    const form = document.getElementById('signupForm');
+    const submitBtn = document.getElementById('signupSubmit');
+    const alertBox = document.getElementById('signupAlert');
+    const alertText = document.getElementById('signupAlertText');
 
-    const nameInput        = document.getElementById('name');
-    const usernameInput    = document.getElementById('username');
-    const emailInput       = document.getElementById('email');
-    const phoneInput       = document.getElementById('phone');
-    const locationInput    = document.getElementById('location');
-    const passwordInput    = document.getElementById('password');
-    const confirmInput     = document.getElementById('confirmPassword');
-    const termsCheckbox    = document.getElementById('terms');
+    const nameInput = document.getElementById('name');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const locationInput = document.getElementById('location');
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirmPassword');
+    const termsCheckbox = document.getElementById('terms');
 
-    const togglePassword   = document.getElementById('togglePassword');
-    const toggleConfirm    = document.getElementById('toggleConfirm');
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleConfirm = document.getElementById('toggleConfirm');
 
-    const strengthFill     = document.getElementById('strengthFill');
-    const strengthText     = document.getElementById('strengthText');
+    const strengthFill = document.getElementById('strengthFill');
+    const strengthText = document.getElementById('strengthText');
 
-    const API_CREATE_USER  = 'API/create/users.php';
-    const API_AUTH         = 'API/auth.php';
+    const API_CREATE_USER = 'API/create/users.php';
+    const API_AUTH = 'API/auth.php';
 
 
     // ── Password Visibility Toggles ─────────────────────────
@@ -123,10 +123,10 @@
         if (/\d/.test(pw)) score++;
         if (/[^a-zA-Z0-9]/.test(pw)) score++;
 
-        if (score <= 1) return { level: 'weak',   label: 'Weak',   css: 'password-strength__fill--weak'   };
-        if (score === 2) return { level: 'fair',   label: 'Fair',   css: 'password-strength__fill--fair'   };
-        if (score === 3) return { level: 'good',   label: 'Good',   css: 'password-strength__fill--good'   };
-        return              { level: 'strong', label: 'Strong', css: 'password-strength__fill--strong' };
+        if (score <= 1) return { level: 'weak', label: 'Weak', css: 'password-strength__fill--weak' };
+        if (score === 2) return { level: 'fair', label: 'Fair', css: 'password-strength__fill--fair' };
+        if (score === 3) return { level: 'good', label: 'Good', css: 'password-strength__fill--good' };
+        return { level: 'strong', label: 'Strong', css: 'password-strength__fill--strong' };
     }
 
     passwordInput.addEventListener('input', function () {
@@ -244,14 +244,14 @@
 
         // ── Full validation pass ──
         let valid = true;
-        const name     = nameInput.value.trim();
+        const name = nameInput.value.trim();
         const username = usernameInput.value.trim();
-        const email    = emailInput.value.trim();
-        const phone    = phoneInput.value.trim();
+        const email = emailInput.value.trim();
+        const phone = phoneInput.value.trim();
         const location = locationInput.value.trim();
-        const type     = document.querySelector('input[name="type"]:checked')?.value;
+        const type = document.querySelector('input[name="type"]:checked')?.value;
         const password = passwordInput.value;
-        const confirm  = confirmInput.value;
+        const confirm = confirmInput.value;
 
         if (!name || name.length < 2) {
             setFieldError('groupName', 'nameError', !name ? 'Full name is required' : 'Name must be at least 2 characters');

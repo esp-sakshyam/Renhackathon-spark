@@ -9,13 +9,13 @@
     'use strict';
 
     // ── DOM References ──────────────────────────────────────
-    const form            = document.getElementById('loginForm');
-    const submitBtn       = document.getElementById('loginSubmit');
-    const alertBox        = document.getElementById('loginAlert');
-    const alertText       = document.getElementById('loginAlertText');
-    const usernameInput   = document.getElementById('username');
-    const passwordInput   = document.getElementById('password');
-    const togglePassword  = document.getElementById('togglePassword');
+    const form = document.getElementById('loginForm');
+    const submitBtn = document.getElementById('loginSubmit');
+    const alertBox = document.getElementById('loginAlert');
+    const alertText = document.getElementById('loginAlertText');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
 
     const API_AUTH = 'API/auth.php';
 
