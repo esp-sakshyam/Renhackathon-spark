@@ -2,17 +2,19 @@
 <html lang="en">
 <head>
   <!-- ============================================================
-       AgroPan — Nepal Agriculture Decision & Risk Simulation
+       AgroPan — Nepal's Smart Agriculture Intelligence Platform
        ============================================================
-       A production-grade decision-support simulator that helps
-       Nepali farmers simulate outcomes before planting.
+       An IoT-enabled agricultural intelligence system combining
+       ESP32-S3 field sensors, cloud monitoring, smart alerts,
+       and predictive simulation for Nepali farmers.
        ============================================================ -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="AgroPan — Simulate agricultural decisions for Nepal. Understand risk, yield, and profit before you plant." />
+  <meta name="description" content="AgroPan — Nepal's Smart Agriculture Intelligence Platform. Real-time IoT field monitoring, cloud dashboard, predictive yield simulation, and smart alerts for data-driven farming decisions." />
   <meta name="theme-color" content="#2E7D65" />
+  <meta name="keywords" content="IoT agriculture Nepal, smart farming, ESP32 sensors, crop monitoring, yield prediction, agricultural intelligence" />
 
-  <title>AgroPan — Agriculture Decision Simulator for Nepal</title>
+  <title>AgroPan — Smart Agriculture Intelligence Platform for Nepal</title>
 
   <!-- Google Fonts: Poppins + Inter + Noto Sans (Nepali compat) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,8 +27,8 @@
   <link rel="stylesheet" href="css/layout.css" />
   <link rel="stylesheet" href="css/components.css" />
 
-  <!-- Favicon (inline SVG data-URI so no external file is needed) -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232E7D65'/%3E%3Cpath d='M30 80 C30 80 35 50 50 45 C65 40 70 55 70 55 C70 55 60 50 50 55 C40 60 30 80 30 80Z' fill='white' opacity='0.95'/%3E%3Cline x1='50' y1='55' x2='50' y2='85' stroke='white' stroke-width='4' stroke-linecap='round' opacity='0.8'/%3E%3Ccircle cx='50' cy='42' r='5' fill='%236EE7A8'/%3E%3C/svg%3E" />
 </head>
 
 <body>
@@ -55,16 +57,16 @@
 
       <!-- Desktop nav links -->
       <ul class="navbar__links" role="list">
-        <li><a href="#insights"><span class="navbar__link-text">Insights</span></a></li>
+        <li><a href="#platform"><span class="navbar__link-text">Platform</span></a></li>
+        <li><a href="#monitoring"><span class="navbar__link-text">Monitoring</span></a></li>
         <li><a href="#how-it-works"><span class="navbar__link-text">How It Works</span></a></li>
-        <li><a href="#why-nepal"><span class="navbar__link-text">Why Nepal</span></a></li>
         <li><a href="#simulate"><span class="navbar__link-text">Simulate</span></a></li>
       </ul>
 
       <!-- Desktop CTA -->
-      <a href="#simulate" class="btn btn--primary btn--sm navbar__cta">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        Simulate Now
+      <a href="#monitoring" class="btn btn--primary btn--sm navbar__cta">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><path d="M2 8h3M11 8h3M8 2v3M8 11v3"/></svg>
+        Monitor Field
       </a>
 
       <!-- Mobile hamburger -->
@@ -78,11 +80,11 @@
     <!-- Mobile dropdown menu -->
     <div class="navbar__mobile-menu" id="nav-mobile">
       <ul role="list">
-        <li><a href="#insights">Insights</a></li>
+        <li><a href="#platform">Platform</a></li>
+        <li><a href="#monitoring">Monitoring</a></li>
         <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#why-nepal">Why Nepal</a></li>
         <li><a href="#simulate">Simulate</a></li>
-        <li><a href="#simulate" class="btn btn--primary btn--sm" style="text-align:center;">Simulate Your Farm</a></li>
+        <li><a href="#monitoring" class="btn btn--primary btn--sm" style="text-align:center;">Monitor My Field</a></li>
       </ul>
     </div>
   </nav>
@@ -116,27 +118,29 @@
       <div class="hero__content">
         <div class="hero__badge">
           <span class="hero__badge-dot" aria-hidden="true"></span>
-          Nepal-Focused Agriculture Intelligence
+          IoT-Powered Smart Agriculture
         </div>
 
         <h1 class="hero__title">
-          Simulate Your Harvest<br />
-          <span class="hero__title-accent">Before You Plant</span>
+          From Real-Time Field Data<br />
+          <span class="hero__title-accent">To Predictive Agricultural Intelligence</span>
         </h1>
 
         <p class="hero__subtitle">
-          AgroPan is a decision-support simulator built for Nepali farmers.
-          Understand yield, risk, and profit outcomes based on Nepal's real
-          climate, terrain, and market data — before the first seed goes in.
+          AgroPan combines ESP32-based IoT sensors with cloud analytics and 
+          predictive simulation. Monitor soil moisture, temperature, humidity, 
+          and air quality in real-time — then forecast yield and risk before 
+          you plant. Built for Nepal's unique agricultural landscape.
         </p>
 
         <div class="hero__actions">
-          <a href="#simulate" class="btn btn--primary btn--lg">
-            Simulate Your Farm
-            <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          <a href="#monitoring" class="btn btn--primary btn--lg">
+            <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><circle cx="8" cy="8" r="3"/><path d="M2 8h3M11 8h3M8 2v3M8 11v3"/></svg>
+            Monitor My Field
           </a>
-          <a href="#how-it-works" class="btn btn--ghost btn--lg" style="border-color: rgba(255,255,255,0.4); color: #fff;">
-            How It Works
+          <a href="#simulate" class="btn btn--ghost btn--lg" style="border-color: rgba(255,255,255,0.4); color: #fff;">
+            Run Simulation
+            <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
           </a>
         </div>
 
@@ -144,41 +148,41 @@
         <div class="hero__trust">
           <span class="hero__trust-item">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#2E7D65" stroke-width="2"><path d="M2 8l4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            No sign-up required
+            Real-time IoT sensors
           </span>
           <span class="hero__trust-item">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#2E7D65" stroke-width="2"><path d="M2 8l4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Works on any device
+            Cloud dashboard access
           </span>
           <span class="hero__trust-item">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#2E7D65" stroke-width="2"><path d="M2 8l4 4 8-8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            100% free & open source
+            Smart alert notifications
           </span>
         </div>
       </div>
 
-      <!-- Floating preview card — shows a mini simulation result -->
+      <!-- Floating preview card — shows live sensor data -->
       <div class="hero__preview">
         <div class="hero__preview-card">
           <div class="hero__preview-header">
             <span class="hero__preview-dot hero__preview-dot--green"></span>
-            <span class="hero__preview-label">Live Simulation Preview</span>
+            <span class="hero__preview-label">Live Sensor Data</span>
           </div>
           <div class="hero__preview-row">
-            <img src="gallery/c510f62b-7b99-4ba1-90e9-3ec331004151.jpeg" alt="Nepali farmland" class="hero__preview-img" />
+            <img src="gallery/c510f62b-7b99-4ba1-90e9-3ec331004151.jpeg" alt="Nepali farmland with IoT sensors" class="hero__preview-img" />
           </div>
           <div class="hero__preview-data">
             <div class="hero__preview-metric">
-              <span class="hero__preview-metric-label">Crop</span>
-              <span class="hero__preview-metric-value">Rice (धान)</span>
+              <span class="hero__preview-metric-label">Soil Moisture</span>
+              <span class="hero__preview-metric-value">42%</span>
             </div>
             <div class="hero__preview-metric">
-              <span class="hero__preview-metric-label">Yield</span>
-              <span class="hero__preview-metric-value">198–352 kg</span>
+              <span class="hero__preview-metric-label">Temperature</span>
+              <span class="hero__preview-metric-value">26°C</span>
             </div>
             <div class="hero__preview-metric">
-              <span class="hero__preview-metric-label">Risk</span>
-              <span class="hero__preview-metric-value hero__preview-metric-value--low">Low</span>
+              <span class="hero__preview-metric-label">Status</span>
+              <span class="hero__preview-metric-value hero__preview-metric-value--low">Optimal</span>
             </div>
           </div>
           <div class="hero__preview-bar">
@@ -192,6 +196,13 @@
     <div class="hero__stats">
       <div class="container hero__stats-inner">
         <div class="hero__stat">
+          <div class="hero__stat-value">4</div>
+          <div class="hero__stat-label">Sensor Types</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-divider" aria-hidden="true"></div>
+        </div>
+        <div class="hero__stat">
           <div class="hero__stat-value">77</div>
           <div class="hero__stat-label">Districts Covered</div>
         </div>
@@ -199,26 +210,390 @@
           <div class="hero__stat-divider" aria-hidden="true"></div>
         </div>
         <div class="hero__stat">
-          <div class="hero__stat-value">45+</div>
-          <div class="hero__stat-label">Crop Profiles</div>
+          <div class="hero__stat-value">24/7</div>
+          <div class="hero__stat-label">Cloud Monitoring</div>
         </div>
         <div class="hero__stat">
           <div class="hero__stat-divider" aria-hidden="true"></div>
         </div>
         <div class="hero__stat">
-          <div class="hero__stat-value">3</div>
-          <div class="hero__stat-label">Ecological Zones</div>
-        </div>
-        <div class="hero__stat">
-          <div class="hero__stat-divider" aria-hidden="true"></div>
-        </div>
-        <div class="hero__stat">
-          <div class="hero__stat-value">10yr</div>
-          <div class="hero__stat-label">Climate Data</div>
+          <div class="hero__stat-value"><1s</div>
+          <div class="hero__stat-label">Alert Response</div>
         </div>
       </div>
     </div>
   </header>
+
+
+  <!-- ============================================================
+       SMART FIELD DEVICE SECTION
+       ============================================================
+       Explains ESP32-S3 hardware and sensor capabilities in a
+       technical but accessible way.
+  -->
+  <section class="section section--lg" id="platform" style="background: #fff;">
+    <div class="container">
+      <div class="section__header reveal">
+        <span class="section__tag">Hardware</span>
+        <h2 class="section__title">Smart Field Device</h2>
+        <p class="section__subtitle">
+          Purpose-built IoT hardware designed for Nepal's field conditions.
+          Collect environmental data at the source, process it locally, and transmit to the cloud.
+        </p>
+      </div>
+
+      <div class="platform__grid reveal-stagger">
+        <!-- ESP32-S3 Core -->
+        <div class="process__card">
+          <div class="process__step" aria-hidden="true"></div>
+          <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="8" y="8" width="28" height="28" rx="4" stroke="#2E7D65" stroke-width="1.5" fill="rgba(46,125,101,0.08)"/>
+            <path d="M4 16h4M4 22h4M4 28h4M36 16h4M36 22h4M36 28h4M16 4v4M22 4v4M28 4v4M16 36v4M22 36v4M28 36v4" stroke="#2E7D65" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="22" cy="22" r="6" fill="#2E7D65" opacity="0.2"/>
+            <circle cx="22" cy="22" r="3" fill="#2E7D65"/>
+          </svg>
+          <h3 class="process__card-title">ESP32-S3 Microcontroller</h3>
+          <p class="process__card-desc">
+            Dual-core processor with built-in WiFi and Bluetooth. Handles 
+            sensor data acquisition, local processing, and secure cloud 
+            transmission with ultra-low power consumption.
+          </p>
+        </div>
+
+        <!-- Soil Moisture Sensor -->
+        <div class="process__card">
+          <div class="process__step" aria-hidden="true"></div>
+          <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M22 6C22 6 10 18 10 26c0 6.627 5.373 12 12 12s12-5.373 12-12c0-8-12-20-12-20z" stroke="#2F8F9D" stroke-width="1.5" fill="rgba(47,143,157,0.1)"/>
+            <path d="M18 28c0-2.5 1.5-5 4-6" stroke="#2F8F9D" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <h3 class="process__card-title">Soil Moisture Sensor</h3>
+          <p class="process__card-desc">
+            Capacitive sensor measures volumetric water content in soil. 
+            Triggers irrigation alerts when moisture drops below optimal 
+            thresholds for your specific crop type.
+          </p>
+        </div>
+
+        <!-- Temperature & Humidity -->
+        <div class="process__card">
+          <div class="process__step" aria-hidden="true"></div>
+          <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="18" y="6" width="8" height="26" rx="4" stroke="#F2A900" stroke-width="1.5" fill="none"/>
+            <circle cx="22" cy="32" r="6" stroke="#F2A900" stroke-width="1.5" fill="rgba(242,169,0,0.15)"/>
+            <circle cx="22" cy="32" r="3" fill="#F2A900"/>
+            <path d="M22 12v14" stroke="#F2A900" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3 class="process__card-title">Temperature & Humidity</h3>
+          <p class="process__card-desc">
+            DHT22 sensor provides accurate ambient temperature and relative 
+            humidity readings. Essential for predicting frost risk, heat 
+            stress, and optimal planting windows.
+          </p>
+        </div>
+
+        <!-- MQ Gas Sensor -->
+        <div class="process__card">
+          <div class="process__step" aria-hidden="true"></div>
+          <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="22" cy="22" r="14" stroke="#8B5E3C" stroke-width="1.5" fill="none"/>
+            <path d="M16 28c2-4 4-8 6-8s4 6 6 8" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="22" cy="18" r="4" fill="rgba(139,94,60,0.2)" stroke="#8B5E3C" stroke-width="1"/>
+          </svg>
+          <h3 class="process__card-title">MQ Gas Sensor</h3>
+          <p class="process__card-desc">
+            Detects methane, ammonia, and other gases relevant to soil health 
+            and decomposition. Alerts on abnormal gas levels that may indicate 
+            crop disease or contamination.
+          </p>
+        </div>
+      </div>
+
+      <!-- Technical specs -->
+      <div class="platform__specs reveal">
+        <div class="platform__spec">
+          <span class="platform__spec-value">3.3V</span>
+          <span class="platform__spec-label">Operating Voltage</span>
+        </div>
+        <div class="platform__spec">
+          <span class="platform__spec-value">< 50mA</span>
+          <span class="platform__spec-label">Power Draw</span>
+        </div>
+        <div class="platform__spec">
+          <span class="platform__spec-value">WiFi 2.4GHz</span>
+          <span class="platform__spec-label">Connectivity</span>
+        </div>
+        <div class="platform__spec">
+          <span class="platform__spec-value">5 min</span>
+          <span class="platform__spec-label">Sampling Interval</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       LIVE MONITORING DASHBOARD
+       ============================================================
+       Explains real-time data visualization and cloud access.
+  -->
+  <section class="section" id="monitoring">
+    <div class="container">
+      <div class="section__header reveal">
+        <span class="section__tag">Dashboard</span>
+        <h2 class="section__title">Live Cloud Monitoring</h2>
+        <p class="section__subtitle">
+          Access your field data from anywhere. Real-time visualization, 
+          historical trends, and actionable insights — all in one dashboard.
+        </p>
+      </div>
+
+      <div class="monitoring__layout reveal">
+        <!-- Dashboard Preview Mock -->
+        <div class="monitoring__dashboard">
+          <div class="monitoring__header">
+            <div class="monitoring__header-dot monitoring__header-dot--red"></div>
+            <div class="monitoring__header-dot monitoring__header-dot--yellow"></div>
+            <div class="monitoring__header-dot monitoring__header-dot--green"></div>
+            <span class="monitoring__header-title">AgroPan Dashboard — Field #1</span>
+          </div>
+          <div class="monitoring__content">
+            <div class="monitoring__grid">
+              <div class="monitoring__card">
+                <div class="monitoring__card-icon" style="background: rgba(47,143,157,0.1);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#2F8F9D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                  </svg>
+                </div>
+                <div class="monitoring__card-data">
+                  <span class="monitoring__card-value">42%</span>
+                  <span class="monitoring__card-label">Soil Moisture</span>
+                </div>
+                <span class="monitoring__card-status monitoring__card-status--good">Optimal</span>
+              </div>
+              <div class="monitoring__card">
+                <div class="monitoring__card-icon" style="background: rgba(242,169,0,0.1);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#F2A900" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>
+                  </svg>
+                </div>
+                <div class="monitoring__card-data">
+                  <span class="monitoring__card-value">26°C</span>
+                  <span class="monitoring__card-label">Temperature</span>
+                </div>
+                <span class="monitoring__card-status monitoring__card-status--good">Normal</span>
+              </div>
+              <div class="monitoring__card">
+                <div class="monitoring__card-icon" style="background: rgba(46,125,101,0.1);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#2E7D65" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/>
+                    <path d="M9.6 4.6A2 2 0 1 1 11 8H2"/>
+                    <path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>
+                  </svg>
+                </div>
+                <div class="monitoring__card-data">
+                  <span class="monitoring__card-value">68%</span>
+                  <span class="monitoring__card-label">Humidity</span>
+                </div>
+                <span class="monitoring__card-status monitoring__card-status--good">Optimal</span>
+              </div>
+              <div class="monitoring__card">
+                <div class="monitoring__card-icon" style="background: rgba(139,94,60,0.1);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#8B5E3C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4M12 8h.01"/>
+                  </svg>
+                </div>
+                <div class="monitoring__card-data">
+                  <span class="monitoring__card-value">12 ppm</span>
+                  <span class="monitoring__card-label">Gas Level</span>
+                </div>
+                <span class="monitoring__card-status monitoring__card-status--good">Safe</span>
+              </div>
+            </div>
+            <div class="monitoring__chart">
+              <span class="monitoring__chart-title">24-Hour Trend</span>
+              <div class="monitoring__chart-visual">
+                <svg viewBox="0 0 300 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 60 Q30 55 60 50 T120 45 T180 50 T240 40 T300 35" stroke="#2E7D65" stroke-width="2" fill="none"/>
+                  <path d="M0 60 Q30 55 60 50 T120 45 T180 50 T240 40 T300 35 V80 H0 Z" fill="url(#chartGradient)" opacity="0.2"/>
+                  <defs>
+                    <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#2E7D65"/>
+                      <stop offset="100%" stop-color="#2E7D65" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features list -->
+        <div class="monitoring__features">
+          <div class="monitoring__feature">
+            <svg class="monitoring__feature-icon" viewBox="0 0 24 24" fill="none" stroke="#2E7D65" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12,6 12,12 16,14"/>
+            </svg>
+            <div>
+              <h4 class="monitoring__feature-title">Real-Time Updates</h4>
+              <p class="monitoring__feature-desc">Sensor data syncs to cloud every 5 minutes. View live conditions from any device with internet access.</p>
+            </div>
+          </div>
+          <div class="monitoring__feature">
+            <svg class="monitoring__feature-icon" viewBox="0 0 24 24" fill="none" stroke="#2E7D65" stroke-width="1.5">
+              <path d="M3 3v18h18"/>
+              <path d="M7 16l4-4 4 4 6-6"/>
+            </svg>
+            <div>
+              <h4 class="monitoring__feature-title">Historical Trends</h4>
+              <p class="monitoring__feature-desc">Track patterns over days, weeks, or months. Identify seasonal trends and compare year-over-year data.</p>
+            </div>
+          </div>
+          <div class="monitoring__feature">
+            <svg class="monitoring__feature-icon" viewBox="0 0 24 24" fill="none" stroke="#2E7D65" stroke-width="1.5">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <path d="M8 21h8M12 17v4"/>
+            </svg>
+            <div>
+              <h4 class="monitoring__feature-title">Multi-Device Access</h4>
+              <p class="monitoring__feature-desc">Responsive web dashboard works on desktop, tablet, and mobile. Check your field from anywhere in Nepal.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SMART ALERT SYSTEM
+       ============================================================
+       Automated notifications for critical field conditions.
+  -->
+  <section class="section section--lg" id="alerts" style="background: #fff;">
+    <div class="container">
+      <div class="section__header reveal">
+        <span class="section__tag">Alerts</span>
+        <h2 class="section__title">Smart Alert System</h2>
+        <p class="section__subtitle">
+          Automated notifications when field conditions require attention. 
+          Never miss critical thresholds that could affect your harvest.
+        </p>
+      </div>
+
+      <div class="alerts__grid reveal-stagger">
+        <!-- Low Moisture Alert -->
+        <div class="alert__card alert__card--warning">
+          <div class="alert__card-header">
+            <div class="alert__card-icon alert__card-icon--warning">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+              </svg>
+            </div>
+            <span class="alert__card-badge alert__card-badge--warning">Low Moisture</span>
+          </div>
+          <h3 class="alert__card-title">Irrigation Required</h3>
+          <p class="alert__card-desc">
+            Triggers when soil moisture drops below 25% for your crop type. 
+            Prevents water stress that can reduce yield by up to 40%.
+          </p>
+          <div class="alert__card-threshold">
+            <span>Threshold:</span> <strong>&lt; 25% soil moisture</strong>
+          </div>
+        </div>
+
+        <!-- High Temperature Alert -->
+        <div class="alert__card alert__card--danger">
+          <div class="alert__card-header">
+            <div class="alert__card-icon alert__card-icon--danger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>
+              </svg>
+            </div>
+            <span class="alert__card-badge alert__card-badge--danger">Heat Stress</span>
+          </div>
+          <h3 class="alert__card-title">Temperature Warning</h3>
+          <p class="alert__card-desc">
+            Activates when ambient temperature exceeds safe limits for your 
+            crops. Enables proactive measures like shade deployment or misting.
+          </p>
+          <div class="alert__card-threshold">
+            <span>Threshold:</span> <strong>&gt; 35°C sustained</strong>
+          </div>
+        </div>
+
+        <!-- Gas Anomaly Alert -->
+        <div class="alert__card alert__card--info">
+          <div class="alert__card-header">
+            <div class="alert__card-icon alert__card-icon--info">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/>
+                <path d="M9.6 4.6A2 2 0 1 1 11 8H2"/>
+                <path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>
+              </svg>
+            </div>
+            <span class="alert__card-badge alert__card-badge--info">Gas Anomaly</span>
+          </div>
+          <h3 class="alert__card-title">Air Quality Alert</h3>
+          <p class="alert__card-desc">
+            Detects unusual gas concentrations that may indicate soil 
+            contamination, pest activity, or decomposition issues.
+          </p>
+          <div class="alert__card-threshold">
+            <span>Threshold:</span> <strong>&gt; 50 ppm deviation</strong>
+          </div>
+        </div>
+
+        <!-- Frost Risk Alert -->
+        <div class="alert__card alert__card--cold">
+          <div class="alert__card-header">
+            <div class="alert__card-icon alert__card-icon--cold">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v20M17 7l-5 5-5-5M17 17l-5-5-5 5M2 12h20M7 7l5 5 5-5M7 17l5-5 5 5"/>
+              </svg>
+            </div>
+            <span class="alert__card-badge alert__card-badge--cold">Frost Risk</span>
+          </div>
+          <h3 class="alert__card-title">Cold Warning</h3>
+          <p class="alert__card-desc">
+            Early warning when temperatures approach freezing. Critical for 
+            hill farms during winter months to protect vulnerable crops.
+          </p>
+          <div class="alert__card-threshold">
+            <span>Threshold:</span> <strong>&lt; 4°C predicted</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification channels -->
+      <div class="alerts__channels reveal">
+        <span class="alerts__channels-label">Alert Delivery:</span>
+        <div class="alerts__channel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+            <path d="M12 18h.01"/>
+          </svg>
+          SMS Notification
+        </div>
+        <div class="alerts__channel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          Email Alert
+        </div>
+        <div class="alerts__channel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          Dashboard Push
+        </div>
+      </div>
+    </div>
+  </section>
 
 
   <!-- ============================================================
@@ -382,17 +757,15 @@
   <!-- ============================================================
        HOW IT WORKS
        ============================================================
-       Four-step process explained in clean cards with
-       numbered steps.
+       Four-step process from sensor deployment to decision.
   -->
   <section class="section section--lg" id="how-it-works" style="background: #fff;">
     <div class="container">
       <div class="section__header reveal">
         <span class="section__tag">Process</span>
-        <h2 class="section__title">How AgroPan Works</h2>
+        <h2 class="section__title">From Sensor to Decision</h2>
         <p class="section__subtitle">
-          Four simple steps between uncertainty and a data-backed
-          farming decision.
+          Four steps between field deployment and data-driven farming intelligence.
         </p>
       </div>
 
@@ -401,14 +774,14 @@
         <div class="process__card">
           <div class="process__step" aria-hidden="true"></div>
           <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="22" cy="22" r="20" stroke="#2E7D65" stroke-width="1.5" fill="none"/>
-            <path d="M22 12v4M22 28v4M12 22h4M28 22h4" stroke="#2E7D65" stroke-width="1.5" stroke-linecap="round"/>
-            <circle cx="22" cy="22" r="6" stroke="#2E7D65" stroke-width="1.5" fill="rgba(46,125,101,0.1)"/>
+            <rect x="8" y="12" width="28" height="24" rx="3" stroke="#2E7D65" stroke-width="1.5" fill="none"/>
+            <path d="M16 12V8a6 6 0 0 1 12 0v4" stroke="#2E7D65" stroke-width="1.5" fill="none"/>
+            <circle cx="22" cy="24" r="4" fill="rgba(46,125,101,0.15)" stroke="#2E7D65" stroke-width="1.5"/>
           </svg>
-          <h3 class="process__card-title">Location & Crop</h3>
+          <h3 class="process__card-title">Deploy Device</h3>
           <p class="process__card-desc">
-            Select your district and ecological zone. Choose from 45+ crop
-            profiles calibrated to Nepal's soil and altitude data.
+            Install the ESP32-S3 field unit in your plot. Solar-powered design 
+            ensures continuous operation. Takes under 10 minutes to set up.
           </p>
         </div>
 
@@ -416,15 +789,14 @@
         <div class="process__card">
           <div class="process__step" aria-hidden="true"></div>
           <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="4" y="8" width="36" height="28" rx="4" stroke="#2F8F9D" stroke-width="1.5" fill="none"/>
-            <path d="M4 16h36" stroke="#2F8F9D" stroke-width="1.5"/>
-            <circle cx="14" cy="26" r="3" fill="rgba(47,143,157,0.2)" stroke="#2F8F9D" stroke-width="1.2"/>
-            <circle cx="26" cy="24" r="4" fill="rgba(47,143,157,0.2)" stroke="#2F8F9D" stroke-width="1.2"/>
+            <path d="M22 8v6M22 30v6M8 22h6M30 22h6" stroke="#2F8F9D" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="22" cy="22" r="10" stroke="#2F8F9D" stroke-width="1.5" fill="rgba(47,143,157,0.1)"/>
+            <circle cx="22" cy="22" r="4" fill="#2F8F9D"/>
           </svg>
-          <h3 class="process__card-title">Climate & Market Inputs</h3>
+          <h3 class="process__card-title">Collect Data</h3>
           <p class="process__card-desc">
-            AgroPan pulls 10 years of rainfall, temperature, and market price
-            data to create realistic boundary conditions for your simulation.
+            Sensors continuously measure soil moisture, temperature, humidity, 
+            and gas levels. Data uploads to cloud every 5 minutes via WiFi.
           </p>
         </div>
 
@@ -437,10 +809,10 @@
             <circle cx="28" cy="14" r="2.5" fill="#F2A900"/>
             <path d="M8 34 L14 24 L20 28 L28 14 L36 18 V34 H8Z" fill="rgba(242,169,0,0.08)"/>
           </svg>
-          <h3 class="process__card-title">Risk Simulation</h3>
+          <h3 class="process__card-title">Analyze & Predict</h3>
           <p class="process__card-desc">
-            The engine runs probabilistic models across climate scenarios,
-            generating yield ranges, risk levels, and profit projections.
+            AgroPan's simulation engine processes sensor data alongside historical 
+            climate records to generate yield forecasts and risk assessments.
           </p>
         </div>
 
@@ -448,6 +820,18 @@
         <div class="process__card">
           <div class="process__step" aria-hidden="true"></div>
           <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="6" y="6" width="32" height="32" rx="6" stroke="#2E7D65" stroke-width="1.5" fill="none"/>
+            <path d="M15 22 L20 27 L30 16" stroke="#2E7D65" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3 class="process__card-title">Act with Confidence</h3>
+          <p class="process__card-desc">
+            Receive smart alerts for critical conditions. Make planting, irrigation, 
+            and harvest decisions backed by real field data — not guesswork.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
             <rect x="6" y="6" width="32" height="32" rx="6" stroke="#2E7D65" stroke-width="1.5" fill="none"/>
             <path d="M15 22 L20 27 L30 16" stroke="#2E7D65" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -465,17 +849,16 @@
   <!-- ============================================================
        WHY AGROPAN FOR NEPAL
        ============================================================
-       Three core reasons this tool is Nepal-specific, not a
-       generic global solution.
+       Nepal-specific challenges that AgroPan's IoT platform addresses.
   -->
   <section class="section" id="why-nepal">
     <div class="container">
       <div class="section__header reveal">
-        <span class="section__tag">Context Matters</span>
-        <h2 class="section__title">Why AgroPan Is Built for Nepal</h2>
+        <span class="section__tag">Built for Nepal</span>
+        <h2 class="section__title">Designed for Nepal's Agricultural Reality</h2>
         <p class="section__subtitle">
-          Generic agriculture tools ignore the realities that define
-          Nepali farming. AgroPan doesn't.
+          Generic IoT solutions ignore the conditions that define Nepali farming. 
+          AgroPan is purpose-built for monsoon dependency, terrain variation, and smallholder economics.
         </p>
       </div>
 
@@ -620,10 +1003,10 @@
     <div class="container">
       <div class="section__header reveal">
         <span class="section__tag">Decision Engine</span>
-        <h2 class="section__title">Run a Simulation</h2>
+        <h2 class="section__title">Predictive Simulation</h2>
         <p class="section__subtitle">
-          Choose your location, crop, and season. AgroPan will project
-          your expected yield, risk level, and profit range.
+          Combine real-time sensor data with historical climate records. 
+          Project yield, risk, and profit before committing to a planting decision.
         </p>
       </div>
 
@@ -773,21 +1156,26 @@
   <!-- ============================================================
        CALL TO ACTION
        ============================================================
-       Calm, confident CTA. No marketing fluff — just a clear
-       invitation to use the tool.
+       Clear invitation to experience the platform.
   -->
   <section class="section" id="cta">
     <div class="container">
       <div class="cta-section reveal">
-        <h2 class="cta-section__title">Make Smarter Farming Decisions</h2>
+        <h2 class="cta-section__title">Ready for Smarter Farming?</h2>
         <p class="cta-section__desc">
-          Every season is an investment. AgroPan helps you see the outcome
-          before you commit — grounded in Nepal's real data, not guesswork.
+          From real-time field monitoring to predictive yield simulation — 
+          AgroPan gives you the intelligence to farm with confidence.
         </p>
-        <a href="#simulate" class="btn btn--primary btn--lg">
-          Start Your Simulation
-          <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        </a>
+        <div class="cta-section__actions">
+          <a href="#monitoring" class="btn btn--primary btn--lg">
+            <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><circle cx="8" cy="8" r="3"/><path d="M2 8h3M11 8h3M8 2v3M8 11v3"/></svg>
+            Monitor My Field
+          </a>
+          <a href="#simulate" class="btn btn--ghost btn--lg">
+            Run Simulation
+            <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -796,11 +1184,11 @@
   <!-- ============================================================
        FOOTER
        ============================================================
-       Minimal footer. "Built for Nepal."
+       Professional footer with platform positioning.
   -->
   <footer class="footer" role="contentinfo">
     <div class="container footer__inner">
-      <div>
+      <div class="footer__brand-section">
         <div class="footer__brand">
           <svg class="footer__brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="32" height="32" rx="8" fill="#2E7D65"/>
@@ -809,21 +1197,36 @@
           </svg>
           AgroPan
         </div>
-        <p class="footer__tagline">Agriculture Decision Simulator</p>
+        <p class="footer__tagline">Nepal's Smart Agriculture Intelligence Platform</p>
+        <p class="footer__positioning">
+          IoT sensors • Cloud monitoring • Predictive simulation • Smart alerts
+        </p>
       </div>
 
       <ul class="footer__links" role="list">
-        <li><a href="#insights">Insights</a></li>
-        <li><a href="#how-it-works">Process</a></li>
+        <li><a href="#platform">Platform</a></li>
+        <li><a href="#monitoring">Monitoring</a></li>
+        <li><a href="#alerts">Alerts</a></li>
         <li><a href="#simulate">Simulate</a></li>
       </ul>
 
-      <div>
+      <div class="footer__meta">
         <p class="footer__nepal">
-          <!-- Nepal flag emoji -->
-          🇳🇵 Built for Nepal
+          <svg class="footer__nepal-icon" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0h12l-6 6h10l-8 8v6H0z" fill="#DC143C" stroke="#003893" stroke-width="0.5"/>
+            <circle cx="4" cy="7" r="2" fill="#fff"/>
+            <path d="M4 13l1-1.5h-2z" fill="#fff"/>
+          </svg>
+          Built for Nepal
         </p>
-        <p class="footer__copy">© 2026 AgroPan. Open-source & policy-grade.</p>
+        <p class="footer__copy">© 2026 AgroPan. Smart agriculture for smallholder farmers.</p>
+      </div>
+    </div>
+
+    <!-- Positioning statement bar -->
+    <div class="footer__statement">
+      <div class="container">
+        <p>AgroPan — Nepal's Smart Agriculture Intelligence Platform</p>
       </div>
     </div>
   </footer>
