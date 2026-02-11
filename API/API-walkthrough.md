@@ -1382,13 +1382,13 @@ Remove an emergency alert.
 
 ### `emails` Table Schema
 
-| Column          | Type                      | Description                                  |
-| --------------- | ------------------------- | -------------------------------------------- |
-| `email_id`      | `int(11)` AUTO_INCREMENT  | Primary key                                  |
-| `email`         | `text`                    | Subscriber's email address                   |
-| `name`          | `text`                    | Subscriber's display name                    |
-| `subscribed_at` | `text`                    | Timestamp when the subscriber signed up      |
-| `is_active`     | `tinyint(1)` DEFAULT `1`  | `1` = active, `0` = unsubscribed             |
+| Column          | Type                     | Description                             |
+| --------------- | ------------------------ | --------------------------------------- |
+| `email_id`      | `int(11)` AUTO_INCREMENT | Primary key                             |
+| `email`         | `text`                   | Subscriber's email address              |
+| `name`          | `text`                   | Subscriber's display name               |
+| `subscribed_at` | `text`                   | Timestamp when the subscriber signed up |
+| `is_active`     | `tinyint(1)` DEFAULT `1` | `1` = active, `0` = unsubscribed        |
 
 ---
 
@@ -1406,11 +1406,11 @@ Register a new email subscriber.
 }
 ```
 
-| Field           | Required | Type   | Description                  |
-| --------------- | -------- | ------ | ---------------------------- |
-| `email`         | **Yes**  | string | Subscriber email address     |
-| `name`          | **Yes**  | string | Subscriber display name      |
-| `subscribed_at` | **Yes**  | string | Signup timestamp             |
+| Field           | Required | Type   | Description              |
+| --------------- | -------- | ------ | ------------------------ |
+| `email`         | **Yes**  | string | Subscriber email address |
+| `name`          | **Yes**  | string | Subscriber display name  |
+| `subscribed_at` | **Yes**  | string | Signup timestamp         |
 
 **Success Response:**
 
@@ -1444,8 +1444,8 @@ Fetch one subscriber by ID, or all active subscribers.
 {}
 ```
 
-| Field      | Required | Type | Description                                     |
-| ---------- | -------- | ---- | ----------------------------------------------- |
+| Field      | Required | Type | Description                                      |
+| ---------- | -------- | ---- | ------------------------------------------------ |
 | `email_id` | No       | int  | Specific subscriber ID; omit to fetch all active |
 
 **Success Response (all):**
@@ -1481,12 +1481,12 @@ Update a subscriber's details or toggle their active status (unsubscribe/resubsc
 }
 ```
 
-| Field      | Required | Type   | Description                          |
-| ---------- | -------- | ------ | ------------------------------------ |
-| `email_id` | **Yes**  | int    | ID of the subscriber to update       |
-| `email`    | No       | string | Updated email address                |
-| `name`     | No       | string | Updated display name                 |
-| `is_active`| No       | int    | `1` to resubscribe, `0` to unsubscribe |
+| Field       | Required | Type   | Description                            |
+| ----------- | -------- | ------ | -------------------------------------- |
+| `email_id`  | **Yes**  | int    | ID of the subscriber to update         |
+| `email`     | No       | string | Updated email address                  |
+| `name`      | No       | string | Updated display name                   |
+| `is_active` | No       | int    | `1` to resubscribe, `0` to unsubscribe |
 
 **Success Response:**
 
@@ -1511,9 +1511,9 @@ Permanently remove a subscriber from the database.
 }
 ```
 
-| Field      | Required | Type | Description                     |
-| ---------- | -------- | ---- | ------------------------------- |
-| `email_id` | **Yes**  | int  | ID of the subscriber to delete  |
+| Field      | Required | Type | Description                    |
+| ---------- | -------- | ---- | ------------------------------ |
+| `email_id` | **Yes**  | int  | ID of the subscriber to delete |
 
 **Success Response:**
 
@@ -1532,8 +1532,8 @@ Permanently remove a subscriber from the database.
 
 Two endpoints automatically send email notifications to **all active subscribers** (`is_active = 1` in the `emails` table):
 
-| Trigger Endpoint       | When                                   | Email Subject Prefix        |
-| ---------------------- | -------------------------------------- | --------------------------- |
+| Trigger Endpoint       | When                                    | Email Subject Prefix        |
+| ---------------------- | --------------------------------------- | --------------------------- |
 | `/create/data.php`     | New sensor reading uploaded by a device | `AgroPan — New Sensor Data` |
 | `/create/warnings.php` | New emergency alert issued by admin     | `AgroPan Emergency Alert`   |
 
@@ -1617,10 +1617,10 @@ All endpoints return errors in a consistent format:
 | `/read/warnings.php`    | POST   | Fetch alert(s)          |
 | `/update/warnings.php`  | POST   | Update an alert         |
 | `/delete/warnings.php`  | POST   | Remove an alert         |
-| `/create/emails.php`   | POST   | Subscribe an email      |
-| `/read/emails.php`     | POST   | Fetch subscriber(s)     |
-| `/update/emails.php`   | POST   | Update/unsubscribe      |
-| `/delete/emails.php`   | POST   | Delete a subscriber     |
+| `/create/emails.php`    | POST   | Subscribe an email      |
+| `/read/emails.php`      | POST   | Fetch subscriber(s)     |
+| `/update/emails.php`    | POST   | Update/unsubscribe      |
+| `/delete/emails.php`    | POST   | Delete a subscriber     |
 
 ---
 

@@ -17,8 +17,10 @@ on a single platform. Built as a zero-dependency, client-side landing
 page with plans for full-stack backend integration.
 
 Tech Stack: HTML5 + CSS3 (Custom Properties) + Vanilla JS (ES5+)
-Dependencies: Zero (no frameworks, no build tools, no npm)
+            PHP 8.0.30 + MariaDB 10.4.32 (XAMPP) for backend API
+Dependencies: Zero (frontend — no frameworks, no build tools, no npm)
 CSS Architecture: variables.css (tokens) + index.css (unified stylesheet)
+API Architecture: PHP CRUD folders (create/read/update/delete) + PDO
 
 Platform Pillars:
   1. IoT Field Device — ESP32-S3 sensor node → web API
@@ -54,6 +56,11 @@ Platform Pillars:
   [DONE] CSS optimization & consolidation                         — 100%
   [DONE] SEO (meta, OG, Twitter, JSON-LD, favicon)                — 100%
   [DONE] Logo integration (navbar + footer)                       — 100%
+  [DONE] API folder structure (8 tables × 4 CRUD = 32 endpoints)  — 100%
+  [DONE] API documentation (API-walkthrough.md v2.0)              — 100%
+  [DONE] Database connection (database.php — PDO + helpers)       — 100%
+  [DONE] Emails subscription table + CRUD files                   — 100%
+  [DONE] Email notification system (stubs in data & warnings)     — 100%
 
   [REMOVED] Simulation Panel — replaced by Marketplace feature
   [REMOVED] Simulation Engine (simulate.js) — no longer loaded
@@ -62,6 +69,7 @@ Platform Pillars:
   [REMOVED] Nepal Flag SVG in footer — removed per user request
 
   [TODO] Backend API (marketplace, user auth, forum)              —   0%
+         → API files exist, stubs ready — CRUD logic not yet written
   [TODO] Real-time forum w/ thread creation & replies             —   0%
   [TODO] Admin dashboard for alert broadcasting                   —   0%
   [TODO] Multi-language support (English + Nepali i18n)           —   0%
@@ -184,6 +192,81 @@ Platform Pillars:
     - Updated progress.log (this file)
     - Hardware guide in README preserved as-is
 
+--- [2026-02-12] Session #4 — API Folder Structure & Documentation ---
+
+  FEATURE: API Directory Scaffolding
+  STATUS:  COMPLETED
+  DETAILS:
+    - Analyzed agropan.sql schema (7 tables at the time: users,
+      crops, devices, data, questions, answers, warnings)
+    - Created API/ folder with 4 CRUD subfolders:
+        create/, read/, update/, delete/
+    - Created 28 empty PHP files (7 tables × 4 CRUD operations)
+    - Created database.php (empty placeholder)
+    - All files follow consistent naming: {table_name}.php
+
+  FEATURE: API Walkthrough Documentation
+  STATUS:  COMPLETED
+  DETAILS:
+    - Created API/API-walkthrough.md (v1.0) — comprehensive docs
+      for all 28 endpoints
+    - Documented request/response format, schema for every table,
+      example JSON payloads, error handling, status codes
+    - Included Quick Reference table for all endpoints
+    - Noted warnings table bug (title/details typed as int(11)
+      instead of text)
+
+--- [2026-02-13] Session #5 — Emails Table, Database Connection, Notifications ---
+
+  FEATURE: Emails Subscription Table
+  STATUS:  COMPLETED
+  DETAILS:
+    - Added `emails` table to agropan.sql (between devices & questions)
+    - Schema: email_id (PK, AUTO_INCREMENT), email (TEXT),
+      name (TEXT), subscribed_at (TEXT), is_active (TINYINT DEFAULT 1)
+    - Added PRIMARY KEY index and AUTO_INCREMENT for email_id
+    - Created 4 CRUD PHP files: create/emails.php, read/emails.php,
+      update/emails.php, delete/emails.php
+    - Database now has 8 tables (was 7)
+
+  FEATURE: Database Connection (database.php)
+  STATUS:  COMPLETED
+  DETAILS:
+    - Wrote centralized PDO database connection in API/database.php
+    - DSN: mysql:host=127.0.0.1;dbname=agropan;charset=utf8mb4
+    - PDO options: ERRMODE_EXCEPTION, FETCH_ASSOC, real prepared stmts
+    - CORS headers included (Access-Control-Allow-Origin: *)
+    - OPTIONS preflight handling
+    - Helper functions:
+        sendResponse() — standardized JSON response + exit
+        getJsonInput() — reads & validates raw JSON body
+        notifyAllSubscribers() — fans out emails to all active subs
+
+  FEATURE: Email Notification Stubs
+  STATUS:  COMPLETED
+  DETAILS:
+    - Added structural stubs to API/create/data.php:
+        - Includes database.php, validates required fields
+        - Commented-out notifyAllSubscribers() call ready to activate
+        - Email includes device name, all sensor values, timestamp
+    - Added structural stubs to API/create/warnings.php:
+        - Includes database.php, validates required fields
+        - Commented-out notifyAllSubscribers() call ready to activate
+        - Email includes alert title, details, validity period
+    - Both files ready for INSERT queries — uncomment notification
+      calls after INSERT logic is implemented
+
+  FEATURE: API Documentation Update (v2.0)
+  STATUS:  COMPLETED
+  DETAILS:
+    - Added Section 8: Emails API (full CRUD docs with schema,
+      request/response examples)
+    - Added "Email Notification Triggers" section documenting
+      auto-notifications from data.php and warnings.php
+    - Updated Table of Contents, Schema Summary, Directory Structure
+    - Added emails endpoints to Quick Reference table
+    - Bumped document version to 2.0
+
 ================================================================================
   FILE INVENTORY
 ================================================================================
@@ -197,7 +280,17 @@ Platform Pillars:
   docs/architecture.md    — Architecture documentation (v2.0)
   README.md               — Project overview, hardware guide, features
   gallery/                — 34 image assets (Nepali agriculture photography)
+  agropan.sql             — Database schema (8 tables)
   progress.log            — This file
+
+  API/database.php        — PDO connection + helpers (sendResponse,
+                            getJsonInput, notifyAllSubscribers)
+  API/API-walkthrough.md  — Full API documentation (v2.0, 32 endpoints)
+  API/create/             — 8 PHP files (users, crops, devices, data,
+                            emails, questions, answers, warnings)
+  API/read/               — 8 PHP files (same set)
+  API/update/             — 8 PHP files (same set)
+  API/delete/             — 8 PHP files (same set)
 
 ================================================================================
   NOTES
@@ -208,7 +301,13 @@ Platform Pillars:
   - Four platform pillars: IoT, Marketplace, Forum, Admin Alerts
   - simulate.js still exists on disk but is not loaded — can be deleted
   - Backend API integration (user auth, marketplace, forum, alerts)
-    is the next major development phase
+    is the next major development phase — all 32 PHP files are stubbed
+    and ready for CRUD logic implementation
+  - database.php provides shared PDO connection + response/input helpers
+  - Email notifications will auto-fire from create/data.php and
+    create/warnings.php once INSERT logic is uncommented
+  - For production email delivery, replace mail() with PHPMailer or
+    a transactional email API (SendGrid, Mailgun)
   - All images are real Nepali agriculture photography (no stock/AI)
   - CSS architecture is token-driven: changing --color-primary updates
     the entire design system
