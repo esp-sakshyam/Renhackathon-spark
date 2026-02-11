@@ -35,7 +35,12 @@ body {
     min-height: 100dvh;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--font-heading);
     font-weight: var(--weight-semibold);
     line-height: var(--leading-tight);
@@ -58,7 +63,10 @@ img {
     height: auto;
 }
 
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
     font: inherit;
     color: inherit;
 }
@@ -108,11 +116,9 @@ button {
 .auth__image-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        135deg,
-        rgba(46, 125, 101, 0.80) 0%,
-        rgba(34, 94, 76, 0.90) 100%
-    );
+    background: linear-gradient(135deg,
+            rgba(46, 125, 101, 0.80) 0%,
+            rgba(34, 94, 76, 0.90) 100%);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -282,8 +288,8 @@ button {
     font-size: var(--text-base);
     color: var(--color-text);
     transition: border-color var(--duration-fast) var(--ease-out),
-                box-shadow var(--duration-fast) var(--ease-out),
-                background var(--duration-fast) var(--ease-out);
+        box-shadow var(--duration-fast) var(--ease-out),
+        background var(--duration-fast) var(--ease-out);
 }
 
 .form-group__input::placeholder {
@@ -297,13 +303,13 @@ button {
     background: var(--color-bg-card);
 }
 
-.form-group__input:focus + .form-group__icon,
-.form-group__input:focus ~ .form-group__icon {
+.form-group__input:focus+.form-group__icon,
+.form-group__input:focus~.form-group__icon {
     color: var(--color-primary);
 }
 
 /* Reverse icon order: input first, icon via ~ */
-.form-group__input-wrap .form-group__input:focus ~ .form-group__icon {
+.form-group__input-wrap .form-group__input:focus~.form-group__icon {
     color: var(--color-primary);
 }
 
@@ -369,7 +375,7 @@ button {
     background: rgba(46, 125, 101, 0.03);
 }
 
-.type-selector__input:checked + .type-selector__card {
+.type-selector__input:checked+.type-selector__card {
     border-color: var(--color-primary);
     background: rgba(46, 125, 101, 0.06);
     box-shadow: 0 0 0 3px rgba(46, 125, 101, 0.12);
@@ -381,7 +387,7 @@ button {
     transition: color var(--duration-fast) var(--ease-out);
 }
 
-.type-selector__input:checked + .type-selector__card .type-selector__icon {
+.type-selector__input:checked+.type-selector__card .type-selector__icon {
     color: var(--color-primary);
 }
 
@@ -491,7 +497,9 @@ button {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 
@@ -573,6 +581,7 @@ button {
         opacity: 0;
         transform: translateY(-8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -600,7 +609,7 @@ button {
     width: 0%;
     border-radius: 2px;
     transition: width var(--duration-normal) var(--ease-out),
-                background var(--duration-normal) var(--ease-out);
+        background var(--duration-normal) var(--ease-out);
 }
 
 .password-strength__fill--weak {
@@ -756,6 +765,7 @@ button {
 
 /* ── Reduced motion ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
