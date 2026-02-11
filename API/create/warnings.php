@@ -39,21 +39,22 @@ try {
     );
 
     $stmt->execute([
-        ':title'      => $input['title'],
-        ':details'    => $input['details'],
-        ':timestamp'  => $timestamp,
+        ':title' => $input['title'],
+        ':details' => $input['details'],
+        ':timestamp' => $timestamp,
         ':valid_till' => $input['valid_till']
     ]);
 
     $warningId = $pdo->lastInsertId();
 
     // ── Notify subscribers ──
-    notifyAllSubscribers($pdo,
+    notifyAllSubscribers(
+        $pdo,
         'AgroPan Emergency Alert — ' . $input['title'],
         "An emergency alert has been issued:\n\n"
-        . "Title      : " . $input['title']      . "\n"
-        . "Details    : " . $input['details']     . "\n"
-        . "Issued at  : " . $timestamp            . "\n"
+        . "Title      : " . $input['title'] . "\n"
+        . "Details    : " . $input['details'] . "\n"
+        . "Issued at  : " . $timestamp . "\n"
         . "Valid till : " . $input['valid_till']
     );
 

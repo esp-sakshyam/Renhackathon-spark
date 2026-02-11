@@ -4,7 +4,7 @@
   Ren Hackathon Spark
 ================================================================================
 
-Last Updated: 2026-02-13
+Last Updated: 2026-02-11
 
 ================================================================================
   PROJECT OVERVIEW
@@ -60,7 +60,10 @@ Platform Pillars:
   [DONE] API documentation (API-walkthrough.md v2.0)              — 100%
   [DONE] Database connection (database.php — PDO + helpers)       — 100%
   [DONE] Emails subscription table + CRUD files                   — 100%
-  [DONE] Email notification system (stubs in data & warnings)     — 100%
+  [DONE] Email notification system (live in data & warnings)      — 100%
+  [DONE] Create APIs — all 8 tables fully implemented              — 100%
+  [DONE] Warnings schema fix (title/details → text)               — 100%
+  [DONE] Unix timestamps everywhere (no YYYY-MM-DD anywhere)      — 100%
 
   [REMOVED] Simulation Panel — replaced by Marketplace feature
   [REMOVED] Simulation Engine (simulate.js) — no longer loaded
@@ -68,8 +71,9 @@ Platform Pillars:
   [REMOVED] Why Nepal Section — replaced by Features Overview
   [REMOVED] Nepal Flag SVG in footer — removed per user request
 
-  [TODO] Backend API (marketplace, user auth, forum)              —   0%
-         → API files exist, stubs ready — CRUD logic not yet written
+  [TODO] Read APIs — all 8 tables                                —   0%
+  [TODO] Update APIs — all 8 tables                               —   0%
+  [TODO] Delete APIs — all 8 tables                               —   0%
   [TODO] Real-time forum w/ thread creation & replies             —   0%
   [TODO] Admin dashboard for alert broadcasting                   —   0%
   [TODO] Multi-language support (English + Nepali i18n)           —   0%
@@ -267,6 +271,64 @@ Platform Pillars:
     - Added emails endpoints to Quick Reference table
     - Bumped document version to 2.0
 
+--- [2026-02-11] Session #6 — Create APIs Implementation ---
+
+  FEATURE: All 8 Create API Endpoints — Fully Implemented
+  STATUS:  COMPLETED
+  DETAILS:
+    - Unix timestamps used everywhere (time()) — no date strings
+    - All endpoints: require database.php, validate input, use
+      prepared statements, return JSON with inserted ID
+
+    create/users.php:
+      - Accepts: username, email, name, location, type, password
+      - Hashes password with bcrypt (password_hash)
+      - Checks duplicate username/email before insert
+      - Sets last_login = current Unix timestamp
+      - Validates type is 'farmer' or 'merchant'
+
+    create/crops.php:
+      - Accepts: name, image, type, price
+      - Sets last_updated = current Unix timestamp
+
+    create/devices.php:
+      - Accepts: name, location, owned_by
+      - Sets last_ping = current Unix timestamp
+
+    create/data.php:
+      - Accepts: temperature, moisture, humidity, gases, nitrogen, device
+      - Sets timestamp = current Unix timestamp (server-side)
+      - Triggers notifyAllSubscribers() after insert (LIVE)
+
+    create/emails.php:
+      - Accepts: email, name
+      - Validates email format (filter_var)
+      - Checks duplicate email before insert
+      - Sets subscribed_at = current Unix timestamp, is_active = 1
+
+    create/questions.php:
+      - Accepts: question, type, asked_by
+      - Initializes upvotes='0', downvotes='0', answers=''
+
+    create/answers.php:
+      - Accepts: question_id, answer, answered_by
+      - Validates parent question exists
+      - Initializes upvotes='0', downvotes='0'
+      - Appends new answer_id to parent question's answers field
+
+    create/warnings.php:
+      - Accepts: title, details, valid_till (Unix timestamp)
+      - Sets timestamp = current Unix timestamp (server-side)
+      - Triggers notifyAllSubscribers() after insert (LIVE)
+
+  FEATURE: Warnings Table Schema Fix
+  STATUS:  COMPLETED
+  DETAILS:
+    - Fixed agropan.sql: title and details columns changed from
+      int(11) to text (was a schema bug since the original dump)
+    - timestamp and valid_till also changed to text for consistency
+      (all columns in all tables store values as text)
+
 ================================================================================
   FILE INVENTORY
 ================================================================================
@@ -300,12 +362,14 @@ Platform Pillars:
     (no mock data or simulation on the landing page)
   - Four platform pillars: IoT, Marketplace, Forum, Admin Alerts
   - simulate.js still exists on disk but is not loaded — can be deleted
-  - Backend API integration (user auth, marketplace, forum, alerts)
-    is the next major development phase — all 32 PHP files are stubbed
-    and ready for CRUD logic implementation
+  - Create APIs are fully implemented (8/8). Read, Update, Delete
+    APIs are next.
   - database.php provides shared PDO connection + response/input helpers
-  - Email notifications will auto-fire from create/data.php and
-    create/warnings.php once INSERT logic is uncommented
+  - Email notifications fire automatically from create/data.php and
+    create/warnings.php (LIVE — not commented out)
+  - All timestamps are Unix timestamps (time()) — no date strings
+  - User passwords are bcrypt-hashed (password_hash + password_verify)
+  - answers.php auto-appends answer_id to parent question's answers field
   - For production email delivery, replace mail() with PHPMailer or
     a transactional email API (SendGrid, Mailgun)
   - All images are real Nepali agriculture photography (no stock/AI)
