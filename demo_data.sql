@@ -5,14 +5,14 @@
 
 -- ── Users ────────────────────────────────────────────
 INSERT INTO `users` (`username`, `email`, `phone`, `name`, `location`, `type`, `last_login`, `password`) VALUES
-('admin',       'admin@agropan.com',      '9800000001', 'System Admin',    'Kathmandu',  'admin',    '1739260800', '$2y$10$QOLw43vAi7gmgNtO9OMJyuEM7FomfkybPtpkdKBN2ZEKB9aFsaApe'),
-('ram_thapa',   'ram@example.com',        '9812345678', 'Ram Thapa',       'Chitwan',    'farmer',   '1739174400', '$2y$10$IMNamhPvDeERLsPUbsq2OuJZKHR8HRlftPgVjTrv3F4AZEVnaafVy'),
-('sita_sharma', 'sita@example.com',       '9823456789', 'Sita Sharma',     'Pokhara',    'farmer',   '1739088000', '$2y$10$IMNamhPvDeERLsPUbsq2OuJZKHR8HRlftPgVjTrv3F4AZEVnaafVy'),
-('hari_kc',     'hari@example.com',       '9834567890', 'Hari KC',         'Biratnagar', 'farmer',   '1739001600', '$2y$10$IMNamhPvDeERLsPUbsq2OuJZKHR8HRlftPgVjTrv3F4AZEVnaafVy'),
-('gita_rai',    'gita@example.com',       '9845678901', 'Gita Rai',        'Dharan',     'merchant', '1738915200', '$2y$10$5T2Z5qI4abf6/6Aq4ilzwuxOp1y7W8DGP8UOWYGzSlaCI7Ajp6kwe'),
-('bishal_pun',  'bishal@example.com',     '9856789012', 'Bishal Pun',      'Butwal',     'merchant', '1738828800', '$2y$10$5T2Z5qI4abf6/6Aq4ilzwuxOp1y7W8DGP8UOWYGzSlaCI7Ajp6kwe'),
-('anita_gurung','anita@example.com',      '9867890123', 'Anita Gurung',    'Lumbini',    'farmer',   '1738742400', '$2y$10$IMNamhPvDeERLsPUbsq2OuJZKHR8HRlftPgVjTrv3F4AZEVnaafVy'),
-('raju_shrestha','raju@example.com',      '9878901234', 'Raju Shrestha',   'Lalitpur',   'merchant', '1738656000', '$2y$10$5T2Z5qI4abf6/6Aq4ilzwuxOp1y7W8DGP8UOWYGzSlaCI7Ajp6kwe');
+('admin',       'admin@agropan.com',      '9800000001', 'System Admin',    'Kathmandu',  'admin',    '1739260800', '$2y$10$cuBc/F4T.omUmeavHrZ1G.QFMfRiYL4P/18mYsz/sJPjEFkhtS0tq'),
+('ram_thapa',   'ram@example.com',        '9812345678', 'Ram Thapa',       'Chitwan',    'farmer',   '1739174400', '$2y$10$cuBc/F4T.omUmeavHrZ1G.QFMfRiYL4P/18mYsz/sJPjEFkhtS0tq'),
+('sita_sharma', 'sita@example.com',       '9823456789', 'Sita Sharma',     'Pokhara',    'farmer',   '1739088000', '$2y$10$cuBc/F4T.omUmeavHrZ1G.QFMfRiYL4P/18mYsz/sJPjEFkhtS0tq'),
+('hari_kc',     'hari@example.com',       '9834567890', 'Hari KC',         'Biratnagar', 'farmer',   '1739001600', '$2y$10$cuBc/F4T.omUmeavHrZ1G.QFMfRiYL4P/18mYsz/sJPjEFkhtS0tq'),
+('gita_rai',    'gita@example.com',       '9845678901', 'Gita Rai',        'Dharan',     'merchant', '1738915200', '$2y$10$cuBc/F4T.omUmeavHrZ1G.QFMfRiYL4P/18mYsz/sJPjEFkhtS0tq'),
+('bishal_pun',  'bishal@example.com',     '9856789012', 'Bishal Pun',      'Butwal',     'merchant', '1738828800', '$2y$10$cuBc/F4T.omUmeavHrZ1G.QFMfRiYL4P/18mYsz/sJPjEFkhtS0tq'),
+('anita_gurung','anita@example.com',      '9867890123', 'Anita Gurung',    'Lumbini',    'farmer',   '1738742400', '$2y$10$cuBc/F4T.omUmeavHrZ1G.QFMfRiYL4P/18mYsz/sJPjEFkhtS0tq'),
+('raju_shrestha','raju@example.com',      '9878901234', 'Raju Shrestha',   'Lalitpur',   'merchant', '1738656000', '$2y$10$cuBc/F4T.omUmeavHrZ1G.QFMfRiYL4P/18mYsz/sJPjEFkhtS0tq');
 
 -- ── Devices ──────────────────────────────────────────
 INSERT INTO `devices` (`name`, `location`, `last_ping`, `owned_by`) VALUES
