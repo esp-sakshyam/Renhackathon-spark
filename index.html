@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ============================================================
+       AgroPan — Nepal Agriculture Decision & Risk Simulation
+       ============================================================
+       A production-grade decision-support simulator that helps
+       Nepali farmers simulate outcomes before planting.
+       ============================================================ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AgroPan — Simulate agricultural decisions for Nepal. Understand risk, yield, and profit before you plant." />
+  <meta name="theme-color" content="#2E7D65" />
+
+  <title>AgroPan — Agriculture Decision Simulator for Nepal</title>
+
+  <!-- Google Fonts: Poppins + Inter + Noto Sans (Nepali compat) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets — order matters: tokens → reset → layout → components -->
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <!-- Favicon (inline SVG data-URI so no external file is needed) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAVIGATION
+       ============================================================
+       Fixed nav with glass-morphism. Collapses to hamburger
+       on mobile. JS adds .navbar--scrolled on scroll.
+  -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container navbar__inner">
+
+      <!-- Brand -->
+      <a href="#" class="navbar__brand" aria-label="AgroPan home">
+        <!-- Inline SVG logo — leaf + chart motif -->
+        <svg class="navbar__brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="#2E7D65"/>
+          <path d="M8 24 C8 24 10 12 16 10 C22 8 24 16 24 16 C24 16 20 14 16 16 C12 18 8 24 8 24Z" fill="#fff" opacity="0.9"/>
+          <line x1="16" y1="16" x2="16" y2="26" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        </svg>
+        AgroPan
+      </a>
+
+      <!-- Desktop nav links -->
+      <ul class="navbar__links" role="list">
+        <li><a href="#insights">Insights</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#why-nepal">Why Nepal</a></li>
+        <li><a href="#simulate">Simulate</a></li>
+      </ul>
+
+      <!-- Desktop CTA -->
+      <a href="#simulate" class="btn btn--primary btn--sm navbar__cta">
+        Simulate Your Farm
+      </a>
+
+      <!-- Mobile hamburger -->
+      <button class="navbar__toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <!-- Mobile dropdown menu -->
+    <div class="navbar__mobile-menu" id="nav-mobile">
+      <ul role="list">
+        <li><a href="#insights">Insights</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#why-nepal">Why Nepal</a></li>
+        <li><a href="#simulate">Simulate</a></li>
+        <li><a href="#simulate" class="btn btn--primary btn--sm" style="text-align:center;">Simulate Your Farm</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       HERO SECTION
+       ============================================================
+       Full-viewport hero with terraced field background.
+       Communicates AgroPan's core value: simulate before
+       you plant.
+  -->
+  <header class="hero" id="hero">
+    <!-- Background image — Nepali terraced fields -->
+    <div class="hero__bg">
+      <img
+        src="gallery/beautiful-landscape-view-greenery-paddy-farmland-kathmandu-nepal_131480-1028.jpg"
+        alt="Terraced rice paddies in the hills of Kathmandu, Nepal"
+        loading="eager"
+      />
+    </div>
+
+    <!-- Dark overlay for text contrast -->
+    <div class="hero__overlay" aria-hidden="true"></div>
+
+    <!-- Hero content -->
+    <div class="hero__content">
+      <div class="hero__badge">
+        <span class="hero__badge-dot" aria-hidden="true"></span>
+        Nepal-Focused Agriculture Intelligence
+      </div>
+
+      <h1 class="hero__title">
+        Simulate Your Harvest<br />Before You Plant
+      </h1>
+
+      <p class="hero__subtitle">
+        AgroPan is a decision-support simulator built for Nepali farmers.
+        Understand yield, risk, and profit outcomes based on Nepal's real
+        climate, terrain, and market data — before the first seed goes in.
+      </p>
+
+      <div class="hero__actions">
+        <a href="#simulate" class="btn btn--primary btn--lg">
+          Simulate Your Farm
+          <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+        <a href="#how-it-works" class="btn btn--ghost btn--lg" style="border-color: rgba(255,255,255,0.4); color: #fff;">
+          How It Works
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="hero__stats">
+      <div class="container hero__stats-inner">
+        <div class="hero__stat">
+          <div class="hero__stat-value">77</div>
+          <div class="hero__stat-label">Districts Covered</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value">45+</div>
+          <div class="hero__stat-label">Crop Profiles</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value">3</div>
+          <div class="hero__stat-label">Ecological Zones</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value">10yr</div>
+          <div class="hero__stat-label">Climate Data</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ============================================================
+       INSIGHT GALLERY
+       ============================================================
+       A curated grid of Nepali agriculture images, each tied to
+       a single insight about climate, crop, or market realities.
+  -->
+  <section class="section" id="insights">
+    <div class="container">
+      <div class="section__header reveal">
+        <span class="section__tag">Field Intelligence</span>
+        <h2 class="section__title">Insights From the Ground</h2>
+        <p class="section__subtitle">
+          Real images. Real data points. Each frame captures a dimension of
+          Nepal's agricultural landscape that AgroPan models.
+        </p>
+      </div>
+
+      <div class="gallery__grid reveal-stagger">
+        <!-- Card 1 — Climate -->
+        <div class="gallery__card">
+          <img
+            src="gallery/Nepal_landscape_1.jpg"
+            alt="Expansive Nepali landscape showing diverse terrain and weather patterns"
+            loading="lazy"
+          />
+          <div class="gallery__card-overlay">
+            <span class="gallery__card-tag">Climate</span>
+            <h3 class="gallery__card-title">Monsoon-Dependent Agriculture</h3>
+            <p class="gallery__card-desc">
+              Over 80% of Nepal's farmland relies on monsoon rainfall,
+              making timing and prediction critical for crop survival.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 2 — Technology -->
+        <div class="gallery__card">
+          <img
+            src="gallery/Drone-in-Agriculture.jpg"
+            alt="Agricultural drone surveying crop fields in Nepal"
+            loading="lazy"
+          />
+          <div class="gallery__card-overlay">
+            <span class="gallery__card-tag">Technology</span>
+            <h3 class="gallery__card-title">Precision Meets Tradition</h3>
+            <p class="gallery__card-desc">
+              Emerging agri-tech tools are beginning to bridge ancient
+              farming wisdom with data-driven decision-making.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3 — Crop -->
+        <div class="gallery__card">
+          <img
+            src="gallery/martin-skrivanek-0omS4uLbies-unsplash-1024x683.jpg"
+            alt="Rice paddy terraces on hillside reflecting generations of Nepali farming"
+            loading="lazy"
+          />
+          <div class="gallery__card-overlay">
+            <span class="gallery__card-tag">Crop</span>
+            <h3 class="gallery__card-title">Rice: Nepal's Lifeline</h3>
+            <p class="gallery__card-desc">
+              Rice occupies 45% of arable land. Yield depends on
+              altitude, irrigation access, and planting window.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 4 — Market -->
+        <div class="gallery__card">
+          <img
+            src="gallery/nepal-agrotourism.jpg"
+            alt="Local Nepali farmers at a market with their produce"
+            loading="lazy"
+          />
+          <div class="gallery__card-overlay">
+            <span class="gallery__card-tag">Market</span>
+            <h3 class="gallery__card-title">From Farm to Market</h3>
+            <p class="gallery__card-desc">
+              Price volatility at local mandis can erase a season's
+              profit. Simulating market conditions reduces that risk.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 5 — Terrain -->
+        <div class="gallery__card">
+          <img
+            src="gallery/50168782292_b471403533_b.jpg"
+            alt="Terraced farming in the mid-hills of Nepal"
+            loading="lazy"
+          />
+          <div class="gallery__card-overlay">
+            <span class="gallery__card-tag">Terrain</span>
+            <h3 class="gallery__card-title">Hills, Terai & Mountains</h3>
+            <p class="gallery__card-desc">
+              Three ecological belts with vastly different growing
+              conditions — one model cannot fit all.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       HOW IT WORKS
+       ============================================================
+       Four-step process explained in clean cards with
+       numbered steps.
+  -->
+  <section class="section section--lg" id="how-it-works" style="background: #fff;">
+    <div class="container">
+      <div class="section__header reveal">
+        <span class="section__tag">Process</span>
+        <h2 class="section__title">How AgroPan Works</h2>
+        <p class="section__subtitle">
+          Four simple steps between uncertainty and a data-backed
+          farming decision.
+        </p>
+      </div>
+
+      <div class="process__grid reveal-stagger">
+        <!-- Step 1 -->
+        <div class="process__card">
+          <div class="process__step" aria-hidden="true"></div>
+          <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="22" cy="22" r="20" stroke="#2E7D65" stroke-width="1.5" fill="none"/>
+            <path d="M22 12v4M22 28v4M12 22h4M28 22h4" stroke="#2E7D65" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="22" cy="22" r="6" stroke="#2E7D65" stroke-width="1.5" fill="rgba(46,125,101,0.1)"/>
+          </svg>
+          <h3 class="process__card-title">Location & Crop</h3>
+          <p class="process__card-desc">
+            Select your district and ecological zone. Choose from 45+ crop
+            profiles calibrated to Nepal's soil and altitude data.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="process__card">
+          <div class="process__step" aria-hidden="true"></div>
+          <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="4" y="8" width="36" height="28" rx="4" stroke="#2F8F9D" stroke-width="1.5" fill="none"/>
+            <path d="M4 16h36" stroke="#2F8F9D" stroke-width="1.5"/>
+            <circle cx="14" cy="26" r="3" fill="rgba(47,143,157,0.2)" stroke="#2F8F9D" stroke-width="1.2"/>
+            <circle cx="26" cy="24" r="4" fill="rgba(47,143,157,0.2)" stroke="#2F8F9D" stroke-width="1.2"/>
+          </svg>
+          <h3 class="process__card-title">Climate & Market Inputs</h3>
+          <p class="process__card-desc">
+            AgroPan pulls 10 years of rainfall, temperature, and market price
+            data to create realistic boundary conditions for your simulation.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="process__card">
+          <div class="process__step" aria-hidden="true"></div>
+          <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M8 34 L14 24 L20 28 L28 14 L36 18" stroke="#F2A900" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="14" cy="24" r="2.5" fill="#F2A900"/>
+            <circle cx="28" cy="14" r="2.5" fill="#F2A900"/>
+            <path d="M8 34 L14 24 L20 28 L28 14 L36 18 V34 H8Z" fill="rgba(242,169,0,0.08)"/>
+          </svg>
+          <h3 class="process__card-title">Risk Simulation</h3>
+          <p class="process__card-desc">
+            The engine runs probabilistic models across climate scenarios,
+            generating yield ranges, risk levels, and profit projections.
+          </p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="process__card">
+          <div class="process__step" aria-hidden="true"></div>
+          <svg class="process__card-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="6" y="6" width="32" height="32" rx="6" stroke="#2E7D65" stroke-width="1.5" fill="none"/>
+            <path d="M15 22 L20 27 L30 16" stroke="#2E7D65" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3 class="process__card-title">Decision Outcome</h3>
+          <p class="process__card-desc">
+            View clear, color-coded results: expected yield, risk assessment,
+            and profit estimate — then decide with confidence.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       WHY AGROPAN FOR NEPAL
+       ============================================================
+       Three core reasons this tool is Nepal-specific, not a
+       generic global solution.
+  -->
+  <section class="section" id="why-nepal">
+    <div class="container">
+      <div class="section__header reveal">
+        <span class="section__tag">Context Matters</span>
+        <h2 class="section__title">Why AgroPan Is Built for Nepal</h2>
+        <p class="section__subtitle">
+          Generic agriculture tools ignore the realities that define
+          Nepali farming. AgroPan doesn't.
+        </p>
+      </div>
+
+      <div class="nepal__grid reveal-stagger">
+        <!-- Card: Hills vs Terai -->
+        <div class="nepal__card">
+          <div class="nepal__card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 20L8 10l4 5 4-8 6 13"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="nepal__card-title">Hills vs. Terai Dynamics</h3>
+            <p class="nepal__card-desc">
+              Crop viability changes dramatically between the flat Terai plains
+              and terraced mid-hill farms. AgroPan models both ecological zones
+              with calibrated parameters — because what works in Chitwan fails
+              in Sindhupalchok.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card: Monsoon Reliance -->
+        <div class="nepal__card">
+          <div class="nepal__card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v6M12 18v4M4 12H2M22 12h-2M6.34 6.34L4.93 4.93M19.07 4.93l-1.41 1.41"/>
+              <path d="M8 16a4 4 0 1 1 8 0"/>
+              <path d="M8 20h8"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="nepal__card-title">Monsoon Dependency</h3>
+            <p class="nepal__card-desc">
+              With 80%+ of agriculture rain-fed, a delayed monsoon can mean
+              disaster. AgroPan factors in historical monsoon patterns and
+              onset variability so farmers see timing-based risk before
+              committing to a planting window.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card: Small Landholders -->
+        <div class="nepal__card">
+          <div class="nepal__card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="nepal__card-title">Small Landholder Reality</h3>
+            <p class="nepal__card-desc">
+              The average Nepali farm is under 0.7 hectares. Every decision
+              carries disproportionate risk. AgroPan's simulations are tuned
+              for smallholder economics where margins are razor-thin and one
+              bad season can mean food insecurity.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card: Market Access -->
+        <div class="nepal__card">
+          <div class="nepal__card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3h18v18H3z"/>
+              <path d="M7 17V10M12 17V7M17 17v-5"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="nepal__card-title">Market Price Volatility</h3>
+            <p class="nepal__card-desc">
+              Local mandi prices swing 30–50% within a single season. AgroPan
+              integrates historical price data to project profit ranges, not
+              just yield — because a bumper crop at crashed prices helps no one.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card: Data Gap -->
+        <div class="nepal__card">
+          <div class="nepal__card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="nepal__card-title">Closing the Data Gap</h3>
+            <p class="nepal__card-desc">
+              Nepal's agricultural data is fragmented across government offices,
+              NGOs, and research stations. AgroPan consolidates 10+ years of
+              climate, soil, and market records into a single simulation layer.
+            </p>
+          </div>
+        </div>
+
+        <!-- Card: Policy Ready -->
+        <div class="nepal__card">
+          <div class="nepal__card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6M9 13h6M9 17h6M9 9h1"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="nepal__card-title">Policy-Grade Insights</h3>
+            <p class="nepal__card-desc">
+              Beyond individual farmers, AgroPan's simulation data can inform
+              district-level agricultural planning, subsidy targeting, and
+              climate adaptation strategies for Nepal's policymakers.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SIMULATION PANEL
+       ============================================================
+       The core product feature: a split-panel form where users
+       select inputs on the left and see simulated outputs on
+       the right. This is the heart of AgroPan.
+  -->
+  <section class="section section--lg" id="simulate" style="background: #fff;">
+    <div class="container">
+      <div class="section__header reveal">
+        <span class="section__tag">Decision Engine</span>
+        <h2 class="section__title">Run a Simulation</h2>
+        <p class="section__subtitle">
+          Choose your location, crop, and season. AgroPan will project
+          your expected yield, risk level, and profit range.
+        </p>
+      </div>
+
+      <div class="sim reveal">
+        <div class="sim__layout">
+
+          <!-- ── Inputs ── -->
+          <div class="sim__inputs">
+            <h3 class="sim__inputs-title">Simulation Parameters</h3>
+            <p class="sim__inputs-subtitle">Configure your farm scenario</p>
+
+            <form id="sim-form" novalidate>
+              <!-- Location -->
+              <div class="sim__field">
+                <label class="sim__label" for="sim-district">District</label>
+                <div class="sim__select-wrapper">
+                  <select class="sim__select" id="sim-district" name="district">
+                    <option value="" disabled selected>Select district…</option>
+                    <option value="kathmandu">Kathmandu</option>
+                    <option value="chitwan">Chitwan</option>
+                    <option value="morang">Morang</option>
+                    <option value="kaski">Kaski</option>
+                    <option value="rupandehi">Rupandehi</option>
+                    <option value="jhapa">Jhapa</option>
+                    <option value="kailali">Kailali</option>
+                    <option value="sunsari">Sunsari</option>
+                    <option value="sindhupalchok">Sindhupalchok</option>
+                    <option value="dang">Dang</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Crop -->
+              <div class="sim__field">
+                <label class="sim__label" for="sim-crop">Crop</label>
+                <div class="sim__select-wrapper">
+                  <select class="sim__select" id="sim-crop" name="crop">
+                    <option value="" disabled selected>Select crop…</option>
+                    <option value="rice">Rice (धान)</option>
+                    <option value="maize">Maize (मकै)</option>
+                    <option value="wheat">Wheat (गहुँ)</option>
+                    <option value="millet">Millet (कोदो)</option>
+                    <option value="lentil">Lentil (मसुरो)</option>
+                    <option value="mustard">Mustard (तोरी)</option>
+                    <option value="potato">Potato (आलु)</option>
+                    <option value="sugarcane">Sugarcane (उखु)</option>
+                    <option value="tea">Tea (चिया)</option>
+                    <option value="cardamom">Cardamom (अलैंची)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Season -->
+              <div class="sim__field">
+                <label class="sim__label" for="sim-season">Planting Season</label>
+                <div class="sim__select-wrapper">
+                  <select class="sim__select" id="sim-season" name="season">
+                    <option value="" disabled selected>Select season…</option>
+                    <option value="monsoon">Monsoon (Barkha)</option>
+                    <option value="winter">Winter (Hiundu)</option>
+                    <option value="spring">Spring (Basanta)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Land size -->
+              <div class="sim__field">
+                <label class="sim__label" for="sim-land">Land Area (Ropani)</label>
+                <input
+                  type="number"
+                  class="sim__input"
+                  id="sim-land"
+                  name="land"
+                  placeholder="e.g. 5"
+                  min="1"
+                  max="100"
+                  step="1"
+                />
+              </div>
+
+              <button type="submit" class="btn btn--primary btn--lg sim__run-btn" id="sim-run">
+                Run Simulation
+                <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- ── Outputs ── -->
+          <div class="sim__outputs">
+            <h3 class="sim__outputs-title">Simulation Results</h3>
+
+            <!-- Placeholder (before simulation) -->
+            <div class="sim__placeholder" id="sim-placeholder">
+              <svg class="sim__placeholder-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect x="4" y="4" width="40" height="40" rx="8" stroke="#ccc" stroke-width="1.5" fill="none"/>
+                <path d="M16 32V22M24 32V16M32 32V26" stroke="#ccc" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <p>Configure your parameters and run the simulation<br />to see projected outcomes.</p>
+            </div>
+
+            <!-- Results (hidden until sim runs) -->
+            <div class="sim__results" id="sim-results">
+
+              <!-- Result cards -->
+              <div class="sim__result-grid">
+                <div class="sim__result-card">
+                  <div class="sim__result-label">Expected Yield</div>
+                  <div class="sim__result-value" id="res-yield">—</div>
+                  <div class="sim__result-unit" id="res-yield-unit">kg / ropani</div>
+                </div>
+                <div class="sim__result-card">
+                  <div class="sim__result-label">Estimated Profit</div>
+                  <div class="sim__result-value" id="res-profit">—</div>
+                  <div class="sim__result-unit">NPR total</div>
+                </div>
+                <div class="sim__result-card">
+                  <div class="sim__result-label">Confidence</div>
+                  <div class="sim__result-value" id="res-confidence">—</div>
+                  <div class="sim__result-unit">simulation certainty</div>
+                </div>
+              </div>
+
+              <!-- Risk bar -->
+              <div class="sim__risk">
+                <div class="sim__risk-header">
+                  <span class="sim__risk-label">Risk Assessment</span>
+                  <span class="sim__risk-level" id="res-risk-badge">—</span>
+                </div>
+                <div class="sim__risk-track">
+                  <div class="sim__risk-fill" id="res-risk-fill" style="width: 0%; background: var(--risk-low);"></div>
+                </div>
+              </div>
+
+              <!-- Recommendation -->
+              <div class="sim__recommendation" id="res-recommendation">
+                <p><strong>Recommendation:</strong> <span id="res-rec-text">—</span></p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       CALL TO ACTION
+       ============================================================
+       Calm, confident CTA. No marketing fluff — just a clear
+       invitation to use the tool.
+  -->
+  <section class="section" id="cta">
+    <div class="container">
+      <div class="cta-section reveal">
+        <h2 class="cta-section__title">Make Smarter Farming Decisions</h2>
+        <p class="cta-section__desc">
+          Every season is an investment. AgroPan helps you see the outcome
+          before you commit — grounded in Nepal's real data, not guesswork.
+        </p>
+        <a href="#simulate" class="btn btn--primary btn--lg">
+          Start Your Simulation
+          <svg class="btn__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================
+       Minimal footer. "Built for Nepal."
+  -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer__inner">
+      <div>
+        <div class="footer__brand">AgroPan</div>
+        <p class="footer__tagline">Agriculture Decision Simulator</p>
+      </div>
+
+      <ul class="footer__links" role="list">
+        <li><a href="#insights">Insights</a></li>
+        <li><a href="#how-it-works">Process</a></li>
+        <li><a href="#simulate">Simulate</a></li>
+      </ul>
+
+      <div>
+        <p class="footer__nepal">
+          <!-- Nepal flag emoji -->
+          🇳🇵 Built for Nepal
+        </p>
+        <p class="footer__copy">© 2026 AgroPan. Open-source & policy-grade.</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================
+       Order: animations (Intersection Observer) → simulate
+       (core logic) → main (orchestration & nav).
+  -->
+  <script src="js/animations.js"></script>
+  <script src="js/simulate.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
