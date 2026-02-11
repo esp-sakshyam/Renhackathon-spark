@@ -158,7 +158,7 @@ API/
 
 ### CREATE — `POST /create/users.php`
 
-Register a new user account.
+Register a new user account. Password is **bcrypt-hashed server-side**. `last_login` is auto-set to the current Unix timestamp. Duplicate username/email is rejected.
 
 **Request Body:**
 
@@ -169,18 +169,18 @@ Register a new user account.
   "name": "Ramesh Thapa",
   "location": "Chitwan",
   "type": "farmer",
-  "password": "hashed_password_here"
+  "password": "securePassword123"
 }
 ```
 
-| Field      | Required | Type   | Description                                |
-| ---------- | -------- | ------ | ------------------------------------------ |
-| `username` | Yes      | string | Unique username for login                  |
-| `email`    | Yes      | string | Valid email address                        |
-| `name`     | Yes      | string | Full name of the user                      |
-| `location` | Yes      | string | District or city                           |
-| `type`     | Yes      | string | `"farmer"` or `"merchant"`                 |
-| `password` | Yes      | string | Password (should be hashed before sending) |
+| Field      | Required | Type   | Description                                  |
+| ---------- | -------- | ------ | -------------------------------------------- |
+| `username` | **Yes**  | string | Unique username for login                    |
+| `email`    | **Yes**  | string | Valid email address (checked for duplicates)  |
+| `name`     | **Yes**  | string | Full name of the user                        |
+| `location` | **Yes**  | string | District or city                             |
+| `type`     | **Yes**  | string | `"farmer"` or `"merchant"` (validated)        |
+| `password` | **Yes**  | string | Plain-text password (hashed with bcrypt)     |
 
 **Success Response:**
 
@@ -198,7 +198,7 @@ Register a new user account.
 
 ### READ — `POST /read/users.php`
 
-Retrieve user(s). Send an empty body to get all users, or specify a filter.
+Retrieve user(s). Send an empty body to get all users, or pass `user_id` for a single user. **Password is excluded** from all responses.
 
 **Request Body (single user):**
 
@@ -208,53 +208,41 @@ Retrieve user(s). Send an empty body to get all users, or specify a filter.
 }
 ```
 
-**Request Body (by type):**
-
-```json
-{
-  "type": "farmer"
-}
-```
-
 **Request Body (all users):**
 
 ```json
 {}
 ```
 
-| Field      | Required | Type   | Description                          |
-| ---------- | -------- | ------ | ------------------------------------ |
-| `user_id`  | No       | int    | Fetch a specific user by ID          |
-| `type`     | No       | string | Filter by `"farmer"` or `"merchant"` |
-| `username` | No       | string | Fetch by username (for login)        |
+| Field     | Required | Type | Description                 |
+| --------- | -------- | ---- | --------------------------- |
+| `user_id` | No       | int  | Fetch a specific user by ID |
 
 **Success Response:**
 
 ```json
 {
   "success": true,
-  "message": "Users retrieved",
-  "data": [
-    {
-      "user_id": 1,
-      "username": "ramesh_farmer",
-      "email": "ramesh@example.com",
-      "name": "Ramesh Thapa",
-      "location": "Chitwan",
-      "type": "farmer",
-      "last_login": "2026-02-11 10:30:00"
-    }
-  ]
+  "message": "User fetched successfully",
+  "data": {
+    "user_id": 1,
+    "username": "ramesh_farmer",
+    "email": "ramesh@example.com",
+    "name": "Ramesh Thapa",
+    "location": "Chitwan",
+    "type": "farmer",
+    "last_login": "1739260800"
+  }
 }
 ```
 
-> **Note:** The `password` field should NEVER be returned in read responses.
+> **Note:** The `password` field is NEVER returned in read responses. All timestamps are Unix timestamps.
 
 ---
 
 ### UPDATE — `POST /update/users.php`
 
-Update an existing user's details. `user_id` is required to identify the record.
+Update an existing user's details. `user_id` is required. `last_login` is auto-updated to the current Unix timestamp on every call. If `password` is provided, it is re-hashed with bcrypt.
 
 **Request Body:**
 
@@ -262,21 +250,21 @@ Update an existing user's details. `user_id` is required to identify the record.
 {
   "user_id": 1,
   "name": "Ramesh Kumar Thapa",
-  "location": "Kathmandu",
-  "last_login": "2026-02-11 14:00:00"
+  "location": "Kathmandu"
 }
 ```
 
-| Field        | Required | Type   | Description                 |
-| ------------ | -------- | ------ | --------------------------- |
-| `user_id`    | **Yes**  | int    | ID of the user to update    |
-| `username`   | No       | string | New username                |
-| `email`      | No       | string | New email                   |
-| `name`       | No       | string | New display name            |
-| `location`   | No       | string | New location                |
-| `type`       | No       | string | Change account type         |
-| `last_login` | No       | string | Update last login timestamp |
-| `password`   | No       | string | New hashed password         |
+| Field      | Required | Type   | Description                            |
+| ---------- | -------- | ------ | -------------------------------------- |
+| `user_id`  | **Yes**  | int    | ID of the user to update               |
+| `username` | No       | string | New username                           |
+| `email`    | No       | string | New email                              |
+| `name`     | No       | string | New display name                       |
+| `location` | No       | string | New location                           |
+| `type`     | No       | string | `"farmer"` or `"merchant"` (validated)  |
+| `password` | No       | string | New password (re-hashed with bcrypt)   |
+
+> `last_login` is auto-set to the current Unix timestamp — do not send it manually.
 
 **Success Response:**
 
