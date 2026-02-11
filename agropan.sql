@@ -84,6 +84,20 @@ CREATE TABLE `devices` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `emails`
+--
+
+CREATE TABLE `emails` (
+  `email_id` int(11) NOT NULL,
+  `email` text NOT NULL,
+  `name` text NOT NULL,
+  `subscribed_at` text NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='table to store subscribed emails for notifications';
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `questions`
 --
 
@@ -157,6 +171,12 @@ ALTER TABLE `devices`
   ADD PRIMARY KEY (`device_id`);
 
 --
+-- Indexes for table `emails`
+--
+ALTER TABLE `emails`
+  ADD PRIMARY KEY (`email_id`);
+
+--
 -- Indexes for table `questions`
 --
 ALTER TABLE `questions`
@@ -201,6 +221,12 @@ ALTER TABLE `data`
 --
 ALTER TABLE `devices`
   MODIFY `device_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `emails`
+--
+ALTER TABLE `emails`
+  MODIFY `email_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `questions`
