@@ -111,25 +111,25 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'status' })
         })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-            if (data.success && data.data && data.data.logged_in) {
-                displayUser(data.data);
-                sessionStorage.setItem('agropan_user', JSON.stringify(data.data));
-            } else {
-                // Not logged in — redirect to login
-                window.location.href = '../../login.html';
-            }
-        })
-        .catch(function () {
-            // Can't reach API — still show dashboard
-            displayUser({ name: 'Farmer', username: 'farmer' });
-        });
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.success && data.data && data.data.logged_in) {
+                    displayUser(data.data);
+                    sessionStorage.setItem('agropan_user', JSON.stringify(data.data));
+                } else {
+                    // Not logged in — redirect to login
+                    window.location.href = '../../login.html';
+                }
+            })
+            .catch(function () {
+                // Can't reach API — still show dashboard
+                displayUser({ name: 'Farmer', username: 'farmer' });
+            });
     }
 
     function displayUser(user) {
         var name = user.name || user.username || 'Farmer';
-        var initials = name.split(' ').map(function(w) { return w[0]; }).join('').toUpperCase().slice(0, 2);
+        var initials = name.split(' ').map(function (w) { return w[0]; }).join('').toUpperCase().slice(0, 2);
         userAvatar.textContent = initials;
         userDisplayName.textContent = name.split(' ')[0]; // First name only in header
     }
@@ -145,14 +145,14 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'logout' })
         })
-        .then(function () {
-            sessionStorage.removeItem('agropan_user');
-            window.location.href = '../../login.html';
-        })
-        .catch(function () {
-            sessionStorage.removeItem('agropan_user');
-            window.location.href = '../../login.html';
-        });
+            .then(function () {
+                sessionStorage.removeItem('agropan_user');
+                window.location.href = '../../login.html';
+            })
+            .catch(function () {
+                sessionStorage.removeItem('agropan_user');
+                window.location.href = '../../login.html';
+            });
     });
 
 })();
