@@ -71,7 +71,7 @@ Platform Pillars:
   [REMOVED] Why Nepal Section — replaced by Features Overview
   [REMOVED] Nepal Flag SVG in footer — removed per user request
 
-  [TODO] Read APIs — all 8 tables                                —   0%
+  [DONE] Read APIs — all 8 tables fully implemented               — 100%
   [TODO] Update APIs — all 8 tables                               —   0%
   [TODO] Delete APIs — all 8 tables                               —   0%
   [TODO] Real-time forum w/ thread creation & replies             —   0%
@@ -328,6 +328,51 @@ Platform Pillars:
       int(11) to text (was a schema bug since the original dump)
     - timestamp and valid_till also changed to text for consistency
       (all columns in all tables store values as text)
+
+--- [2026-02-11] Session #7 — Read APIs Implementation ---
+
+  FEATURE: All 8 Read API Endpoints — Fully Implemented
+  STATUS:  COMPLETED
+  DETAILS:
+    - All endpoints: require database.php, use prepared statements,
+      return JSON array. Support fetch-by-ID or fetch-all.
+    - Password field excluded from users read responses.
+
+    read/users.php:
+      - By user_id or all. Excludes password from output.
+      - Ordered by user_id DESC.
+
+    read/crops.php:
+      - By crop_id, filter by type, or all.
+      - Ordered by crop_id DESC.
+
+    read/devices.php:
+      - By device_id, filter by owned_by, or all.
+      - Ordered by device_id DESC.
+
+    read/data.php:
+      - By data_id, filter by device name, or all.
+      - Ordered by timestamp DESC (newest first).
+
+    read/emails.php:
+      - By email_id, all active (default), or all including inactive
+        (pass { "all": true }).
+      - Ordered by email_id DESC.
+
+    read/questions.php:
+      - By question_id, filter by type, or all.
+      - Ordered by question_id DESC.
+
+    read/answers.php:
+      - By answer_id, by question_id (looks up question's comma-
+        separated answers field, then fetches matching answers
+        via WHERE IN), or all.
+      - By-question ordered ASC, all ordered DESC.
+
+    read/warnings.php:
+      - By warning_id, active only ({ "active": true } — filters
+        where valid_till > current Unix time), or all.
+      - Ordered by timestamp DESC (newest first).
 
 ================================================================================
   FILE INVENTORY
