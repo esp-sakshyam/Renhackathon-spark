@@ -35,9 +35,9 @@ try {
     $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
 
     $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,   // Throw exceptions on error
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,   // Throw exceptions on error
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,         // Return associative arrays
-        PDO::ATTR_EMULATE_PREPARES   => false,                    // Use real prepared statements
+        PDO::ATTR_EMULATE_PREPARES => false,                    // Use real prepared statements
     ];
 
     $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
@@ -112,7 +112,7 @@ function notifyAllSubscribers(PDO $pdo, string $subject, string $body): void
             return; // No active subscribers
         }
 
-        $headers  = "From: AgroPan Alerts <noreply@agropan.com>\r\n";
+        $headers = "From: AgroPan Alerts <noreply@agropan.com>\r\n";
         $headers .= "Reply-To: noreply@agropan.com\r\n";
         $headers .= "MIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
