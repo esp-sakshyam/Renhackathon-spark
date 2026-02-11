@@ -43,7 +43,7 @@ try {
     $stmt = $pdo->prepare("SELECT user_id FROM users WHERE username = :username OR email = :email LIMIT 1");
     $stmt->execute([
         ':username' => $input['username'],
-        ':email'    => $input['email']
+        ':email' => $input['email']
     ]);
 
     if ($stmt->fetch()) {
@@ -64,13 +64,13 @@ try {
     );
 
     $stmt->execute([
-        ':username'   => $input['username'],
-        ':email'      => $input['email'],
-        ':name'       => $input['name'],
-        ':location'   => $input['location'],
-        ':type'       => $input['type'],
+        ':username' => $input['username'],
+        ':email' => $input['email'],
+        ':name' => $input['name'],
+        ':location' => $input['location'],
+        ':type' => $input['type'],
         ':last_login' => (string) time(),
-        ':password'   => $hashedPassword
+        ':password' => $hashedPassword
     ]);
 
     $userId = $pdo->lastInsertId();

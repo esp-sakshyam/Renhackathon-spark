@@ -42,27 +42,28 @@ try {
     );
 
     $stmt->execute([
-        ':timestamp'   => $timestamp,
+        ':timestamp' => $timestamp,
         ':temperature' => $input['temperature'],
-        ':moisture'    => $input['moisture'],
-        ':humidity'    => $input['humidity'],
-        ':gases'       => $input['gases'],
-        ':nitrogen'    => $input['nitrogen'],
-        ':device'      => $input['device']
+        ':moisture' => $input['moisture'],
+        ':humidity' => $input['humidity'],
+        ':gases' => $input['gases'],
+        ':nitrogen' => $input['nitrogen'],
+        ':device' => $input['device']
     ]);
 
     $dataId = $pdo->lastInsertId();
 
     // ── Notify subscribers ──
-    notifyAllSubscribers($pdo,
+    notifyAllSubscribers(
+        $pdo,
         'AgroPan — New Sensor Data Received',
         "New sensor data has been recorded:\n\n"
-        . "Device      : " . $input['device']      . "\n"
-        . "Temperature : " . $input['temperature']  . " °C\n"
-        . "Moisture    : " . $input['moisture']     . " %\n"
-        . "Humidity    : " . $input['humidity']     . " %\n"
-        . "Gases       : " . $input['gases']        . " ppm\n"
-        . "Nitrogen    : " . $input['nitrogen']     . " mg/kg\n"
+        . "Device      : " . $input['device'] . "\n"
+        . "Temperature : " . $input['temperature'] . " °C\n"
+        . "Moisture    : " . $input['moisture'] . " %\n"
+        . "Humidity    : " . $input['humidity'] . " %\n"
+        . "Gases       : " . $input['gases'] . " ppm\n"
+        . "Nitrogen    : " . $input['nitrogen'] . " mg/kg\n"
         . "Timestamp   : " . $timestamp
     );
 

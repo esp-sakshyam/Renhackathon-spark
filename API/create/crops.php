@@ -37,10 +37,10 @@ try {
     );
 
     $stmt->execute([
-        ':name'         => $input['name'],
-        ':image'        => $input['image'],
-        ':type'         => $input['type'],
-        ':price'        => $input['price'],
+        ':name' => $input['name'],
+        ':image' => $input['image'],
+        ':type' => $input['type'],
+        ':price' => $input['price'],
         ':last_updated' => (string) time()
     ]);
 

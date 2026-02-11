@@ -36,10 +36,10 @@ try {
     );
 
     $stmt->execute([
-        ':name'      => $input['name'],
-        ':location'  => $input['location'],
+        ':name' => $input['name'],
+        ':location' => $input['location'],
         ':last_ping' => (string) time(),
-        ':owned_by'  => $input['owned_by']
+        ':owned_by' => $input['owned_by']
     ]);
 
     $deviceId = $pdo->lastInsertId();
