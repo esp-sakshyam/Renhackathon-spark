@@ -2,9 +2,9 @@
 
 ## System Overview
 
-AgroPan is a **client-side agriculture decision & risk simulation platform** focused exclusively on Nepal. It enables farmers, agricultural advisors, and policymakers to simulate crop outcomes before planting — projecting yield, risk, and profit based on Nepal's climate, terrain, and market realities.
+AgroPan is a **full-stack smart agriculture platform** focused on Nepal. It combines IoT-based field monitoring with a digital marketplace, community forum, and emergency alert system — connecting farmers, merchants, and administrators on a single platform.
 
-> "AgroPan is not a website — it's a decision engine with a calm, intelligent interface."
+> "AgroPan is not just a website — it's an agriculture ecosystem: monitor, trade, discuss, and stay safe."
 
 ---
 
@@ -12,11 +12,27 @@ AgroPan is a **client-side agriculture decision & risk simulation platform** foc
 
 | Principle | Rationale |
 |---|---|
-| **Client-first** | Zero backend dependency for the prototype — runs entirely in-browser so any farmer with a phone can use it offline. |
-| **Data-structured** | Simulation data (crops, districts, seasons) is separated from UI logic, making it trivial to swap placeholder data for real API responses. |
+| **Progressive web** | The landing page runs client-side with zero dependencies, while backend features (marketplace, forum, alerts) connect to a server API. |
+| **Role-based** | Two primary user types — **Farmer** and **Merchant** — each with distinct capabilities and a shared community space. |
 | **Mobile-first** | 65%+ of Nepal's internet users access via mobile. Every layout and interaction is designed for small screens first, then enhanced. |
-| **Progressive** | Intersection Observer animations, lazy images, and minimal JS footprint. No frameworks, no build tools — opens in any browser. |
-| **Nepal-contextualized** | Every data point, crop name (with Nepali script), district, and risk factor is calibrated to Nepal's agriculture reality. |
+| **IoT-integrated** | ESP32-S3 field devices send real sensor data to a web API, bridging physical agriculture with digital tools. |
+| **Nepal-contextualized** | Crop names, districts, market prices, and alert types are calibrated to Nepal's agriculture reality. |
+
+---
+
+## Platform Features
+
+### 1. IoT Field Device
+ESP32-S3 hardware nodes deployed in fields send sensor data (soil moisture, temperature, humidity, air quality) to the platform's web API every 30 seconds. Farmers can monitor conditions remotely.
+
+### 2. Marketplace
+Farmers analyze real-time crop prices, list produce for sale, and connect directly with merchants. Merchants browse listings, compare prices across districts, and contact farmers. Both roles have dedicated account types.
+
+### 3. Community Forum
+A discussion space for registered farmers and merchants. Topic categories include crop diseases, market trends, weather advisories, equipment tips, success stories, and seasonal guides.
+
+### 4. Emergency Alerts
+Administrators broadcast urgent alerts covering disease outbreaks, pest invasions, natural disasters (landslides, floods), and severe weather. Alerts are delivered via the platform, SMS, and email.
 
 ---
 
@@ -24,16 +40,13 @@ AgroPan is a **client-side agriculture decision & risk simulation platform** foc
 
 ```
 agropan/
-├── index.html              ← Single-page application entry
+├── index.html              ← Landing page (single-page, static)
 ├── css/
 │   ├── variables.css       ← Design tokens (colors, spacing, fonts)
-│   ├── base.css            ← CSS reset + global element styles
-│   ├── layout.css          ← Page structure, grid utilities, navbar
-│   └── components.css      ← UI components (buttons, cards, sim panel)
+│   └── index.css           ← Unified stylesheet (reset → components → responsive)
 ├── js/
 │   ├── animations.js       ← Intersection Observer scroll reveals
-│   ├── simulate.js         ← Simulation engine (crop data + logic)
-│   └── main.js             ← App controller (nav, form, rendering)
+│   └── main.js             ← App controller (nav, scroll, counters)
 ├── gallery/                ← Real Nepali agriculture photographs
 ├── docs/
 │   └── architecture.md     ← This document
@@ -47,81 +60,56 @@ agropan/
 ```
 index.html
   ├── css/variables.css    (design tokens)
-  ├── css/base.css         (reset, depends on variables)
-  ├── css/layout.css       (layout, depends on variables)
-  ├── css/components.css   (components, depends on variables)
+  ├── css/index.css        (unified styles, depends on variables)
   │
   ├── js/animations.js     (standalone — Intersection Observer)
-  ├── js/simulate.js       (standalone — pure data + logic)
-  └── js/main.js           (depends on simulate.js for AgroPanSim)
+  └── js/main.js           (standalone — nav, scroll, counters)
 ```
 
 ### Loading Order
-Scripts load in this order at the bottom of `<body>`:
+Scripts load at the bottom of `<body>`:
 1. `animations.js` — Registers scroll observers immediately
-2. `simulate.js` — Exposes `AgroPanSim` global module
-3. `main.js` — Wires DOM events, uses `AgroPanSim.simulate()`
-
----
-
-## Simulation Engine (`simulate.js`)
-
-### Data Model
-
-**CROP_DATA** — 10 crop profiles with:
-- `yieldRange` [min, max] kg/ropani
-- `costPerRopani` NPR
-- `pricePerKg` [min, max] NPR
-- `bestSeason` — optimal planting window
-- `riskFactors` — array of real agronomic risks
-
-**DISTRICT_DATA** — 10 Nepal districts with:
-- `zone` — ecological classification
-- `yieldMod` — yield multiplier (0.7–1.12)
-- `riskMod` — risk multiplier (0.82–1.30)
-
-### Simulation Flow
-
-```
-User Input → {district, crop, season, land}
-  │
-  ├── Lookup CROP_DATA[crop]
-  ├── Lookup DISTRICT_DATA[district]
-  ├── Compute getSeasonModifier(crop, season)
-  │
-  ├── Yield = yieldRange × districtMod × seasonMod
-  ├── Revenue = totalYield × priceRange
-  ├── Profit = Revenue − (costPerRopani × land)
-  ├── Risk = baseRisk(30) × districtRiskMod × seasonRiskMod
-  ├── Confidence = f(riskScore)
-  │
-  └── Output → {yield, profit, risk, confidence, recommendation}
-```
-
-### Risk Classification
-| Score Range | Level | Color |
-|---|---|---|
-| 0–35 | Low | `#2E7D65` (green) |
-| 36–60 | Medium | `#F2A900` (amber) |
-| 61–100 | High | `#D94F3B` (red) |
+2. `main.js` — Wires DOM events (navbar, smooth scroll, counter animation)
 
 ---
 
 ## CSS Architecture
 
+### Unified Stylesheet (`index.css`)
+All styles are consolidated into a single file organized by layer:
+
+1. **Reset & Base** — element-level resets, global defaults
+2. **Layout** — containers, sections, navbar, grid utilities
+3. **Components** — buttons, hero, feature cards, marketplace, community, alerts, gallery, process, CTA, footer
+4. **Animations** — scroll reveal and stagger transitions
+5. **Responsive** — consolidated media queries (640px → 768px → 1024px)
+
 ### Token-Driven Design
 All visual properties flow from `variables.css`. A single change to `--color-primary` updates every component in the system.
 
-### Layer Order
-1. **Variables** — tokens only, no selectors on elements
-2. **Base** — element-level resets and defaults
-3. **Layout** — structural rules (container, grid, navbar)
-4. **Components** — self-contained UI blocks
-
 ### Responsive Strategy
-- **Mobile-first**: Base styles are for `320px+`
-- **Tablet** (`768px`): 2-column grids, show desktop nav
-- **Desktop** (`1024px`): Full layout, 3-4 column grids
+- **Mobile-first**: Base styles target `320px+`
+- **Small tablet** (`640px`): 2-column grids for features, marketplace, community, alerts
+- **Tablet** (`768px`): Desktop nav, hero side-by-side layout, footer row layout
+- **Desktop** (`1024px`): Full 3-4 column grids, expanded spacing
+
+---
+
+## Landing Page Sections
+
+| Section | Purpose | Key Classes |
+|---|---|---|
+| **Navbar** | Fixed navigation with mobile hamburger menu | `.navbar`, `.navbar__links`, `.navbar__mobile-menu` |
+| **Hero** | Full-viewport intro with preview card and stats strip | `.hero`, `.hero__layout`, `.hero__preview-card`, `.hero__stats` |
+| **Features** | 4-card grid: IoT, Marketplace, Forum, Alerts | `.features__grid`, `.feature-card`, `.feature-card__icon--{color}` |
+| **IoT Device** | Smart field device with specs banner | `.platform__banner`, `.platform__grid`, `.platform__specs` |
+| **Marketplace** | Farmer/Merchant role split with feature lists | `.marketplace__layout`, `.marketplace__role`, `.marketplace__list` |
+| **Community** | 6-topic discussion forum cards | `.community__grid`, `.community__card` |
+| **Alerts** | Admin-driven emergency alert cards (4 types) | `.alerts__grid`, `.alert__card--{severity}`, `.alerts__channels` |
+| **How It Works** | 4-step process cards | `.process__grid`, `.process__card` |
+| **Gallery** | Photo grid with hover overlays | `.gallery__grid`, `.gallery__card` |
+| **CTA** | Dual farmer/merchant call-to-action | `.cta-section`, `.cta-section__actions` |
+| **Footer** | Brand, links, copyright | `.footer`, `.footer__inner` |
 
 ---
 
@@ -132,8 +120,8 @@ All visual properties flow from `variables.css`. A single change to `--color-pri
 | Scroll reveal | Element enters viewport | Intersection Observer |
 | Staggered reveal | Container enters viewport | CSS `transition-delay` per child |
 | Counter animation | Page load | `requestAnimationFrame` |
-| Risk bar fill | Simulation runs | CSS transition + rAF |
-| Button shake | Invalid form | CSS `@keyframes` injected via JS |
+| Hero zoom | Continuous | CSS `@keyframes` infinite alternate |
+| Preview card float | Continuous | CSS `@keyframes` infinite |
 
 All animations respect `prefers-reduced-motion: reduce`.
 
@@ -154,13 +142,13 @@ All animations respect `prefers-reduced-motion: reduce`.
 
 | Phase | Enhancement |
 |---|---|
-| **v1.1** | Replace placeholder data with Nepal DOA API integration |
-| **v1.2** | Add offline support via Service Worker + IndexedDB caching |
-| **v2.0** | WebAssembly-compiled agronomic model for complex simulations |
+| **v1.1** | Backend API for marketplace listings, user registration, and authentication |
+| **v1.2** | Community forum with real-time thread creation and replies |
+| **v2.0** | Admin dashboard for emergency alert broadcasting (SMS + email integration) |
 | **v2.1** | Multi-language support (English + Nepali) with `i18n` module |
-| **v3.0** | District-level heatmap visualization using Canvas/WebGL |
-| **v3.1** | Policy dashboard for aggregate simulation analytics |
+| **v3.0** | IoT data dashboard with historical charts and alert thresholds |
+| **v3.1** | Mobile app (PWA) with offline support and push notifications |
 
 ---
 
-*Document version: 1.0 · Last updated: February 2026*
+*Document version: 2.0 · Last updated: February 2026*
