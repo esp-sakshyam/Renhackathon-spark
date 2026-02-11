@@ -971,6 +971,7 @@ Update a question (edit text, add votes, link new answers).
 | `question_id` | **Yes**  | int    | ID of the question to update       |
 | `question`    | No       | string | Edited question text               |
 | `type`        | No       | string | Changed topic category             |
+| `asked_by`    | No       | string | Updated author user ID             |
 | `upvotes`     | No       | string | Updated upvote user ID list        |
 | `downvotes`   | No       | string | Updated downvote user ID list      |
 | `answers`     | No       | string | Updated comma-separated answer IDs |
@@ -1033,27 +1034,25 @@ Delete a forum question (and optionally its linked answers).
 
 ### CREATE — `POST /create/answers.php`
 
-Post a new answer to a forum question.
+Post a new answer to a forum question. Requires `question_id` to link the answer to a question. The new `answer_id` is **automatically appended** to the parent question's `answers` field. `upvotes` and `downvotes` are auto-initialized to `"0"`.
 
 **Request Body:**
 
 ```json
 {
+  "question_id": 1,
   "answer": "Vermicompost works great for rice paddies. Apply 2-3 tons per hectare before transplanting.",
-  "answered_by": "3",
-  "upvotes": "",
-  "downvotes": ""
+  "answered_by": "3"
 }
 ```
 
 | Field         | Required | Type   | Description                     |
 | ------------- | -------- | ------ | ------------------------------- |
-| `answer`      | Yes      | string | Full answer text                |
-| `answered_by` | Yes      | string | User ID of the person answering |
-| `upvotes`     | No       | string | Initially empty                 |
-| `downvotes`   | No       | string | Initially empty                 |
+| `question_id` | **Yes**  | int    | ID of the parent question       |
+| `answer`      | **Yes**  | string | Full answer text                |
+| `answered_by` | **Yes**  | string | User ID of the person answering |
 
-> **Important:** After creating an answer, you should also call `POST /update/questions.php` to append the new `answer_id` to the parent question's `answers` field.
+> `upvotes` defaults to `"0"`, `downvotes` defaults to `"0"`. The new `answer_id` is auto-appended to the parent question's `answers` field — no separate update call needed.
 
 **Success Response:**
 
@@ -1071,7 +1070,7 @@ Post a new answer to a forum question.
 
 ### READ — `POST /read/answers.php`
 
-Retrieve answer(s).
+Retrieve answer(s). Can fetch by `answer_id`, by `question_id` (looks up the question's `answers` field and fetches all linked answers), or all.
 
 **Request Body (single answer):**
 
@@ -1081,34 +1080,31 @@ Retrieve answer(s).
 }
 ```
 
-**Request Body (by user):**
+**Request Body (all answers for a question):**
 
 ```json
 {
-  "answered_by": "3"
+  "question_id": 1
 }
 ```
 
-**Request Body (multiple by IDs — useful for loading all answers to a question):**
+**Request Body (all answers):**
 
 ```json
-{
-  "answer_ids": "1,3,7"
-}
+{}
 ```
 
-| Field         | Required | Type   | Description                       |
-| ------------- | -------- | ------ | --------------------------------- |
-| `answer_id`   | No       | int    | Fetch a specific answer           |
-| `answered_by` | No       | string | Filter by responder's user ID     |
-| `answer_ids`  | No       | string | Comma-separated IDs (batch fetch) |
+| Field         | Required | Type | Description                                           |
+| ------------- | -------- | ---- | ----------------------------------------------------- |
+| `answer_id`   | No       | int  | Fetch a specific answer                               |
+| `question_id` | No       | int  | Fetch all answers linked to a question (via WHERE IN) |
 
 **Success Response:**
 
 ```json
 {
   "success": true,
-  "message": "Answers retrieved",
+  "message": "Answers fetched successfully",
   "data": [
     {
       "answer_id": 1,
@@ -1137,12 +1133,13 @@ Edit an answer or update its votes.
 }
 ```
 
-| Field       | Required | Type   | Description                   |
-| ----------- | -------- | ------ | ----------------------------- |
-| `answer_id` | **Yes**  | int    | ID of the answer to update    |
-| `answer`    | No       | string | Edited answer text            |
-| `upvotes`   | No       | string | Updated upvote user ID list   |
-| `downvotes` | No       | string | Updated downvote user ID list |
+| Field         | Required | Type   | Description                   |
+| ------------- | -------- | ------ | ----------------------------- |
+| `answer_id`   | **Yes**  | int    | ID of the answer to update    |
+| `answer`      | No       | string | Edited answer text            |
+| `answered_by` | No       | string | Updated responder user ID     |
+| `upvotes`     | No       | string | Updated upvote user ID list   |
+| `downvotes`   | No       | string | Updated downvote user ID list |
 
 **Success Response:**
 
@@ -1192,21 +1189,19 @@ Delete an answer.
 
 ### `warnings` Table Schema
 
-| Column       | Type                     | Description                                                                                  |
-| ------------ | ------------------------ | -------------------------------------------------------------------------------------------- |
-| `warning_id` | `int(11)` AUTO_INCREMENT | Primary key                                                                                  |
-| `title`      | `int(11)`                | Alert title (Note: stored as int in schema — should be treated as text in API)               |
-| `details`    | `int(11)`                | Alert description/details (Note: stored as int in schema — should be treated as text in API) |
-| `timestamp`  | `int(11)`                | When the alert was issued (Unix timestamp)                                                   |
-| `valid_till` | `int(11)`                | When the alert expires (Unix timestamp)                                                      |
-
-> **Schema Note:** The `warnings` table uses `int(11)` for all columns. The `title` and `details` columns are typed as `int` in the original schema but will likely need to be altered to `text` before production use. The `timestamp` and `valid_till` columns store Unix timestamps as integers.
+| Column       | Type                     | Description                                |
+| ------------ | ------------------------ | ------------------------------------------ |
+| `warning_id` | `int(11)` AUTO_INCREMENT | Primary key                                |
+| `title`      | `text`                   | Alert title                                |
+| `details`    | `text`                   | Alert description/details                  |
+| `timestamp`  | `text`                   | When the alert was issued (Unix timestamp) |
+| `valid_till` | `text`                   | When the alert expires (Unix timestamp)    |
 
 ---
 
 ### CREATE — `POST /create/warnings.php`
 
-Broadcast a new emergency alert (admin only).
+Broadcast a new emergency alert (admin only). `timestamp` is auto-set to the current Unix timestamp. Triggers email notification to all active subscribers.
 
 **Request Body:**
 
@@ -1214,17 +1209,17 @@ Broadcast a new emergency alert (admin only).
 {
   "title": "Late Blight Alert — Potato Crops",
   "details": "Phytophthora infestans detected in Solukhumbu district. Farmers with potato crops should apply copper-based fungicide immediately. Inspect fields daily.",
-  "timestamp": 1739260800,
-  "valid_till": 1739865600
+  "valid_till": "1739865600"
 }
 ```
 
 | Field        | Required | Type   | Description                                     |
 | ------------ | -------- | ------ | ----------------------------------------------- |
-| `title`      | Yes      | string | Short alert title                               |
-| `details`    | Yes      | string | Full alert description with recommended actions |
-| `timestamp`  | Yes      | int    | Unix timestamp — when the alert was issued      |
-| `valid_till` | Yes      | int    | Unix timestamp — when the alert expires         |
+| `title`      | **Yes**  | string | Short alert title                               |
+| `details`    | **Yes**  | string | Full alert description with recommended actions |
+| `valid_till` | **Yes**  | string | Unix timestamp — when the alert expires         |
+
+> `timestamp` is auto-set to the current Unix timestamp — do not send it manually.
 
 **Success Response:**
 
@@ -1242,12 +1237,20 @@ Broadcast a new emergency alert (admin only).
 
 ### READ — `POST /read/warnings.php`
 
-Retrieve emergency alerts. Typically used to fetch active (non-expired) alerts.
+Retrieve emergency alerts. Can fetch by `warning_id`, active-only alerts, or all.
 
 **Request Body (all alerts):**
 
 ```json
 {}
+```
+
+**Request Body (active alerts only):**
+
+```json
+{
+  "active": true
+}
 ```
 
 **Request Body (single alert):**
@@ -1258,29 +1261,30 @@ Retrieve emergency alerts. Typically used to fetch active (non-expired) alerts.
 }
 ```
 
-| Field        | Required | Type | Description                  |
-| ------------ | -------- | ---- | ---------------------------- |
-| `warning_id` | No       | int  | Fetch a specific alert by ID |
+| Field        | Required | Type | Description                             |
+| ------------ | -------- | ---- | --------------------------------------- |
+| `warning_id` | No       | int  | Fetch a specific alert by ID            |
+| `active`     | No       | bool | `true` to fetch only non-expired alerts |
 
 **Success Response:**
 
 ```json
 {
   "success": true,
-  "message": "Warnings retrieved",
+  "message": "Warnings fetched successfully",
   "data": [
     {
       "warning_id": 1,
       "title": "Late Blight Alert — Potato Crops",
       "details": "Phytophthora infestans detected in Solukhumbu district...",
-      "timestamp": 1739260800,
-      "valid_till": 1739865600
+      "timestamp": "1739260800",
+      "valid_till": "1739865600"
     }
   ]
 }
 ```
 
-> **Tip:** To show only active alerts on the frontend, filter where `valid_till > current_unix_timestamp`.
+> **Tip:** Use `{"active": true}` to show only alerts where `valid_till > current_unix_timestamp`.
 
 ---
 
@@ -1303,8 +1307,8 @@ Update an existing alert (extend validity, edit details, etc.).
 | `warning_id` | **Yes**  | int    | ID of the alert to update    |
 | `title`      | No       | string | Updated title                |
 | `details`    | No       | string | Updated details/instructions |
-| `timestamp`  | No       | int    | Corrected issue timestamp    |
-| `valid_till` | No       | int    | Extended or shortened expiry |
+| `timestamp`  | No       | string | Corrected issue timestamp    |
+| `valid_till` | No       | string | Extended or shortened expiry |
 
 **Success Response:**
 
@@ -1364,23 +1368,23 @@ Remove an emergency alert.
 
 ### CREATE — `POST /create/emails.php`
 
-Register a new email subscriber.
+Register a new email subscriber. `subscribed_at` is auto-set to the current Unix timestamp. Email format is validated, and duplicates are rejected.
 
 **Request Body:**
 
 ```json
 {
   "email": "farmer.ram@example.com",
-  "name": "Ram Thapa",
-  "subscribed_at": "2026-02-11 07:00:00"
+  "name": "Ram Thapa"
 }
 ```
 
-| Field           | Required | Type   | Description              |
-| --------------- | -------- | ------ | ------------------------ |
-| `email`         | **Yes**  | string | Subscriber email address |
-| `name`          | **Yes**  | string | Subscriber display name  |
-| `subscribed_at` | **Yes**  | string | Signup timestamp         |
+| Field   | Required | Type   | Description                          |
+| ------- | -------- | ------ | ------------------------------------ |
+| `email` | **Yes**  | string | Subscriber email address (validated) |
+| `name`  | **Yes**  | string | Subscriber display name              |
+
+> `subscribed_at` is auto-set to the current Unix timestamp — do not send it manually.
 
 **Success Response:**
 
@@ -1398,7 +1402,7 @@ Register a new email subscriber.
 
 ### READ — `POST /read/emails.php`
 
-Fetch one subscriber by ID, or all active subscribers.
+Fetch one subscriber by ID, all active subscribers (default), or all subscribers including inactive.
 
 **Request Body (single):**
 
@@ -1408,15 +1412,26 @@ Fetch one subscriber by ID, or all active subscribers.
 }
 ```
 
-**Request Body (all active):**
+**Request Body (all active — default):**
 
 ```json
 {}
 ```
 
-| Field      | Required | Type | Description                                      |
-| ---------- | -------- | ---- | ------------------------------------------------ |
-| `email_id` | No       | int  | Specific subscriber ID; omit to fetch all active |
+**Request Body (all including inactive):**
+
+```json
+{
+  "all": true
+}
+```
+
+| Field      | Required | Type | Description                                         |
+| ---------- | -------- | ---- | --------------------------------------------------- |
+| `email_id` | No       | int  | Specific subscriber ID                              |
+| `all`      | No       | bool | `true` to include inactive/unsubscribed subscribers |
+
+> Without any filter, only active subscribers (`is_active = 1`) are returned.
 
 **Success Response (all):**
 
@@ -1429,7 +1444,7 @@ Fetch one subscriber by ID, or all active subscribers.
       "email_id": 1,
       "email": "farmer.ram@example.com",
       "name": "Ram Thapa",
-      "subscribed_at": "2026-02-11 07:00:00",
+      "subscribed_at": "1739260800",
       "is_active": 1
     }
   ]
@@ -1594,4 +1609,4 @@ All endpoints return errors in a consistent format:
 
 ---
 
-_Document version: 2.0 · Last updated: February 2026_
+_Document version: 3.0 · Last updated: February 2026_

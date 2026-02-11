@@ -374,6 +374,83 @@ Platform Pillars:
         where valid_till > current Unix time), or all.
       - Ordered by timestamp DESC (newest first).
 
+--- [2026-02-11] Session #8 — Update APIs + API Walkthrough Fix ---
+
+  FEATURE: All 8 Update API Endpoints — Fully Implemented
+  STATUS:  COMPLETED
+  DETAILS:
+    - All endpoints: require database.php, validate primary key,
+      build dynamic SET clause from allowed fields, verify record
+      exists before updating, use prepared statements.
+
+    update/users.php:
+      - Requires user_id. Allowed fields: username, email, name,
+        location, type, password.
+      - Password re-hashed with bcrypt if provided.
+      - last_login auto-updated to current Unix timestamp.
+      - Validates type is "farmer" or "merchant".
+
+    update/crops.php:
+      - Requires crop_id. Allowed fields: name, image, type, price.
+      - last_updated auto-set to current Unix timestamp.
+
+    update/devices.php:
+      - Requires device_id. Allowed fields: name, location, owned_by.
+      - last_ping auto-set to current Unix timestamp.
+
+    update/data.php:
+      - Requires data_id. Allowed fields: timestamp, temperature,
+        moisture, humidity, gases, nitrogen, device.
+      - No auto-timestamp (corrections keep original or set explicitly).
+
+    update/emails.php:
+      - Requires email_id. Allowed fields: email, name, is_active.
+      - Special handling for is_active=0 (PHP's empty() treats 0 as
+        empty, so explicit === 0 check is used).
+      - Email format validated if provided.
+
+    update/questions.php:
+      - Requires question_id. Allowed fields: question, type, asked_by,
+        upvotes, downvotes, answers.
+
+    update/answers.php:
+      - Requires answer_id. Allowed fields: answer, answered_by,
+        upvotes, downvotes.
+
+    update/warnings.php:
+      - Requires warning_id. Allowed fields: title, details,
+        timestamp, valid_till.
+
+  FEATURE: API-walkthrough.md — Comprehensive Fix (v2.0 → v3.0)
+  STATUS:  COMPLETED
+  DETAILS:
+    - Fixed warnings schema: changed int(11) to text for title/details,
+      removed outdated "Schema Note" about needing ALTER TABLE.
+    - Replaced ALL date string examples ("2026-02-11 08:00:00") with
+      Unix timestamps throughout the document.
+    - Fixed CREATE docs to reflect auto-set fields:
+      • crops: removed last_updated from required (auto-set)
+      • devices: removed last_ping from required (auto-set)
+      • data: removed timestamp from required (auto-set)
+      • emails: removed subscribed_at from required (auto-set)
+      • questions: removed upvotes/downvotes/answers from request
+        (auto-initialized to "0"/"0"/"")
+      • answers: added question_id as required, documented auto-append
+        behavior, removed manual update note
+      • warnings: removed timestamp from required (auto-set)
+      • users: noted bcrypt hashing, updated field descriptions
+    - Fixed READ docs to match actual implementations:
+      • users: removed type/username filters (only user_id supported)
+      • crops: removed name filter
+      • questions: removed asked_by filter
+      • answers: changed to question_id filter (WHERE IN lookup)
+      • emails: added {"all": true} option for inactive subscribers
+      • warnings: added {"active": true} option
+    - Fixed UPDATE docs: documented auto-set fields (last_login,
+      last_updated, last_ping), added asked_by/answered_by to
+      questions/answers update tables.
+    - Bumped version to 3.0.
+
 ================================================================================
   FILE INVENTORY
 ================================================================================
@@ -392,12 +469,11 @@ Platform Pillars:
 
   API/database.php        — PDO connection + helpers (sendResponse,
                             getJsonInput, notifyAllSubscribers)
-  API/API-walkthrough.md  — Full API documentation (v2.0, 32 endpoints)
-  API/create/             — 8 PHP files (users, crops, devices, data,
-                            emails, questions, answers, warnings)
-  API/read/               — 8 PHP files (same set)
-  API/update/             — 8 PHP files (same set)
-  API/delete/             — 8 PHP files (same set)
+  API/API-walkthrough.md  — Full API documentation (v3.0, 32 endpoints)
+  API/create/             — 8 PHP files — FULLY IMPLEMENTED
+  API/read/               — 8 PHP files — FULLY IMPLEMENTED
+  API/update/             — 8 PHP files — FULLY IMPLEMENTED
+  API/delete/             — 8 PHP files (empty — not yet implemented)
 
 ================================================================================
   NOTES
@@ -407,14 +483,15 @@ Platform Pillars:
     (no mock data or simulation on the landing page)
   - Four platform pillars: IoT, Marketplace, Forum, Admin Alerts
   - simulate.js still exists on disk but is not loaded — can be deleted
-  - Create APIs are fully implemented (8/8). Read, Update, Delete
-    APIs are next.
+  - Create APIs: DONE (8/8), Read APIs: DONE (8/8),
+    Update APIs: DONE (8/8), Delete APIs: PENDING (0/8)
   - database.php provides shared PDO connection + response/input helpers
   - Email notifications fire automatically from create/data.php and
     create/warnings.php (LIVE — not commented out)
   - All timestamps are Unix timestamps (time()) — no date strings
   - User passwords are bcrypt-hashed (password_hash + password_verify)
   - answers.php auto-appends answer_id to parent question's answers field
+  - API-walkthrough.md v3.0 — all docs match actual implementations
   - For production email delivery, replace mail() with PHPMailer or
     a transactional email API (SendGrid, Mailgun)
   - All images are real Nepali agriculture photography (no stock/AI)
