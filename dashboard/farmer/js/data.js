@@ -86,7 +86,7 @@
                         '<td>' + fmt(r.temperature, '°C') + '</td>' +
                         '<td>' + fmt(r.moisture, '%') + '</td>' +
                         '<td>' + fmt(r.humidity, '%') + '</td>' +
-                        '<td>' + fmt(r.gas_level, ' ppm') + '</td>' +
+                        '<td>' + fmt(r.gases, ' ppm') + '</td>' +
                         '<td>' + fmt(r.nitrogen, ' mg/kg') + '</td>' +
                         '<td style="font-size:var(--text-xs);color:var(--color-text-muted)">' + ts(r.timestamp) + '</td>' +
                         '</tr>';
@@ -113,7 +113,7 @@
         document.getElementById('liveTemp').textContent = latest && latest.temperature != null ? latest.temperature + ' °C' : '— °C';
         document.getElementById('liveMoisture').textContent = latest && latest.moisture != null ? latest.moisture + ' %' : '— %';
         document.getElementById('liveHumidity').textContent = latest && latest.humidity != null ? latest.humidity + ' %' : '— %';
-        document.getElementById('liveGas').textContent = latest && latest.gas_level != null ? latest.gas_level + ' ppm' : '— ppm';
+        document.getElementById('liveGas').textContent = latest && latest.gases != null ? latest.gases + ' ppm' : '— ppm';
     }
 
     function escapeHtml(str) {

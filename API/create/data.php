@@ -25,9 +25,27 @@ require_once __DIR__ . '/../database.php';
 // ── Read input ──
 $input = getJsonInput();
 
-$required = ['temperature', 'moisture', 'humidity', 'gases', 'nitrogen', 'device'];
+// ── Map hardware field names to DB column names ──
+// Hardware sends: device_id, soil_moisture, gas_level
+// DB expects:    device,    moisture,      gases
+if (isset($input['device_id']) && !isset($input['device'])) {
+    $input['device'] = $input['device_id'];
+}
+if (isset($input['soil_moisture']) && !isset($input['moisture'])) {
+    $input['moisture'] = $input['soil_moisture'];
+}
+if (isset($input['gas_level']) && !isset($input['gases'])) {
+    $input['gases'] = $input['gas_level'];
+}
+
+// nitrogen is optional — hardware may not send it
+if (!isset($input['nitrogen'])) {
+    $input['nitrogen'] = '0';
+}
+
+$required = ['temperature', 'moisture', 'humidity', 'gases', 'device'];
 foreach ($required as $field) {
-    if (!isset($input[$field]) || $input[$field] === '') {
+    if (!isset($input[$field]) && $input[$field] !== 0 && $input[$field] !== '0') {
         sendResponse(400, false, "Missing required field: $field");
     }
 }
