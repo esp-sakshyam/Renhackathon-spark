@@ -1159,6 +1159,53 @@
    PLATFORM SECTION — Smart Field Device
    ================================================================
 */
+.platform__banner {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: var(--space-2xl);
+  aspect-ratio: 21 / 9;
+}
+
+.platform__banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.platform__banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(20,20,18,0.75) 100%);
+  display: flex;
+  align-items: flex-end;
+}
+
+.platform__banner-content {
+  padding: var(--space-xl) var(--space-2xl);
+  width: 100%;
+}
+
+.platform__banner-tag {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: #fff;
+  background: var(--color-primary);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-sm);
+}
+
+.platform__banner-text {
+  font-size: var(--text-md);
+  color: rgba(255,255,255,0.9);
+  line-height: var(--leading-normal);
+  max-width: 600px;
+}
+
 .platform__grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -1223,9 +1270,57 @@
 
 @media (min-width: 1024px) {
   .monitoring__layout {
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
     align-items: start;
   }
+
+  .monitoring__image-panel {
+    grid-column: 1 / -1;
+    max-height: 360px;
+  }
+
+  .monitoring__image-panel img {
+    max-height: 360px;
+  }
+}
+
+.monitoring__image-panel {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  min-height: 320px;
+}
+
+.monitoring__image-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  min-height: 320px;
+}
+
+.monitoring__image-badge {
+  position: absolute;
+  bottom: var(--space-md);
+  left: var(--space-md);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: rgba(46,125,101,0.9);
+  backdrop-filter: blur(8px);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: #fff;
+  letter-spacing: 0.03em;
+}
+
+.monitoring__image-badge svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 
 .monitoring__dashboard {
@@ -1407,6 +1502,48 @@
    ALERTS SECTION — Smart Alert System
    ================================================================
 */
+.alerts__banner {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: var(--space-2xl);
+  max-height: 200px;
+}
+
+.alerts__banner img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.alerts__banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(46,125,101,0.88) 0%, rgba(20,20,18,0.45) 100%);
+  display: flex;
+  align-items: center;
+}
+
+.alerts__banner-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl) var(--space-2xl);
+}
+
+.alerts__banner-content svg {
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.alerts__banner-content p {
+  font-size: var(--text-md);
+  color: rgba(255,255,255,0.92);
+  line-height: var(--leading-normal);
+  max-width: 600px;
+}
+
 .alerts__grid {
   display: grid;
   grid-template-columns: 1fr;
