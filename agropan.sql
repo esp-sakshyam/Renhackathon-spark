@@ -136,10 +136,10 @@ CREATE TABLE `users` (
 
 CREATE TABLE `warnings` (
   `warning_id` int(11) NOT NULL,
-  `title` int(11) NOT NULL,
-  `details` int(11) NOT NULL,
-  `timestamp` int(11) NOT NULL,
-  `valid_till` int(11) NOT NULL
+  `title` text NOT NULL,
+  `details` text NOT NULL,
+  `timestamp` text NOT NULL,
+  `valid_till` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='table to store the emergency alerts';
 
 --
