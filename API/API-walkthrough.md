@@ -176,10 +176,10 @@ Register a new user account. Password is **bcrypt-hashed server-side**. `last_lo
 | Field      | Required | Type   | Description                                  |
 | ---------- | -------- | ------ | -------------------------------------------- |
 | `username` | **Yes**  | string | Unique username for login                    |
-| `email`    | **Yes**  | string | Valid email address (checked for duplicates)  |
+| `email`    | **Yes**  | string | Valid email address (checked for duplicates) |
 | `name`     | **Yes**  | string | Full name of the user                        |
 | `location` | **Yes**  | string | District or city                             |
-| `type`     | **Yes**  | string | `"farmer"` or `"merchant"` (validated)        |
+| `type`     | **Yes**  | string | `"farmer"` or `"merchant"` (validated)       |
 | `password` | **Yes**  | string | Plain-text password (hashed with bcrypt)     |
 
 **Success Response:**
@@ -261,7 +261,7 @@ Update an existing user's details. `user_id` is required. `last_login` is auto-u
 | `email`    | No       | string | New email                              |
 | `name`     | No       | string | New display name                       |
 | `location` | No       | string | New location                           |
-| `type`     | No       | string | `"farmer"` or `"merchant"` (validated)  |
+| `type`     | No       | string | `"farmer"` or `"merchant"` (validated) |
 | `password` | No       | string | New password (re-hashed with bcrypt)   |
 
 > `last_login` is auto-set to the current Unix timestamp — do not send it manually.
@@ -325,7 +325,7 @@ Delete a user account permanently.
 
 ### CREATE — `POST /create/crops.php`
 
-Add a new crop to the marketplace.
+Add a new crop to the marketplace. `last_updated` is auto-set to the current Unix timestamp.
 
 **Request Body:**
 
@@ -334,18 +334,18 @@ Add a new crop to the marketplace.
   "name": "Rice",
   "image": "gallery/crop-rice-paddy.jpg",
   "type": "cereal",
-  "price": "45",
-  "last_updated": "2026-02-11 08:00:00"
+  "price": "45"
 }
 ```
 
-| Field          | Required | Type   | Description                                   |
-| -------------- | -------- | ------ | --------------------------------------------- |
-| `name`         | Yes      | string | Name of the crop                              |
-| `image`        | Yes      | string | Image path or URL                             |
-| `type`         | Yes      | string | Category (cereal, vegetable, cash_crop, etc.) |
-| `price`        | Yes      | string | Market price per kg in NPR                    |
-| `last_updated` | Yes      | string | When the price was last updated               |
+| Field   | Required | Type   | Description                                   |
+| ------- | -------- | ------ | --------------------------------------------- |
+| `name`  | **Yes**  | string | Name of the crop                              |
+| `image` | **Yes**  | string | Image path or URL                             |
+| `type`  | **Yes**  | string | Category (cereal, vegetable, cash_crop, etc.) |
+| `price` | **Yes**  | string | Market price per kg in NPR                    |
+
+> `last_updated` is auto-set to the current Unix timestamp — do not send it manually.
 
 **Success Response:**
 
@@ -363,7 +363,7 @@ Add a new crop to the marketplace.
 
 ### READ — `POST /read/crops.php`
 
-Retrieve crop(s) from the marketplace.
+Retrieve crop(s) from the marketplace. Send an empty body to get all crops.
 
 **Request Body (all crops):**
 
@@ -391,24 +391,21 @@ Retrieve crop(s) from the marketplace.
 | --------- | -------- | ------ | --------------------------- |
 | `crop_id` | No       | int    | Fetch a specific crop by ID |
 | `type`    | No       | string | Filter by crop category     |
-| `name`    | No       | string | Search by crop name         |
 
 **Success Response:**
 
 ```json
 {
   "success": true,
-  "message": "Crops retrieved",
-  "data": [
-    {
-      "crop_id": 1,
-      "name": "Rice",
-      "image": "gallery/crop-rice-paddy.jpg",
-      "type": "cereal",
-      "price": "45",
-      "last_updated": "2026-02-11 08:00:00"
-    }
-  ]
+  "message": "Crop fetched successfully",
+  "data": {
+    "crop_id": 1,
+    "name": "Rice",
+    "image": "gallery/crop-rice-paddy.jpg",
+    "type": "cereal",
+    "price": "45",
+    "last_updated": "1739260800"
+  }
 }
 ```
 
@@ -416,26 +413,26 @@ Retrieve crop(s) from the marketplace.
 
 ### UPDATE — `POST /update/crops.php`
 
-Update a crop's details (typically price updates).
+Update a crop's details (typically price updates). `last_updated` is auto-set to the current Unix timestamp on every call.
 
 **Request Body:**
 
 ```json
 {
   "crop_id": 1,
-  "price": "48",
-  "last_updated": "2026-02-11 14:30:00"
+  "price": "48"
 }
 ```
 
-| Field          | Required | Type   | Description              |
-| -------------- | -------- | ------ | ------------------------ |
-| `crop_id`      | **Yes**  | int    | ID of the crop to update |
-| `name`         | No       | string | New crop name            |
-| `image`        | No       | string | New image path           |
-| `type`         | No       | string | New category             |
-| `price`        | No       | string | Updated market price     |
-| `last_updated` | No       | string | Timestamp of this update |
+| Field     | Required | Type   | Description              |
+| --------- | -------- | ------ | ------------------------ |
+| `crop_id` | **Yes**  | int    | ID of the crop to update |
+| `name`    | No       | string | New crop name            |
+| `image`   | No       | string | New image path           |
+| `type`    | No       | string | New category             |
+| `price`   | No       | string | Updated market price     |
+
+> `last_updated` is auto-set to the current Unix timestamp — do not send it manually.
 
 **Success Response:**
 
@@ -495,7 +492,7 @@ Remove a crop listing from the marketplace.
 
 ### CREATE — `POST /create/devices.php`
 
-Register a new IoT device.
+Register a new IoT device. `last_ping` is auto-set to the current Unix timestamp.
 
 **Request Body:**
 
@@ -503,17 +500,17 @@ Register a new IoT device.
 {
   "name": "AGROPAN-001",
   "location": "Chitwan, Field Block A",
-  "last_ping": "2026-02-11 10:00:00",
   "owned_by": "1"
 }
 ```
 
-| Field       | Required | Type   | Description                    |
-| ----------- | -------- | ------ | ------------------------------ |
-| `name`      | Yes      | string | Unique device identifier       |
-| `location`  | Yes      | string | Where the device is deployed   |
-| `last_ping` | Yes      | string | Initial registration timestamp |
-| `owned_by`  | Yes      | string | User ID of the device owner    |
+| Field      | Required | Type   | Description                  |
+| ---------- | -------- | ------ | ---------------------------- |
+| `name`     | **Yes**  | string | Unique device identifier     |
+| `location` | **Yes**  | string | Where the device is deployed |
+| `owned_by` | **Yes**  | string | User ID of the device owner  |
+
+> `last_ping` is auto-set to the current Unix timestamp — do not send it manually.
 
 **Success Response:**
 
@@ -565,13 +562,13 @@ Retrieve device(s).
 ```json
 {
   "success": true,
-  "message": "Devices retrieved",
+  "message": "Devices fetched successfully",
   "data": [
     {
       "device_id": 1,
       "name": "AGROPAN-001",
       "location": "Chitwan, Field Block A",
-      "last_ping": "2026-02-11 10:45:30",
+      "last_ping": "1739264730",
       "owned_by": "1"
     }
   ]
@@ -582,15 +579,14 @@ Retrieve device(s).
 
 ### UPDATE — `POST /update/devices.php`
 
-Update device details (typically called when device pings or is relocated).
+Update device details (typically called when device pings or is relocated). `last_ping` is auto-updated to the current Unix timestamp on every call.
 
 **Request Body:**
 
 ```json
 {
   "device_id": 1,
-  "location": "Chitwan, Field Block B",
-  "last_ping": "2026-02-11 12:30:00"
+  "location": "Chitwan, Field Block B"
 }
 ```
 
@@ -599,8 +595,9 @@ Update device details (typically called when device pings or is relocated).
 | `device_id` | **Yes**  | int    | ID of the device to update           |
 | `name`      | No       | string | New device name                      |
 | `location`  | No       | string | New deployment location              |
-| `last_ping` | No       | string | Updated last ping timestamp          |
 | `owned_by`  | No       | string | Transfer ownership to different user |
+
+> `last_ping` is auto-set to the current Unix timestamp — do not send it manually.
 
 **Success Response:**
 
@@ -663,13 +660,12 @@ Unregister a device from the platform.
 
 ### CREATE — `POST /create/data.php`
 
-Upload a new sensor reading. Called by the ESP32-S3 firmware every 30 seconds.
+Upload a new sensor reading. Called by the ESP32-S3 firmware every 30 seconds. `timestamp` is auto-set to the current Unix timestamp. Triggers email notification to all active subscribers.
 
 **Request Body:**
 
 ```json
 {
-  "timestamp": "2026-02-11 10:45:30",
   "temperature": "28.5",
   "moisture": "62.3",
   "humidity": "78.1",
@@ -681,13 +677,14 @@ Upload a new sensor reading. Called by the ESP32-S3 firmware every 30 seconds.
 
 | Field         | Required | Type   | Description                        |
 | ------------- | -------- | ------ | ---------------------------------- |
-| `timestamp`   | Yes      | string | ISO timestamp of the reading       |
-| `temperature` | Yes      | string | Temperature in °C                  |
-| `moisture`    | Yes      | string | Soil moisture (0–100%)             |
-| `humidity`    | Yes      | string | Air humidity (0–100%)              |
-| `gases`       | Yes      | string | Gas concentration (%)              |
-| `nitrogen`    | Yes      | string | Nitrogen level                     |
-| `device`      | Yes      | string | Device name or ID sending the data |
+| `temperature` | **Yes**  | string | Temperature in °C                  |
+| `moisture`    | **Yes**  | string | Soil moisture (0–100%)             |
+| `humidity`    | **Yes**  | string | Air humidity (0–100%)              |
+| `gases`       | **Yes**  | string | Gas concentration (%)              |
+| `nitrogen`    | **Yes**  | string | Nitrogen level                     |
+| `device`      | **Yes**  | string | Device name or ID sending the data |
+
+> `timestamp` is auto-set to the current Unix timestamp — do not send it manually.
 
 **Success Response:**
 
@@ -705,7 +702,7 @@ Upload a new sensor reading. Called by the ESP32-S3 firmware every 30 seconds.
 
 ### READ — `POST /read/data.php`
 
-Retrieve sensor readings. Can filter by device and/or time range.
+Retrieve sensor readings. Can filter by device or fetch by ID. Results ordered by timestamp descending.
 
 **Request Body (latest from a device):**
 
@@ -739,11 +736,11 @@ Retrieve sensor readings. Can filter by device and/or time range.
 ```json
 {
   "success": true,
-  "message": "Sensor data retrieved",
+  "message": "Sensor data fetched successfully",
   "data": [
     {
       "data_id": 1,
-      "timestamp": "2026-02-11 10:45:30",
+      "timestamp": "1739264730",
       "temperature": "28.5",
       "moisture": "62.3",
       "humidity": "78.1",
@@ -842,7 +839,7 @@ Delete a sensor reading record.
 
 ### CREATE — `POST /create/questions.php`
 
-Post a new question to the community forum.
+Post a new question to the community forum. `upvotes`, `downvotes`, and `answers` are auto-initialized to `"0"`, `"0"`, and `""` respectively.
 
 **Request Body:**
 
@@ -850,21 +847,17 @@ Post a new question to the community forum.
 {
   "question": "What is the best organic fertilizer for rice paddies in Chitwan?",
   "type": "crop_disease",
-  "asked_by": "1",
-  "upvotes": "",
-  "downvotes": "",
-  "answers": ""
+  "asked_by": "1"
 }
 ```
 
-| Field       | Required | Type   | Description                                    |
-| ----------- | -------- | ------ | ---------------------------------------------- |
-| `question`  | Yes      | string | Full question text                             |
-| `type`      | Yes      | string | Topic category                                 |
-| `asked_by`  | Yes      | string | User ID of the person asking                   |
-| `upvotes`   | No       | string | Initially empty                                |
-| `downvotes` | No       | string | Initially empty                                |
-| `answers`   | No       | string | Initially empty (populated as answers come in) |
+| Field      | Required | Type   | Description                  |
+| ---------- | -------- | ------ | ---------------------------- |
+| `question` | **Yes**  | string | Full question text           |
+| `type`     | **Yes**  | string | Topic category (see below)   |
+| `asked_by` | **Yes**  | string | User ID of the person asking |
+
+> `upvotes` defaults to `"0"`, `downvotes` defaults to `"0"`, `answers` defaults to `""` — do not send them manually.
 
 **Topic Categories:**
 
@@ -909,14 +902,6 @@ Retrieve forum questions.
 }
 ```
 
-**Request Body (by user):**
-
-```json
-{
-  "asked_by": "1"
-}
-```
-
 **Request Body (single question):**
 
 ```json
@@ -925,29 +910,26 @@ Retrieve forum questions.
 }
 ```
 
-| Field         | Required | Type   | Description                |
-| ------------- | -------- | ------ | -------------------------- |
-| `question_id` | No       | int    | Fetch a specific question  |
-| `type`        | No       | string | Filter by topic category   |
-| `asked_by`    | No       | string | Filter by author's user ID |
+| Field         | Required | Type   | Description               |
+| ------------- | -------- | ------ | ------------------------- |
+| `question_id` | No       | int    | Fetch a specific question |
+| `type`        | No       | string | Filter by topic category  |
 
 **Success Response:**
 
 ```json
 {
   "success": true,
-  "message": "Questions retrieved",
-  "data": [
-    {
-      "question_id": 1,
-      "question": "What is the best organic fertilizer for rice paddies in Chitwan?",
-      "type": "crop_disease",
-      "asked_by": "1",
-      "upvotes": "2,5,8",
-      "downvotes": "",
-      "answers": "1,3"
-    }
-  ]
+  "message": "Question fetched successfully",
+  "data": {
+    "question_id": 1,
+    "question": "What is the best organic fertilizer for rice paddies in Chitwan?",
+    "type": "crop_disease",
+    "asked_by": "1",
+    "upvotes": "2,5,8",
+    "downvotes": "",
+    "answers": "1,3"
+  }
 }
 ```
 
