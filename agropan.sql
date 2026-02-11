@@ -121,6 +121,7 @@ CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `username` text NOT NULL,
   `email` text NOT NULL,
+  `phone` text NOT NULL,
   `name` text NOT NULL,
   `location` text NOT NULL,
   `type` text NOT NULL,

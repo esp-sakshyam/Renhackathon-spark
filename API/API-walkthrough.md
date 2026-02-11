@@ -151,6 +151,7 @@ API/
 | `user_id`    | `int(11)` AUTO_INCREMENT | Primary key                              |
 | `username`   | `text`                   | Unique login username                    |
 | `email`      | `text`                   | User's email address                     |
+| `phone`      | `text`                   | User's phone number                      |
 | `name`       | `text`                   | Full display name                        |
 | `location`   | `text`                   | User's district/location                 |
 | `type`       | `text`                   | Account type: `"farmer"` or `"merchant"` |
@@ -169,6 +170,7 @@ Register a new user account. Password is **bcrypt-hashed server-side**. `last_lo
 {
   "username": "ramesh_farmer",
   "email": "ramesh@example.com",
+  "phone": "9801234567",
   "name": "Ramesh Thapa",
   "location": "Chitwan",
   "type": "farmer",
@@ -180,6 +182,7 @@ Register a new user account. Password is **bcrypt-hashed server-side**. `last_lo
 | ---------- | -------- | ------ | -------------------------------------------- |
 | `username` | **Yes**  | string | Unique username for login                    |
 | `email`    | **Yes**  | string | Valid email address (checked for duplicates) |
+| `phone`    | **Yes**  | string | Phone number                                 |
 | `name`     | **Yes**  | string | Full name of the user                        |
 | `location` | **Yes**  | string | District or city                             |
 | `type`     | **Yes**  | string | `"farmer"` or `"merchant"` (validated)       |
@@ -231,6 +234,7 @@ Retrieve user(s). Send an empty body to get all users, or pass `user_id` for a s
     "user_id": 1,
     "username": "ramesh_farmer",
     "email": "ramesh@example.com",
+    "phone": "9801234567",
     "name": "Ramesh Thapa",
     "location": "Chitwan",
     "type": "farmer",
@@ -262,6 +266,7 @@ Update an existing user's details. `user_id` is required. `last_login` is auto-u
 | `user_id`  | **Yes**  | int    | ID of the user to update               |
 | `username` | No       | string | New username                           |
 | `email`    | No       | string | New email                              |
+| `phone`    | No       | string | New phone number                       |
 | `name`     | No       | string | New display name                       |
 | `location` | No       | string | New location                           |
 | `type`     | No       | string | `"farmer"` or `"merchant"` (validated) |
@@ -1581,6 +1586,7 @@ Authenticate a user with username and password. Starts a PHP session with secure
     "username": "ramesh_farmer",
     "name": "Ramesh Thapa",
     "email": "ramesh@example.com",
+    "phone": "9801234567",
     "type": "farmer",
     "location": "Chitwan"
   }
@@ -1646,6 +1652,7 @@ Check if a user is currently logged in and retrieve their session data.
     "username": "ramesh_farmer",
     "name": "Ramesh Thapa",
     "email": "ramesh@example.com",
+    "phone": "9801234567",
     "type": "farmer",
     "location": "Chitwan"
   }
@@ -1702,6 +1709,7 @@ requireLogin();
 | `$_SESSION['username']`  | string | Login username             |
 | `$_SESSION['name']`      | string | Full display name          |
 | `$_SESSION['email']`     | string | Email address              |
+| `$_SESSION['phone']`     | string | Phone number               |
 | `$_SESSION['type']`      | string | `"farmer"` or `"merchant"` |
 | `$_SESSION['location']`  | string | District/location          |
 | `$_SESSION['logged_in']` | bool   | Always `true`              |
@@ -1802,4 +1810,4 @@ All endpoints return errors in a consistent format:
 
 ---
 
-_Document version: 4.0 · Last updated: February 2026_
+_Document version: 5.0 · Last updated: February 2026_

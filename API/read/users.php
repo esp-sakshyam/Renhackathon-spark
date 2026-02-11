@@ -20,7 +20,7 @@ try {
     if (!empty($input['user_id'])) {
         // ── Fetch single user ──
         $stmt = $pdo->prepare(
-            "SELECT user_id, username, email, name, location, type, last_login
+            "SELECT user_id, username, email, phone, name, location, type, last_login
              FROM users WHERE user_id = :id LIMIT 1"
         );
         $stmt->execute([':id' => $input['user_id']]);
@@ -35,7 +35,7 @@ try {
     } else {
         // ── Fetch all users ──
         $stmt = $pdo->query(
-            "SELECT user_id, username, email, name, location, type, last_login
+            "SELECT user_id, username, email, phone, name, location, type, last_login
              FROM users ORDER BY user_id DESC"
         );
         $users = $stmt->fetchAll();

@@ -26,7 +26,7 @@ if (empty($input['user_id'])) {
 }
 
 // ── Updatable fields ──
-$allowed = ['username', 'email', 'name', 'location', 'type', 'password'];
+$allowed = ['username', 'email', 'phone', 'name', 'location', 'type', 'password'];
 $setClauses = [];
 $params = [':id' => $input['user_id']];
 

@@ -13,6 +13,7 @@
  * {
  *   "username" : "ram_thapa",
  *   "email"    : "ram@example.com",
+ *   "phone"    : "9801234567",
  *   "name"     : "Ram Thapa",
  *   "location" : "Chitwan",
  *   "type"     : "farmer",
@@ -25,7 +26,7 @@ require_once __DIR__ . '/../database.php';
 // ── Read input ──
 $input = getJsonInput();
 
-$required = ['username', 'email', 'name', 'location', 'type', 'password'];
+$required = ['username', 'email', 'phone', 'name', 'location', 'type', 'password'];
 foreach ($required as $field) {
     if (empty($input[$field])) {
         sendResponse(400, false, "Missing required field: $field");
@@ -59,13 +60,14 @@ $hashedPassword = password_hash($input['password'], PASSWORD_BCRYPT);
 // ── Insert user ──
 try {
     $stmt = $pdo->prepare(
-        "INSERT INTO users (username, email, name, location, type, last_login, password)
-         VALUES (:username, :email, :name, :location, :type, :last_login, :password)"
+        "INSERT INTO users (username, email, phone, name, location, type, last_login, password)
+         VALUES (:username, :email, :phone, :name, :location, :type, :last_login, :password)"
     );
 
     $stmt->execute([
         ':username' => $input['username'],
         ':email' => $input['email'],
+        ':phone' => $input['phone'],
         ':name' => $input['name'],
         ':location' => $input['location'],
         ':type' => $input['type'],

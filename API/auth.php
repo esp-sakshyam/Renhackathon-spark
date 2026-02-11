@@ -24,6 +24,7 @@
  *   $_SESSION['username']  — string
  *   $_SESSION['name']      — string
  *   $_SESSION['email']     — string
+ *   $_SESSION['phone']     — string
  *   $_SESSION['type']      — "farmer" or "merchant"
  *   $_SESSION['location']  — string
  *   $_SESSION['logged_in'] — true
@@ -92,6 +93,7 @@ function getLoggedInUser(): ?array
         'username' => $_SESSION['username'],
         'name' => $_SESSION['name'],
         'email' => $_SESSION['email'],
+        'phone' => $_SESSION['phone'],
         'type' => $_SESSION['type'],
         'location' => $_SESSION['location'],
     ];
@@ -162,7 +164,7 @@ if ($action === 'login') {
     try {
         // Look up user by username
         $stmt = $pdo->prepare(
-            "SELECT user_id, username, email, name, location, type, password
+            "SELECT user_id, username, email, phone, name, location, type, password
              FROM users WHERE username = :username LIMIT 1"
         );
         $stmt->execute([':username' => $username]);
@@ -185,6 +187,7 @@ if ($action === 'login') {
         $_SESSION['username'] = $user['username'];
         $_SESSION['name'] = $user['name'];
         $_SESSION['email'] = $user['email'];
+        $_SESSION['phone'] = $user['phone'];
         $_SESSION['type'] = $user['type'];
         $_SESSION['location'] = $user['location'];
         $_SESSION['logged_in'] = true;
@@ -201,6 +204,7 @@ if ($action === 'login') {
             'username' => $user['username'],
             'name' => $user['name'],
             'email' => $user['email'],
+            'phone' => $user['phone'],
             'type' => $user['type'],
             'location' => $user['location'],
         ]);
