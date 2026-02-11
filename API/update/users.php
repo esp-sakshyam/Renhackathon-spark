@@ -52,8 +52,8 @@ if (count($setClauses) <= 1) {
 }
 
 // ── Validate type if provided ──
-if (!empty($input['type']) && !in_array($input['type'], ['farmer', 'merchant'])) {
-    sendResponse(400, false, "Invalid type. Must be 'farmer' or 'merchant'");
+if (!empty($input['type']) && !in_array($input['type'], ['farmer', 'merchant', 'admin'])) {
+    sendResponse(400, false, "Invalid type. Must be 'farmer', 'merchant', or 'admin'");
 }
 
 try {

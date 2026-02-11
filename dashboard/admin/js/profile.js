@@ -9,20 +9,20 @@
 
     var API = '../../API/';
 
-    var alertBox        = document.getElementById('profileAlert');
-    var profileAvatar   = document.getElementById('profileAvatar');
-    var profileName     = document.getElementById('profileName');
-    var profileType     = document.getElementById('profileType');
+    var alertBox = document.getElementById('profileAlert');
+    var profileAvatar = document.getElementById('profileAvatar');
+    var profileName = document.getElementById('profileName');
+    var profileType = document.getElementById('profileType');
     var profileLocation = document.getElementById('profileLocation');
-    var profileLastLogin= document.getElementById('profileLastLogin');
+    var profileLastLogin = document.getElementById('profileLastLogin');
 
-    var editName     = document.getElementById('editName');
-    var editUsername  = document.getElementById('editUsername');
-    var editEmail    = document.getElementById('editEmail');
-    var editPhone    = document.getElementById('editPhone');
+    var editName = document.getElementById('editName');
+    var editUsername = document.getElementById('editUsername');
+    var editEmail = document.getElementById('editEmail');
+    var editPhone = document.getElementById('editPhone');
     var editLocation = document.getElementById('editLocation');
 
-    var newPassword     = document.getElementById('newPassword');
+    var newPassword = document.getElementById('newPassword');
     var confirmPassword = document.getElementById('confirmPassword');
 
     var currentUser = null;
@@ -126,7 +126,7 @@
                 showAlert('Profile updated successfully!');
                 var updated = Object.assign({}, currentUser, body);
                 currentUser = updated;
-                try { parent.sessionStorage.setItem('agropan_user', JSON.stringify(updated)); } catch (e) {}
+                try { parent.sessionStorage.setItem('agropan_user', JSON.stringify(updated)); } catch (e) { }
                 displayProfile(updated);
                 try {
                     var parentAvatar = parent.document.getElementById('userAvatar');
@@ -136,7 +136,7 @@
                         parentAvatar.textContent = initials;
                         parentName.textContent = (updated.name || '').split(' ')[0];
                     }
-                } catch (e) {}
+                } catch (e) { }
             } else {
                 showAlert(res.message || 'Update failed.', 'danger');
             }
