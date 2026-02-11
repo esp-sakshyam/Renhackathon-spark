@@ -149,9 +149,14 @@
 
                 // Redirect based on user type
                 var userType = (data.data && data.data.type) ? data.data.type.toLowerCase() : 'farmer';
-                var dashboardPath = userType === 'merchant'
-                    ? 'dashboard/merchant/index.html'
-                    : 'dashboard/farmer/index.html';
+                var dashboardPath;
+                if (userType === 'admin') {
+                    dashboardPath = 'dashboard/admin/index.html';
+                } else if (userType === 'merchant') {
+                    dashboardPath = 'dashboard/merchant/index.html';
+                } else {
+                    dashboardPath = 'dashboard/farmer/index.html';
+                }
 
                 // Redirect after brief delay
                 setTimeout(function () {

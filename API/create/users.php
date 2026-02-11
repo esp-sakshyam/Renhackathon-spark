@@ -34,9 +34,9 @@ foreach ($required as $field) {
 }
 
 // ── Validate type ──
-$validTypes = ['farmer', 'merchant'];
+$validTypes = ['farmer', 'merchant', 'admin'];
 if (!in_array($input['type'], $validTypes)) {
-    sendResponse(400, false, "Invalid type. Must be 'farmer' or 'merchant'");
+    sendResponse(400, false, "Invalid type. Must be 'farmer', 'merchant', or 'admin'");
 }
 
 // ── Check for duplicate username or email ──
