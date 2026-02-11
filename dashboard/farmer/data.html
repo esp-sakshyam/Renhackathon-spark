@@ -6,12 +6,31 @@
     <title>Field Data — AgroPan</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" media="print" onload="this.media='all'" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/fontawesome.css" />
-    <link rel="stylesheet" media="print" onload="this.media='all'" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/solid.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      media="print"
+      onload="this.media = 'all'"
+      href="https://site-assets.fontawesome.com/releases/v7.1.0/css/fontawesome.css"
+    />
+    <link
+      rel="stylesheet"
+      media="print"
+      onload="this.media = 'all'"
+      href="https://site-assets.fontawesome.com/releases/v7.1.0/css/solid.css"
+    />
     <noscript>
-      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/fontawesome.css" />
-      <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v7.1.0/css/solid.css" />
+      <link
+        rel="stylesheet"
+        href="https://site-assets.fontawesome.com/releases/v7.1.0/css/fontawesome.css"
+      />
+      <link
+        rel="stylesheet"
+        href="https://site-assets.fontawesome.com/releases/v7.1.0/css/solid.css"
+      />
     </noscript>
     <link rel="stylesheet" href="../../css/variables.css" />
     <link rel="stylesheet" href="css/shared.css" />
@@ -22,7 +41,11 @@
         <h1 class="page__title">Field Data</h1>
         <p class="page__subtitle">Sensor readings from your IoT devices.</p>
         <div class="page__actions">
-          <select class="form-input form-select" id="deviceFilter" style="max-width: 220px;">
+          <select
+            class="form-input form-select"
+            id="deviceFilter"
+            style="max-width: 220px"
+          >
             <option value="">All Devices</option>
           </select>
           <button class="btn btn--ghost btn--sm" id="refreshData">
@@ -82,7 +105,9 @@
       <div class="card">
         <div class="card__header">
           <h3 class="card__title">All Readings</h3>
-          <span class="card__action" id="dataCount" style="cursor: default;">0 records</span>
+          <span class="card__action" id="dataCount" style="cursor: default"
+            >0 records</span
+          >
         </div>
         <div class="card__body card__body--flush">
           <div class="table-wrap">
@@ -100,7 +125,14 @@
               </thead>
               <tbody id="dataBody">
                 <tr>
-                  <td colspan="7" style="text-align:center; color: var(--color-text-light); padding: var(--space-xl);">
+                  <td
+                    colspan="7"
+                    style="
+                      text-align: center;
+                      color: var(--color-text-light);
+                      padding: var(--space-xl);
+                    "
+                  >
                     <i class="fa-solid fa-spinner fa-spin"></i> Loading…
                   </td>
                 </tr>
