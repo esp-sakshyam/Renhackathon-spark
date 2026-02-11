@@ -451,6 +451,79 @@ Platform Pillars:
       questions/answers update tables.
     - Bumped version to 3.0.
 
+--- [2026-02-11] Session #9 — Delete APIs + Auth + Walkthrough v4.0 ---
+
+  FEATURE: All 8 Delete API Endpoints — Fully Implemented
+  STATUS:  COMPLETED
+  DETAILS:
+    - All endpoints: require database.php, validate primary key,
+      verify record exists before deleting, use prepared statements.
+
+    delete/users.php:
+      - Requires user_id. Simple delete after existence check.
+
+    delete/crops.php:
+      - Requires crop_id. Simple delete after existence check.
+
+    delete/devices.php:
+      - Requires device_id. Simple delete after existence check.
+
+    delete/data.php:
+      - Requires data_id. Simple delete after existence check.
+
+    delete/emails.php:
+      - Requires email_id. Hard delete (permanent removal).
+      - For soft-delete, use update/emails.php with is_active=0.
+
+    delete/questions.php:
+      - Requires question_id. CASCADE DELETE — automatically deletes
+        all answers linked via the question's comma-separated
+        answers field (parses IDs → DELETE WHERE IN).
+
+    delete/answers.php:
+      - Requires answer_id. AUTO-CLEANUP — scans all questions and
+        removes the deleted answer_id from any parent question's
+        comma-separated answers field.
+
+    delete/warnings.php:
+      - Requires warning_id. Simple delete after existence check.
+
+  FEATURE: auth.php — Authentication & Session Management
+  STATUS:  COMPLETED
+  DETAILS:
+    - Dual-mode file: endpoint mode (POST) + include mode (require)
+    - Endpoint actions: login, logout, status
+    - Login: validates username/password with bcrypt, regenerates
+      session ID (prevent fixation), stores user data in session,
+      updates last_login timestamp
+    - Logout: clears session data, deletes cookie, destroys session
+    - Status: returns logged-in user data or "Not logged in"
+    - Include mode helpers:
+      • startSecureSession() — safe to call multiple times
+      • isLoggedIn() — checks session state
+      • getLoggedInUser() — returns user data array or null
+      • requireLogin() — sends 401 + exits if not authenticated
+    - Session config: AGROPAN_SESSION cookie, 24hr lifetime,
+      httponly=true, samesite=Lax, secure=false (set true for HTTPS)
+    - Detects include vs direct call via SCRIPT_FILENAME check
+
+  FEATURE: API-walkthrough.md — v3.0 → v4.0
+  STATUS:  COMPLETED
+  DETAILS:
+    - Added full Section 9: Authentication API (login/logout/status
+      endpoints, include mode guide, helper functions table, session
+      data reference, session config table)
+    - Fixed DELETE docs:
+      • questions: documented cascade delete behavior
+      • answers: removed outdated manual update note, documented
+        auto-cleanup of parent question's answers field
+      • emails: added soft-delete alternative note
+    - Added auth.php to directory structure and TOC
+    - Added auth endpoints to Quick Reference table
+    - Added 401 Unauthorized and 405 Method Not Allowed to status codes
+    - Added auth-related error messages
+    - Bumped version to 4.0
+
 ================================================================================
   FILE INVENTORY
 ================================================================================
@@ -469,11 +542,13 @@ Platform Pillars:
 
   API/database.php        — PDO connection + helpers (sendResponse,
                             getJsonInput, notifyAllSubscribers)
-  API/API-walkthrough.md  — Full API documentation (v3.0, 32 endpoints)
+  API/auth.php             — Authentication & session management
+                            (login/logout/status + include helpers)
+  API/API-walkthrough.md  — Full API documentation (v4.0, 35 endpoints)
   API/create/             — 8 PHP files — FULLY IMPLEMENTED
   API/read/               — 8 PHP files — FULLY IMPLEMENTED
   API/update/             — 8 PHP files — FULLY IMPLEMENTED
-  API/delete/             — 8 PHP files (empty — not yet implemented)
+  API/delete/             — 8 PHP files — FULLY IMPLEMENTED
 
 ================================================================================
   NOTES
@@ -484,16 +559,21 @@ Platform Pillars:
   - Four platform pillars: IoT, Marketplace, Forum, Admin Alerts
   - simulate.js still exists on disk but is not loaded — can be deleted
   - Create APIs: DONE (8/8), Read APIs: DONE (8/8),
-    Update APIs: DONE (8/8), Delete APIs: PENDING (0/8)
+    Update APIs: DONE (8/8), Delete APIs: DONE (8/8)
+  - auth.php: login/logout/status endpoint + session helpers
+    for use across all pages (requireLogin, isLoggedIn, etc.)
   - database.php provides shared PDO connection + response/input helpers
   - Email notifications fire automatically from create/data.php and
     create/warnings.php (LIVE — not commented out)
   - All timestamps are Unix timestamps (time()) — no date strings
   - User passwords are bcrypt-hashed (password_hash + password_verify)
-  - answers.php auto-appends answer_id to parent question's answers field
-  - API-walkthrough.md v3.0 — all docs match actual implementations
+  - answers create auto-appends answer_id to parent question
+  - answers delete auto-removes answer_id from parent question
+  - questions delete cascades to delete all linked answers
+  - API-walkthrough.md v4.0 — all docs match actual implementations
   - For production email delivery, replace mail() with PHPMailer or
     a transactional email API (SendGrid, Mailgun)
+  - For production auth, set session secure=true (requires HTTPS)
   - All images are real Nepali agriculture photography (no stock/AI)
   - CSS architecture is token-driven: changing --color-primary updates
     the entire design system
