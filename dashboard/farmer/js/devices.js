@@ -37,7 +37,7 @@
         if (!unix) return 'Never';
         var d = new Date(unix * 1000);
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) +
-               ', ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            ', ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     }
 
     function showAlert(msg, type) {
@@ -70,10 +70,10 @@
     function showEmpty(msg) {
         list.innerHTML =
             '<div style="text-align:center;padding:var(--space-3xl);color:var(--color-text-light);grid-column:1/-1">' +
-                '<div style="font-size:3rem;margin-bottom:var(--space-md)"><i class="fa-solid fa-microchip"></i></div>' +
-                '<p style="font-size:var(--text-lg);font-weight:var(--weight-semibold);margin-bottom:var(--space-xs)">' + (msg || 'No devices yet') + '</p>' +
-                '<p style="margin-bottom:var(--space-lg)">Add your first IoT sensor to start monitoring.</p>' +
-                '<button class="btn btn--primary btn--sm" onclick="document.getElementById(\'addDeviceBtn\').click()"><i class="fa-solid fa-plus"></i> Add Device</button>' +
+            '<div style="font-size:3rem;margin-bottom:var(--space-md)"><i class="fa-solid fa-microchip"></i></div>' +
+            '<p style="font-size:var(--text-lg);font-weight:var(--weight-semibold);margin-bottom:var(--space-xs)">' + (msg || 'No devices yet') + '</p>' +
+            '<p style="margin-bottom:var(--space-lg)">Add your first IoT sensor to start monitoring.</p>' +
+            '<button class="btn btn--primary btn--sm" onclick="document.getElementById(\'addDeviceBtn\').click()"><i class="fa-solid fa-plus"></i> Add Device</button>' +
             '</div>';
     }
 
@@ -81,16 +81,16 @@
         list.innerHTML = devices.map(function (d) {
             return '<div class="item-card">' +
                 '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--space-md)">' +
-                    '<div style="width:44px;height:44px;border-radius:var(--radius-md);background:rgba(34,139,34,.1);color:var(--color-primary);display:flex;align-items:center;justify-content:center;font-size:var(--text-lg)"><i class="fa-solid fa-microchip"></i></div>' +
-                    '<div style="display:flex;gap:var(--space-xs)">' +
-                        '<button class="btn btn--ghost btn--sm btn--icon" onclick="editDevice(' + d.device_id + ')" title="Edit"><i class="fa-solid fa-pen"></i></button>' +
-                        '<button class="btn btn--ghost btn--sm btn--icon" onclick="deleteDevice(' + d.device_id + ')" title="Delete" style="color:var(--color-danger)"><i class="fa-solid fa-trash-can"></i></button>' +
-                    '</div>' +
+                '<div style="width:44px;height:44px;border-radius:var(--radius-md);background:rgba(34,139,34,.1);color:var(--color-primary);display:flex;align-items:center;justify-content:center;font-size:var(--text-lg)"><i class="fa-solid fa-microchip"></i></div>' +
+                '<div style="display:flex;gap:var(--space-xs)">' +
+                '<button class="btn btn--ghost btn--sm btn--icon" onclick="editDevice(' + d.device_id + ')" title="Edit"><i class="fa-solid fa-pen"></i></button>' +
+                '<button class="btn btn--ghost btn--sm btn--icon" onclick="deleteDevice(' + d.device_id + ')" title="Delete" style="color:var(--color-danger)"><i class="fa-solid fa-trash-can"></i></button>' +
+                '</div>' +
                 '</div>' +
                 '<h4 style="font-weight:var(--weight-semibold);margin-bottom:var(--space-xs)">' + escapeHtml(d.name) + '</h4>' +
                 '<p style="font-size:var(--text-sm);color:var(--color-text-muted);display:flex;align-items:center;gap:var(--space-xs);margin-bottom:var(--space-sm)"><i class="fa-solid fa-location-dot" style="font-size:var(--text-xs)"></i> ' + escapeHtml(d.location || '—') + '</p>' +
                 '<p style="font-size:var(--text-xs);color:var(--color-text-light)"><i class="fa-solid fa-clock"></i> Last ping: ' + ts(d.last_ping) + '</p>' +
-            '</div>';
+                '</div>';
         }).join('');
     }
 
@@ -158,16 +158,16 @@
                 location: location,
                 owned_by: user.username || 'unknown'
             })
-            .then(function (res) {
-                if (res.success) {
-                    showAlert('Device created!');
-                    closeModalFn();
-                    loadDevices();
-                } else {
-                    showAlert(res.message || 'Creation failed.', 'danger');
-                }
-            })
-            .catch(function () { showAlert('Network error.', 'danger'); });
+                .then(function (res) {
+                    if (res.success) {
+                        showAlert('Device created!');
+                        closeModalFn();
+                        loadDevices();
+                    } else {
+                        showAlert(res.message || 'Creation failed.', 'danger');
+                    }
+                })
+                .catch(function () { showAlert('Network error.', 'danger'); });
         }
     });
 

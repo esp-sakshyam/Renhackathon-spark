@@ -32,7 +32,7 @@
         if (!unix) return '—';
         var d = new Date(unix * 1000);
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
-               ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     }
 
 

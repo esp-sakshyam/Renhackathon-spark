@@ -28,7 +28,7 @@
         if (!unix) return '—';
         var d = new Date(unix * 1000);
         return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) +
-               ', ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            ', ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     }
 
     function relativeTime(unix) {
@@ -129,13 +129,13 @@
                 container.innerHTML = '<div class="activity-list">' + warnings.map(function (w) {
                     var severity = (w.severity || '').toLowerCase();
                     var iconClass = severity === 'high' ? 'stat-card__icon--danger' :
-                                    severity === 'medium' ? 'stat-card__icon--alert' :
-                                    'stat-card__icon--secondary';
+                        severity === 'medium' ? 'stat-card__icon--alert' :
+                            'stat-card__icon--secondary';
                     return '<div class="activity-item">' +
                         '<div class="activity-item__icon ' + iconClass + '"><i class="fa-solid fa-triangle-exclamation"></i></div>' +
                         '<div class="activity-item__content">' +
-                            '<div class="activity-item__text">' + (w.title || w.message || 'Warning') + '</div>' +
-                            '<div class="activity-item__time">' + relativeTime(w.timestamp) + '</div>' +
+                        '<div class="activity-item__text">' + (w.title || w.message || 'Warning') + '</div>' +
+                        '<div class="activity-item__time">' + relativeTime(w.timestamp) + '</div>' +
                         '</div></div>';
                 }).join('') + '</div>';
             })
@@ -154,18 +154,18 @@
         var loginTime = user.last_login ? relativeTime(user.last_login) : 'recently';
         feed.innerHTML =
             '<div class="activity-item">' +
-                '<div class="activity-item__icon stat-card__icon--primary"><i class="fa-solid fa-right-to-bracket"></i></div>' +
-                '<div class="activity-item__content">' +
-                    '<div class="activity-item__text">You logged in</div>' +
-                    '<div class="activity-item__time">' + loginTime + '</div>' +
-                '</div>' +
+            '<div class="activity-item__icon stat-card__icon--primary"><i class="fa-solid fa-right-to-bracket"></i></div>' +
+            '<div class="activity-item__content">' +
+            '<div class="activity-item__text">You logged in</div>' +
+            '<div class="activity-item__time">' + loginTime + '</div>' +
+            '</div>' +
             '</div>' +
             '<div class="activity-item">' +
-                '<div class="activity-item__icon stat-card__icon--accent"><i class="fa-solid fa-seedling"></i></div>' +
-                '<div class="activity-item__content">' +
-                    '<div class="activity-item__text">Dashboard loaded successfully</div>' +
-                    '<div class="activity-item__time">Just now</div>' +
-                '</div>' +
+            '<div class="activity-item__icon stat-card__icon--accent"><i class="fa-solid fa-seedling"></i></div>' +
+            '<div class="activity-item__content">' +
+            '<div class="activity-item__text">Dashboard loaded successfully</div>' +
+            '<div class="activity-item__time">Just now</div>' +
+            '</div>' +
             '</div>';
     }
 
