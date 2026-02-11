@@ -355,9 +355,15 @@
                     console.warn('Auto-login after signup failed:', loginErr);
                 }
 
+                // Redirect based on user type
+                var signedUpType = (type || 'farmer').toLowerCase();
+                var dashboardPath = signedUpType === 'merchant'
+                    ? 'dashboard/merchant/index.html'
+                    : 'dashboard/farmer/index.html';
+
                 // Redirect
                 setTimeout(function () {
-                    window.location.href = 'index.html';
+                    window.location.href = dashboardPath;
                 }, 1000);
             } else {
                 showAlert(data.message || 'Registration failed. Please try again.', 'error');

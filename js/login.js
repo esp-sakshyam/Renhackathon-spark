@@ -147,9 +147,15 @@
                     sessionStorage.setItem('agropan_user', JSON.stringify(data.data));
                 }
 
+                // Redirect based on user type
+                var userType = (data.data && data.data.type) ? data.data.type.toLowerCase() : 'farmer';
+                var dashboardPath = userType === 'merchant'
+                    ? 'dashboard/merchant/index.html'
+                    : 'dashboard/farmer/index.html';
+
                 // Redirect after brief delay
                 setTimeout(function () {
-                    window.location.href = 'index.html';
+                    window.location.href = dashboardPath;
                 }, 800);
             } else {
                 showAlert(data.message || 'Invalid username or password', 'error');
