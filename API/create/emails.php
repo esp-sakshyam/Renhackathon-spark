@@ -53,8 +53,8 @@ try {
     );
 
     $stmt->execute([
-        ':email'         => $input['email'],
-        ':name'          => $input['name'],
+        ':email' => $input['email'],
+        ':name' => $input['name'],
         ':subscribed_at' => (string) time()
     ]);
 

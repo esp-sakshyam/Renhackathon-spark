@@ -50,7 +50,7 @@ try {
     );
 
     $stmt->execute([
-        ':answer'      => $input['answer'],
+        ':answer' => $input['answer'],
         ':answered_by' => $input['answered_by']
     ]);
 
@@ -63,11 +63,11 @@ try {
     $stmt = $pdo->prepare("UPDATE questions SET answers = :answers WHERE question_id = :qid");
     $stmt->execute([
         ':answers' => $updatedAnswers,
-        ':qid'     => $input['question_id']
+        ':qid' => $input['question_id']
     ]);
 
     sendResponse(201, true, 'Answer posted successfully', [
-        'answer_id'   => (int) $answerId,
+        'answer_id' => (int) $answerId,
         'question_id' => (int) $input['question_id']
     ]);
 

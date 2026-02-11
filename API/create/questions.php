@@ -38,7 +38,7 @@ try {
 
     $stmt->execute([
         ':question' => $input['question'],
-        ':type'     => $input['type'],
+        ':type' => $input['type'],
         ':asked_by' => $input['asked_by']
     ]);
 
