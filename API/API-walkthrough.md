@@ -1,0 +1,1441 @@
+# AgroPan — API Walkthrough
+
+> Complete documentation for every CRUD endpoint in the AgroPan platform API.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Base URL](#base-url)
+- [Request / Response Format](#request--response-format)
+- [Database Schema Summary](#database-schema-summary)
+- [API Directory Structure](#api-directory-structure)
+- [1. Users API](#1-users-api)
+- [2. Crops API](#2-crops-api)
+- [3. Devices API](#3-devices-api)
+- [4. Data API (Sensor Readings)](#4-data-api-sensor-readings)
+- [5. Questions API](#5-questions-api)
+- [6. Answers API](#6-answers-api)
+- [7. Warnings API (Emergency Alerts)](#7-warnings-api-emergency-alerts)
+- [Error Handling](#error-handling)
+- [Status Codes](#status-codes)
+
+---
+
+## Overview
+
+The AgroPan API is a PHP + MySQL (MariaDB) RESTful API running on XAMPP. It follows a **CRUD folder structure** — each table has a dedicated PHP file in `create/`, `read/`, `update/`, and `delete/` folders. All endpoints accept and return **JSON**.
+
+**Database:** `agropan` (MariaDB 10.4.32)  
+**PHP Version:** 8.0.30  
+**Server:** XAMPP (Apache)
+
+---
+
+## Base URL
+
+```
+http://localhost/reliance/Renhackathon-spark/API
+```
+
+All endpoint paths below are relative to this base URL.
+
+---
+
+## Request / Response Format
+
+### Requests
+
+- **Method:** `POST` for all endpoints (create, read, update, delete)
+- **Content-Type:** `application/json`
+- **Body:** JSON object with the required fields
+
+### Responses
+
+All endpoints return a JSON object with this structure:
+
+```json
+{
+  "success": true,
+  "message": "Description of what happened",
+  "data": {}
+}
+```
+
+On error:
+
+```json
+{
+  "success": false,
+  "message": "Error description"
+}
+```
+
+---
+
+## Database Schema Summary
+
+| Table       | Primary Key   | Purpose                               |
+| ----------- | ------------- | ------------------------------------- |
+| `users`     | `user_id`     | Farmer & merchant accounts            |
+| `crops`     | `crop_id`     | Crop marketplace listings with prices |
+| `devices`   | `device_id`   | Registered IoT field devices          |
+| `data`      | `data_id`     | Sensor readings uploaded by devices   |
+| `questions` | `question_id` | Community forum questions             |
+| `answers`   | `answer_id`   | Replies to forum questions            |
+| `warnings`  | `warning_id`  | Admin-broadcast emergency alerts      |
+
+---
+
+## API Directory Structure
+
+```
+API/
+├── create/
+│   ├── users.php
+│   ├── crops.php
+│   ├── devices.php
+│   ├── data.php
+│   ├── questions.php
+│   ├── answers.php
+│   └── warnings.php
+├── read/
+│   ├── users.php
+│   ├── crops.php
+│   ├── devices.php
+│   ├── data.php
+│   ├── questions.php
+│   ├── answers.php
+│   └── warnings.php
+├── update/
+│   ├── users.php
+│   ├── crops.php
+│   ├── devices.php
+│   ├── data.php
+│   ├── questions.php
+│   ├── answers.php
+│   └── warnings.php
+├── delete/
+│   ├── users.php
+│   ├── crops.php
+│   ├── devices.php
+│   ├── data.php
+│   ├── questions.php
+│   ├── answers.php
+│   └── warnings.php
+└── API-walkthrough.md   ← This file
+```
+
+---
+
+## 1. Users API
+
+> Manages farmer and merchant accounts.
+
+### `users` Table Schema
+
+| Column       | Type                     | Description                              |
+| ------------ | ------------------------ | ---------------------------------------- |
+| `user_id`    | `int(11)` AUTO_INCREMENT | Primary key                              |
+| `username`   | `text`                   | Unique login username                    |
+| `email`      | `text`                   | User's email address                     |
+| `name`       | `text`                   | Full display name                        |
+| `location`   | `text`                   | User's district/location                 |
+| `type`       | `text`                   | Account type: `"farmer"` or `"merchant"` |
+| `last_login` | `text`                   | Timestamp of last login                  |
+| `password`   | `text`                   | Hashed password                          |
+
+---
+
+### CREATE — `POST /create/users.php`
+
+Register a new user account.
+
+**Request Body:**
+
+```json
+{
+  "username": "ramesh_farmer",
+  "email": "ramesh@example.com",
+  "name": "Ramesh Thapa",
+  "location": "Chitwan",
+  "type": "farmer",
+  "password": "hashed_password_here"
+}
+```
+
+| Field      | Required | Type   | Description                                |
+| ---------- | -------- | ------ | ------------------------------------------ |
+| `username` | Yes      | string | Unique username for login                  |
+| `email`    | Yes      | string | Valid email address                        |
+| `name`     | Yes      | string | Full name of the user                      |
+| `location` | Yes      | string | District or city                           |
+| `type`     | Yes      | string | `"farmer"` or `"merchant"`                 |
+| `password` | Yes      | string | Password (should be hashed before sending) |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "User registered successfully",
+  "data": {
+    "user_id": 1
+  }
+}
+```
+
+---
+
+### READ — `POST /read/users.php`
+
+Retrieve user(s). Send an empty body to get all users, or specify a filter.
+
+**Request Body (single user):**
+
+```json
+{
+  "user_id": 1
+}
+```
+
+**Request Body (by type):**
+
+```json
+{
+  "type": "farmer"
+}
+```
+
+**Request Body (all users):**
+
+```json
+{}
+```
+
+| Field      | Required | Type   | Description                          |
+| ---------- | -------- | ------ | ------------------------------------ |
+| `user_id`  | No       | int    | Fetch a specific user by ID          |
+| `type`     | No       | string | Filter by `"farmer"` or `"merchant"` |
+| `username` | No       | string | Fetch by username (for login)        |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Users retrieved",
+  "data": [
+    {
+      "user_id": 1,
+      "username": "ramesh_farmer",
+      "email": "ramesh@example.com",
+      "name": "Ramesh Thapa",
+      "location": "Chitwan",
+      "type": "farmer",
+      "last_login": "2026-02-11 10:30:00"
+    }
+  ]
+}
+```
+
+> **Note:** The `password` field should NEVER be returned in read responses.
+
+---
+
+### UPDATE — `POST /update/users.php`
+
+Update an existing user's details. `user_id` is required to identify the record.
+
+**Request Body:**
+
+```json
+{
+  "user_id": 1,
+  "name": "Ramesh Kumar Thapa",
+  "location": "Kathmandu",
+  "last_login": "2026-02-11 14:00:00"
+}
+```
+
+| Field        | Required | Type   | Description                 |
+| ------------ | -------- | ------ | --------------------------- |
+| `user_id`    | **Yes**  | int    | ID of the user to update    |
+| `username`   | No       | string | New username                |
+| `email`      | No       | string | New email                   |
+| `name`       | No       | string | New display name            |
+| `location`   | No       | string | New location                |
+| `type`       | No       | string | Change account type         |
+| `last_login` | No       | string | Update last login timestamp |
+| `password`   | No       | string | New hashed password         |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "User updated successfully"
+}
+```
+
+---
+
+### DELETE — `POST /delete/users.php`
+
+Delete a user account permanently.
+
+**Request Body:**
+
+```json
+{
+  "user_id": 1
+}
+```
+
+| Field     | Required | Type | Description              |
+| --------- | -------- | ---- | ------------------------ |
+| `user_id` | **Yes**  | int  | ID of the user to delete |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "User deleted successfully"
+}
+```
+
+---
+
+---
+
+## 2. Crops API
+
+> Manages crop listings in the marketplace with pricing data.
+
+### `crops` Table Schema
+
+| Column         | Type                     | Description                                              |
+| -------------- | ------------------------ | -------------------------------------------------------- |
+| `crop_id`      | `int(11)` AUTO_INCREMENT | Primary key                                              |
+| `name`         | `text`                   | Crop name (e.g., "Rice", "Wheat")                        |
+| `image`        | `text`                   | Path or URL to crop image                                |
+| `type`         | `text`                   | Crop category (e.g., "cereal", "vegetable", "cash_crop") |
+| `price`        | `text`                   | Current market price (NPR per unit)                      |
+| `last_updated` | `text`                   | Timestamp of last price update                           |
+
+---
+
+### CREATE — `POST /create/crops.php`
+
+Add a new crop to the marketplace.
+
+**Request Body:**
+
+```json
+{
+  "name": "Rice",
+  "image": "gallery/crop-rice-paddy.jpg",
+  "type": "cereal",
+  "price": "45",
+  "last_updated": "2026-02-11 08:00:00"
+}
+```
+
+| Field          | Required | Type   | Description                                   |
+| -------------- | -------- | ------ | --------------------------------------------- |
+| `name`         | Yes      | string | Name of the crop                              |
+| `image`        | Yes      | string | Image path or URL                             |
+| `type`         | Yes      | string | Category (cereal, vegetable, cash_crop, etc.) |
+| `price`        | Yes      | string | Market price per kg in NPR                    |
+| `last_updated` | Yes      | string | When the price was last updated               |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Crop added successfully",
+  "data": {
+    "crop_id": 1
+  }
+}
+```
+
+---
+
+### READ — `POST /read/crops.php`
+
+Retrieve crop(s) from the marketplace.
+
+**Request Body (all crops):**
+
+```json
+{}
+```
+
+**Request Body (single crop):**
+
+```json
+{
+  "crop_id": 1
+}
+```
+
+**Request Body (by type):**
+
+```json
+{
+  "type": "cereal"
+}
+```
+
+| Field     | Required | Type   | Description                 |
+| --------- | -------- | ------ | --------------------------- |
+| `crop_id` | No       | int    | Fetch a specific crop by ID |
+| `type`    | No       | string | Filter by crop category     |
+| `name`    | No       | string | Search by crop name         |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Crops retrieved",
+  "data": [
+    {
+      "crop_id": 1,
+      "name": "Rice",
+      "image": "gallery/crop-rice-paddy.jpg",
+      "type": "cereal",
+      "price": "45",
+      "last_updated": "2026-02-11 08:00:00"
+    }
+  ]
+}
+```
+
+---
+
+### UPDATE — `POST /update/crops.php`
+
+Update a crop's details (typically price updates).
+
+**Request Body:**
+
+```json
+{
+  "crop_id": 1,
+  "price": "48",
+  "last_updated": "2026-02-11 14:30:00"
+}
+```
+
+| Field          | Required | Type   | Description              |
+| -------------- | -------- | ------ | ------------------------ |
+| `crop_id`      | **Yes**  | int    | ID of the crop to update |
+| `name`         | No       | string | New crop name            |
+| `image`        | No       | string | New image path           |
+| `type`         | No       | string | New category             |
+| `price`        | No       | string | Updated market price     |
+| `last_updated` | No       | string | Timestamp of this update |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Crop updated successfully"
+}
+```
+
+---
+
+### DELETE — `POST /delete/crops.php`
+
+Remove a crop listing from the marketplace.
+
+**Request Body:**
+
+```json
+{
+  "crop_id": 1
+}
+```
+
+| Field     | Required | Type | Description              |
+| --------- | -------- | ---- | ------------------------ |
+| `crop_id` | **Yes**  | int  | ID of the crop to delete |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Crop deleted successfully"
+}
+```
+
+---
+
+---
+
+## 3. Devices API
+
+> Manages registered IoT field devices (ESP32-S3 sensor nodes).
+
+### `devices` Table Schema
+
+| Column      | Type                     | Description                             |
+| ----------- | ------------------------ | --------------------------------------- |
+| `device_id` | `int(11)` AUTO_INCREMENT | Primary key                             |
+| `name`      | `text`                   | Device name (e.g., "AGROPAN-001")       |
+| `location`  | `text`                   | Physical deployment location            |
+| `last_ping` | `text`                   | Timestamp of last data transmission     |
+| `owned_by`  | `text`                   | User ID or username of the device owner |
+
+---
+
+### CREATE — `POST /create/devices.php`
+
+Register a new IoT device.
+
+**Request Body:**
+
+```json
+{
+  "name": "AGROPAN-001",
+  "location": "Chitwan, Field Block A",
+  "last_ping": "2026-02-11 10:00:00",
+  "owned_by": "1"
+}
+```
+
+| Field       | Required | Type   | Description                    |
+| ----------- | -------- | ------ | ------------------------------ |
+| `name`      | Yes      | string | Unique device identifier       |
+| `location`  | Yes      | string | Where the device is deployed   |
+| `last_ping` | Yes      | string | Initial registration timestamp |
+| `owned_by`  | Yes      | string | User ID of the device owner    |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Device registered successfully",
+  "data": {
+    "device_id": 1
+  }
+}
+```
+
+---
+
+### READ — `POST /read/devices.php`
+
+Retrieve device(s).
+
+**Request Body (all devices):**
+
+```json
+{}
+```
+
+**Request Body (by owner):**
+
+```json
+{
+  "owned_by": "1"
+}
+```
+
+**Request Body (single device):**
+
+```json
+{
+  "device_id": 1
+}
+```
+
+| Field       | Required | Type   | Description                       |
+| ----------- | -------- | ------ | --------------------------------- |
+| `device_id` | No       | int    | Fetch a specific device           |
+| `owned_by`  | No       | string | Filter devices by owner's user ID |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Devices retrieved",
+  "data": [
+    {
+      "device_id": 1,
+      "name": "AGROPAN-001",
+      "location": "Chitwan, Field Block A",
+      "last_ping": "2026-02-11 10:45:30",
+      "owned_by": "1"
+    }
+  ]
+}
+```
+
+---
+
+### UPDATE — `POST /update/devices.php`
+
+Update device details (typically called when device pings or is relocated).
+
+**Request Body:**
+
+```json
+{
+  "device_id": 1,
+  "location": "Chitwan, Field Block B",
+  "last_ping": "2026-02-11 12:30:00"
+}
+```
+
+| Field       | Required | Type   | Description                          |
+| ----------- | -------- | ------ | ------------------------------------ |
+| `device_id` | **Yes**  | int    | ID of the device to update           |
+| `name`      | No       | string | New device name                      |
+| `location`  | No       | string | New deployment location              |
+| `last_ping` | No       | string | Updated last ping timestamp          |
+| `owned_by`  | No       | string | Transfer ownership to different user |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Device updated successfully"
+}
+```
+
+---
+
+### DELETE — `POST /delete/devices.php`
+
+Unregister a device from the platform.
+
+**Request Body:**
+
+```json
+{
+  "device_id": 1
+}
+```
+
+| Field       | Required | Type | Description                |
+| ----------- | -------- | ---- | -------------------------- |
+| `device_id` | **Yes**  | int  | ID of the device to remove |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Device deleted successfully"
+}
+```
+
+---
+
+---
+
+## 4. Data API (Sensor Readings)
+
+> Stores sensor readings uploaded by IoT devices. This is the core data pipeline — devices POST readings every 30 seconds.
+
+### `data` Table Schema
+
+| Column        | Type                     | Description                          |
+| ------------- | ------------------------ | ------------------------------------ |
+| `data_id`     | `int(11)` AUTO_INCREMENT | Primary key                          |
+| `timestamp`   | `text`                   | When the reading was taken           |
+| `temperature` | `text`                   | Temperature in °C                    |
+| `moisture`    | `text`                   | Soil moisture percentage (0–100%)    |
+| `humidity`    | `text`                   | Air humidity percentage              |
+| `gases`       | `text`                   | Gas level percentage (MQ135 reading) |
+| `nitrogen`    | `text`                   | Nitrogen level reading               |
+| `device`      | `text`                   | Device ID or name that sent the data |
+
+---
+
+### CREATE — `POST /create/data.php`
+
+Upload a new sensor reading. Called by the ESP32-S3 firmware every 30 seconds.
+
+**Request Body:**
+
+```json
+{
+  "timestamp": "2026-02-11 10:45:30",
+  "temperature": "28.5",
+  "moisture": "62.3",
+  "humidity": "78.1",
+  "gases": "12.5",
+  "nitrogen": "45.0",
+  "device": "AGROPAN-001"
+}
+```
+
+| Field         | Required | Type   | Description                        |
+| ------------- | -------- | ------ | ---------------------------------- |
+| `timestamp`   | Yes      | string | ISO timestamp of the reading       |
+| `temperature` | Yes      | string | Temperature in °C                  |
+| `moisture`    | Yes      | string | Soil moisture (0–100%)             |
+| `humidity`    | Yes      | string | Air humidity (0–100%)              |
+| `gases`       | Yes      | string | Gas concentration (%)              |
+| `nitrogen`    | Yes      | string | Nitrogen level                     |
+| `device`      | Yes      | string | Device name or ID sending the data |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Sensor data recorded",
+  "data": {
+    "data_id": 1
+  }
+}
+```
+
+---
+
+### READ — `POST /read/data.php`
+
+Retrieve sensor readings. Can filter by device and/or time range.
+
+**Request Body (latest from a device):**
+
+```json
+{
+  "device": "AGROPAN-001"
+}
+```
+
+**Request Body (all readings):**
+
+```json
+{}
+```
+
+**Request Body (by data ID):**
+
+```json
+{
+  "data_id": 42
+}
+```
+
+| Field     | Required | Type   | Description                       |
+| --------- | -------- | ------ | --------------------------------- |
+| `data_id` | No       | int    | Fetch a specific reading by ID    |
+| `device`  | No       | string | Filter readings by device name/ID |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Sensor data retrieved",
+  "data": [
+    {
+      "data_id": 1,
+      "timestamp": "2026-02-11 10:45:30",
+      "temperature": "28.5",
+      "moisture": "62.3",
+      "humidity": "78.1",
+      "gases": "12.5",
+      "nitrogen": "45.0",
+      "device": "AGROPAN-001"
+    }
+  ]
+}
+```
+
+---
+
+### UPDATE — `POST /update/data.php`
+
+Update an existing sensor reading (used for corrections or recalibration adjustments).
+
+**Request Body:**
+
+```json
+{
+  "data_id": 1,
+  "moisture": "64.0",
+  "temperature": "28.8"
+}
+```
+
+| Field         | Required | Type   | Description                  |
+| ------------- | -------- | ------ | ---------------------------- |
+| `data_id`     | **Yes**  | int    | ID of the reading to update  |
+| `timestamp`   | No       | string | Corrected timestamp          |
+| `temperature` | No       | string | Corrected temperature        |
+| `moisture`    | No       | string | Corrected moisture           |
+| `humidity`    | No       | string | Corrected humidity           |
+| `gases`       | No       | string | Corrected gas level          |
+| `nitrogen`    | No       | string | Corrected nitrogen level     |
+| `device`      | No       | string | Reassign to different device |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Sensor data updated successfully"
+}
+```
+
+---
+
+### DELETE — `POST /delete/data.php`
+
+Delete a sensor reading record.
+
+**Request Body:**
+
+```json
+{
+  "data_id": 1
+}
+```
+
+| Field     | Required | Type | Description                 |
+| --------- | -------- | ---- | --------------------------- |
+| `data_id` | **Yes**  | int  | ID of the reading to delete |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Sensor data deleted successfully"
+}
+```
+
+---
+
+---
+
+## 5. Questions API
+
+> Manages community forum questions posted by farmers and merchants.
+
+### `questions` Table Schema
+
+| Column        | Type                     | Description                                                                                                 |
+| ------------- | ------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `question_id` | `int(11)` AUTO_INCREMENT | Primary key                                                                                                 |
+| `question`    | `text`                   | The question text/body                                                                                      |
+| `type`        | `text`                   | Topic category (e.g., "crop_disease", "market_trends", "weather", "equipment", "success_story", "seasonal") |
+| `asked_by`    | `text`                   | User ID or username of the author                                                                           |
+| `upvotes`     | `text`                   | Comma-separated list of user IDs who upvoted                                                                |
+| `downvotes`   | `text`                   | Comma-separated list of user IDs who downvoted                                                              |
+| `answers`     | `text`                   | Comma-separated list of answer IDs linked to this question                                                  |
+
+---
+
+### CREATE — `POST /create/questions.php`
+
+Post a new question to the community forum.
+
+**Request Body:**
+
+```json
+{
+  "question": "What is the best organic fertilizer for rice paddies in Chitwan?",
+  "type": "crop_disease",
+  "asked_by": "1",
+  "upvotes": "",
+  "downvotes": "",
+  "answers": ""
+}
+```
+
+| Field       | Required | Type   | Description                                    |
+| ----------- | -------- | ------ | ---------------------------------------------- |
+| `question`  | Yes      | string | Full question text                             |
+| `type`      | Yes      | string | Topic category                                 |
+| `asked_by`  | Yes      | string | User ID of the person asking                   |
+| `upvotes`   | No       | string | Initially empty                                |
+| `downvotes` | No       | string | Initially empty                                |
+| `answers`   | No       | string | Initially empty (populated as answers come in) |
+
+**Topic Categories:**
+
+| Value           | Description                              |
+| --------------- | ---------------------------------------- |
+| `crop_disease`  | Crop diseases and pest management        |
+| `market_trends` | Price trends, buying/selling advice      |
+| `weather`       | Weather advisories and seasonal planning |
+| `equipment`     | Tools, machinery, IoT device tips        |
+| `success_story` | Farmer/merchant success stories          |
+| `seasonal`      | Seasonal planting and harvest guides     |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Question posted successfully",
+  "data": {
+    "question_id": 1
+  }
+}
+```
+
+---
+
+### READ — `POST /read/questions.php`
+
+Retrieve forum questions.
+
+**Request Body (all questions):**
+
+```json
+{}
+```
+
+**Request Body (by topic):**
+
+```json
+{
+  "type": "crop_disease"
+}
+```
+
+**Request Body (by user):**
+
+```json
+{
+  "asked_by": "1"
+}
+```
+
+**Request Body (single question):**
+
+```json
+{
+  "question_id": 1
+}
+```
+
+| Field         | Required | Type   | Description                |
+| ------------- | -------- | ------ | -------------------------- |
+| `question_id` | No       | int    | Fetch a specific question  |
+| `type`        | No       | string | Filter by topic category   |
+| `asked_by`    | No       | string | Filter by author's user ID |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Questions retrieved",
+  "data": [
+    {
+      "question_id": 1,
+      "question": "What is the best organic fertilizer for rice paddies in Chitwan?",
+      "type": "crop_disease",
+      "asked_by": "1",
+      "upvotes": "2,5,8",
+      "downvotes": "",
+      "answers": "1,3"
+    }
+  ]
+}
+```
+
+---
+
+### UPDATE — `POST /update/questions.php`
+
+Update a question (edit text, add votes, link new answers).
+
+**Request Body (edit question text):**
+
+```json
+{
+  "question_id": 1,
+  "question": "What is the best organic fertilizer for rice paddies in the Terai region?"
+}
+```
+
+**Request Body (add upvote):**
+
+```json
+{
+  "question_id": 1,
+  "upvotes": "2,5,8,12"
+}
+```
+
+**Request Body (link a new answer):**
+
+```json
+{
+  "question_id": 1,
+  "answers": "1,3,7"
+}
+```
+
+| Field         | Required | Type   | Description                        |
+| ------------- | -------- | ------ | ---------------------------------- |
+| `question_id` | **Yes**  | int    | ID of the question to update       |
+| `question`    | No       | string | Edited question text               |
+| `type`        | No       | string | Changed topic category             |
+| `upvotes`     | No       | string | Updated upvote user ID list        |
+| `downvotes`   | No       | string | Updated downvote user ID list      |
+| `answers`     | No       | string | Updated comma-separated answer IDs |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Question updated successfully"
+}
+```
+
+---
+
+### DELETE — `POST /delete/questions.php`
+
+Delete a forum question (and optionally its linked answers).
+
+**Request Body:**
+
+```json
+{
+  "question_id": 1
+}
+```
+
+| Field         | Required | Type | Description                  |
+| ------------- | -------- | ---- | ---------------------------- |
+| `question_id` | **Yes**  | int  | ID of the question to delete |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Question deleted successfully"
+}
+```
+
+---
+
+---
+
+## 6. Answers API
+
+> Manages replies to community forum questions.
+
+### `answers` Table Schema
+
+| Column        | Type                     | Description                                    |
+| ------------- | ------------------------ | ---------------------------------------------- |
+| `answer_id`   | `int(11)` AUTO_INCREMENT | Primary key                                    |
+| `answer`      | `text`                   | The answer text/body                           |
+| `answered_by` | `text`                   | User ID or username of the responder           |
+| `upvotes`     | `text`                   | Comma-separated list of user IDs who upvoted   |
+| `downvotes`   | `text`                   | Comma-separated list of user IDs who downvoted |
+
+---
+
+### CREATE — `POST /create/answers.php`
+
+Post a new answer to a forum question.
+
+**Request Body:**
+
+```json
+{
+  "answer": "Vermicompost works great for rice paddies. Apply 2-3 tons per hectare before transplanting.",
+  "answered_by": "3",
+  "upvotes": "",
+  "downvotes": ""
+}
+```
+
+| Field         | Required | Type   | Description                     |
+| ------------- | -------- | ------ | ------------------------------- |
+| `answer`      | Yes      | string | Full answer text                |
+| `answered_by` | Yes      | string | User ID of the person answering |
+| `upvotes`     | No       | string | Initially empty                 |
+| `downvotes`   | No       | string | Initially empty                 |
+
+> **Important:** After creating an answer, you should also call `POST /update/questions.php` to append the new `answer_id` to the parent question's `answers` field.
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Answer posted successfully",
+  "data": {
+    "answer_id": 1
+  }
+}
+```
+
+---
+
+### READ — `POST /read/answers.php`
+
+Retrieve answer(s).
+
+**Request Body (single answer):**
+
+```json
+{
+  "answer_id": 1
+}
+```
+
+**Request Body (by user):**
+
+```json
+{
+  "answered_by": "3"
+}
+```
+
+**Request Body (multiple by IDs — useful for loading all answers to a question):**
+
+```json
+{
+  "answer_ids": "1,3,7"
+}
+```
+
+| Field         | Required | Type   | Description                       |
+| ------------- | -------- | ------ | --------------------------------- |
+| `answer_id`   | No       | int    | Fetch a specific answer           |
+| `answered_by` | No       | string | Filter by responder's user ID     |
+| `answer_ids`  | No       | string | Comma-separated IDs (batch fetch) |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Answers retrieved",
+  "data": [
+    {
+      "answer_id": 1,
+      "answer": "Vermicompost works great for rice paddies. Apply 2-3 tons per hectare before transplanting.",
+      "answered_by": "3",
+      "upvotes": "1,5",
+      "downvotes": ""
+    }
+  ]
+}
+```
+
+---
+
+### UPDATE — `POST /update/answers.php`
+
+Edit an answer or update its votes.
+
+**Request Body:**
+
+```json
+{
+  "answer_id": 1,
+  "answer": "Vermicompost works great for rice paddies. Apply 2-3 tons per hectare before transplanting. Mix with cow dung for best results.",
+  "upvotes": "1,5,9"
+}
+```
+
+| Field       | Required | Type   | Description                   |
+| ----------- | -------- | ------ | ----------------------------- |
+| `answer_id` | **Yes**  | int    | ID of the answer to update    |
+| `answer`    | No       | string | Edited answer text            |
+| `upvotes`   | No       | string | Updated upvote user ID list   |
+| `downvotes` | No       | string | Updated downvote user ID list |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Answer updated successfully"
+}
+```
+
+---
+
+### DELETE — `POST /delete/answers.php`
+
+Delete an answer.
+
+**Request Body:**
+
+```json
+{
+  "answer_id": 1
+}
+```
+
+| Field       | Required | Type | Description                |
+| ----------- | -------- | ---- | -------------------------- |
+| `answer_id` | **Yes**  | int  | ID of the answer to delete |
+
+> **Important:** After deleting an answer, you should also call `POST /update/questions.php` to remove the `answer_id` from the parent question's `answers` field.
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Answer deleted successfully"
+}
+```
+
+---
+
+---
+
+## 7. Warnings API (Emergency Alerts)
+
+> Manages admin-broadcast emergency alerts for diseases, pest invasions, landslides, severe weather, etc.
+
+### `warnings` Table Schema
+
+| Column       | Type                     | Description                                                                                  |
+| ------------ | ------------------------ | -------------------------------------------------------------------------------------------- |
+| `warning_id` | `int(11)` AUTO_INCREMENT | Primary key                                                                                  |
+| `title`      | `int(11)`                | Alert title (Note: stored as int in schema — should be treated as text in API)               |
+| `details`    | `int(11)`                | Alert description/details (Note: stored as int in schema — should be treated as text in API) |
+| `timestamp`  | `int(11)`                | When the alert was issued (Unix timestamp)                                                   |
+| `valid_till` | `int(11)`                | When the alert expires (Unix timestamp)                                                      |
+
+> **Schema Note:** The `warnings` table uses `int(11)` for all columns. The `title` and `details` columns are typed as `int` in the original schema but will likely need to be altered to `text` before production use. The `timestamp` and `valid_till` columns store Unix timestamps as integers.
+
+---
+
+### CREATE — `POST /create/warnings.php`
+
+Broadcast a new emergency alert (admin only).
+
+**Request Body:**
+
+```json
+{
+  "title": "Late Blight Alert — Potato Crops",
+  "details": "Phytophthora infestans detected in Solukhumbu district. Farmers with potato crops should apply copper-based fungicide immediately. Inspect fields daily.",
+  "timestamp": 1739260800,
+  "valid_till": 1739865600
+}
+```
+
+| Field        | Required | Type   | Description                                     |
+| ------------ | -------- | ------ | ----------------------------------------------- |
+| `title`      | Yes      | string | Short alert title                               |
+| `details`    | Yes      | string | Full alert description with recommended actions |
+| `timestamp`  | Yes      | int    | Unix timestamp — when the alert was issued      |
+| `valid_till` | Yes      | int    | Unix timestamp — when the alert expires         |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Emergency alert broadcast successfully",
+  "data": {
+    "warning_id": 1
+  }
+}
+```
+
+---
+
+### READ — `POST /read/warnings.php`
+
+Retrieve emergency alerts. Typically used to fetch active (non-expired) alerts.
+
+**Request Body (all alerts):**
+
+```json
+{}
+```
+
+**Request Body (single alert):**
+
+```json
+{
+  "warning_id": 1
+}
+```
+
+| Field        | Required | Type | Description                  |
+| ------------ | -------- | ---- | ---------------------------- |
+| `warning_id` | No       | int  | Fetch a specific alert by ID |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Warnings retrieved",
+  "data": [
+    {
+      "warning_id": 1,
+      "title": "Late Blight Alert — Potato Crops",
+      "details": "Phytophthora infestans detected in Solukhumbu district...",
+      "timestamp": 1739260800,
+      "valid_till": 1739865600
+    }
+  ]
+}
+```
+
+> **Tip:** To show only active alerts on the frontend, filter where `valid_till > current_unix_timestamp`.
+
+---
+
+### UPDATE — `POST /update/warnings.php`
+
+Update an existing alert (extend validity, edit details, etc.).
+
+**Request Body:**
+
+```json
+{
+  "warning_id": 1,
+  "details": "UPDATED: Spread confirmed in Ramechhap and Dolakha districts as well. All potato farmers in eastern hills should take immediate action.",
+  "valid_till": 1740470400
+}
+```
+
+| Field        | Required | Type   | Description                  |
+| ------------ | -------- | ------ | ---------------------------- |
+| `warning_id` | **Yes**  | int    | ID of the alert to update    |
+| `title`      | No       | string | Updated title                |
+| `details`    | No       | string | Updated details/instructions |
+| `timestamp`  | No       | int    | Corrected issue timestamp    |
+| `valid_till` | No       | int    | Extended or shortened expiry |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Warning updated successfully"
+}
+```
+
+---
+
+### DELETE — `POST /delete/warnings.php`
+
+Remove an emergency alert.
+
+**Request Body:**
+
+```json
+{
+  "warning_id": 1
+}
+```
+
+| Field        | Required | Type | Description               |
+| ------------ | -------- | ---- | ------------------------- |
+| `warning_id` | **Yes**  | int  | ID of the alert to delete |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Warning deleted successfully"
+}
+```
+
+---
+
+---
+
+## Error Handling
+
+All endpoints return errors in a consistent format:
+
+```json
+{
+  "success": false,
+  "message": "Description of the error"
+}
+```
+
+### Common Error Messages
+
+| Error                          | Returned When                                                   |
+| ------------------------------ | --------------------------------------------------------------- |
+| `"Missing required fields"`    | A required field is absent from the request body                |
+| `"Invalid JSON input"`         | Request body is not valid JSON                                  |
+| `"Record not found"`           | The specified ID does not exist in the database                 |
+| `"Database connection failed"` | MySQL/MariaDB is not running or credentials are wrong           |
+| `"Duplicate entry"`            | Attempting to insert a record that violates a unique constraint |
+
+---
+
+## Status Codes
+
+| HTTP Code | Meaning               | Used When                                |
+| --------- | --------------------- | ---------------------------------------- |
+| `200`     | OK                    | Successful read, update, or delete       |
+| `201`     | Created               | Successful record creation               |
+| `400`     | Bad Request           | Missing fields, invalid JSON             |
+| `404`     | Not Found             | Requested record ID doesn't exist        |
+| `500`     | Internal Server Error | Database failure or unexpected PHP error |
+
+---
+
+## Quick Reference — All Endpoints
+
+| Endpoint                | Method | Description             |
+| ----------------------- | ------ | ----------------------- |
+| `/create/users.php`     | POST   | Register a new user     |
+| `/read/users.php`       | POST   | Fetch user(s)           |
+| `/update/users.php`     | POST   | Update user details     |
+| `/delete/users.php`     | POST   | Delete a user           |
+| `/create/crops.php`     | POST   | Add a crop listing      |
+| `/read/crops.php`       | POST   | Fetch crop(s)           |
+| `/update/crops.php`     | POST   | Update crop data/price  |
+| `/delete/crops.php`     | POST   | Remove a crop           |
+| `/create/devices.php`   | POST   | Register an IoT device  |
+| `/read/devices.php`     | POST   | Fetch device(s)         |
+| `/update/devices.php`   | POST   | Update device info      |
+| `/delete/devices.php`   | POST   | Unregister a device     |
+| `/create/data.php`      | POST   | Upload sensor reading   |
+| `/read/data.php`        | POST   | Fetch sensor data       |
+| `/update/data.php`      | POST   | Correct a reading       |
+| `/delete/data.php`      | POST   | Delete a reading        |
+| `/create/questions.php` | POST   | Post a forum question   |
+| `/read/questions.php`   | POST   | Fetch question(s)       |
+| `/update/questions.php` | POST   | Edit/vote on a question |
+| `/delete/questions.php` | POST   | Delete a question       |
+| `/create/answers.php`   | POST   | Post an answer          |
+| `/read/answers.php`     | POST   | Fetch answer(s)         |
+| `/update/answers.php`   | POST   | Edit/vote on an answer  |
+| `/delete/answers.php`   | POST   | Delete an answer        |
+| `/create/warnings.php`  | POST   | Broadcast an alert      |
+| `/read/warnings.php`    | POST   | Fetch alert(s)          |
+| `/update/warnings.php`  | POST   | Update an alert         |
+| `/delete/warnings.php`  | POST   | Remove an alert         |
+
+---
+
+_Document version: 1.0 · Last updated: February 2026_
