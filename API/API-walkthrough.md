@@ -20,6 +20,7 @@
 - [7. Warnings API (Emergency Alerts)](#7-warnings-api-emergency-alerts)
 - [8. Emails API (Subscriber Notifications)](#8-emails-api-subscriber-notifications)
 - [Email Notification Triggers](#email-notification-triggers)
+- [9. Authentication API](#9-authentication-api)
 - [Error Handling](#error-handling)
 - [Status Codes](#status-codes)
 
@@ -96,6 +97,7 @@ On error:
 ```
 API/
 ├── database.php         ← Shared PDO connection + helpers
+├── auth.php             ← Login, logout, session management
 ├── create/
 │   ├── users.php
 │   ├── crops.php
@@ -132,6 +134,7 @@ API/
 │   ├── questions.php
 │   ├── answers.php
 │   └── warnings.php
+├── auth.php             ← Authentication (login/logout/status)
 └── API-walkthrough.md   ← This file
 ```
 
@@ -989,7 +992,7 @@ Update a question (edit text, add votes, link new answers).
 
 ### DELETE — `POST /delete/questions.php`
 
-Delete a forum question (and optionally its linked answers).
+Delete a forum question **and all its linked answers**. The question's `answers` field (comma-separated IDs) is parsed, and every referenced answer is deleted automatically in the same request.
 
 **Request Body:**
 
@@ -1003,12 +1006,14 @@ Delete a forum question (and optionally its linked answers).
 | ------------- | -------- | ---- | ---------------------------- |
 | `question_id` | **Yes**  | int  | ID of the question to delete |
 
+> **Cascade:** All answers linked via the question's `answers` field are deleted automatically. No separate call needed.
+
 **Success Response:**
 
 ```json
 {
   "success": true,
-  "message": "Question deleted successfully"
+  "message": "Question and linked answers deleted successfully"
 }
 ```
 
@@ -1154,7 +1159,7 @@ Edit an answer or update its votes.
 
 ### DELETE — `POST /delete/answers.php`
 
-Delete an answer.
+Delete an answer. The `answer_id` is **automatically removed** from the parent question's `answers` field — no separate update call needed.
 
 **Request Body:**
 
@@ -1168,7 +1173,7 @@ Delete an answer.
 | ----------- | -------- | ---- | -------------------------- |
 | `answer_id` | **Yes**  | int  | ID of the answer to delete |
 
-> **Important:** After deleting an answer, you should also call `POST /update/questions.php` to remove the `answer_id` from the parent question's `answers` field.
+> **Auto-cleanup:** The deleted `answer_id` is automatically removed from any parent question's comma-separated `answers` field.
 
 **Success Response:**
 
@@ -1486,7 +1491,7 @@ Update a subscriber's details or toggle their active status (unsubscribe/resubsc
 
 ### DELETE — `POST /delete/emails.php`
 
-Permanently remove a subscriber from the database.
+Permanently remove a subscriber from the database. For a soft-delete (unsubscribe without losing the record), use `POST /update/emails.php` with `{"is_active": 0}` instead.
 
 **Request Body:**
 
@@ -1535,6 +1540,186 @@ The `notifyAllSubscribers()` helper function in `database.php` handles the fan-o
 
 ---
 
+## 9. Authentication API
+
+> Handles user login, logout, and session status checks. Uses PHP native sessions with secure cookie settings. Supports dual-mode: **endpoint mode** (call directly) and **include mode** (other pages include it for session helpers).
+
+### Endpoint — `POST /auth.php`
+
+All auth actions use the same endpoint. The `action` field determines what happens.
+
+---
+
+### Login — `POST /auth.php`
+
+Authenticate a user with username and password. Starts a PHP session with secure cookie settings. Updates `last_login` to the current Unix timestamp.
+
+**Request Body:**
+
+```json
+{
+  "action": "login",
+  "username": "ramesh_farmer",
+  "password": "securePassword123"
+}
+```
+
+| Field      | Required | Type   | Description           |
+| ---------- | -------- | ------ | --------------------- |
+| `action`   | **Yes**  | string | Must be `"login"`     |
+| `username` | **Yes**  | string | The user's login name |
+| `password` | **Yes**  | string | Plain-text password   |
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "user_id": 1,
+    "username": "ramesh_farmer",
+    "name": "Ramesh Thapa",
+    "email": "ramesh@example.com",
+    "type": "farmer",
+    "location": "Chitwan"
+  }
+}
+```
+
+**Error Response (401):**
+
+```json
+{
+  "success": false,
+  "message": "Invalid username or password"
+}
+```
+
+> **Security:** Session ID is regenerated on login to prevent session fixation attacks. Password is verified with `password_verify()` (bcrypt).
+
+---
+
+### Logout — `POST /auth.php`
+
+Destroys the current session and clears the session cookie.
+
+**Request Body:**
+
+```json
+{
+  "action": "logout"
+}
+```
+
+**Success Response:**
+
+```json
+{
+  "success": true,
+  "message": "Logged out successfully"
+}
+```
+
+---
+
+### Status — `POST /auth.php`
+
+Check if a user is currently logged in and retrieve their session data.
+
+**Request Body:**
+
+```json
+{
+  "action": "status"
+}
+```
+
+**Success Response (logged in):**
+
+```json
+{
+  "success": true,
+  "message": "User is logged in",
+  "data": {
+    "user_id": 1,
+    "username": "ramesh_farmer",
+    "name": "Ramesh Thapa",
+    "email": "ramesh@example.com",
+    "type": "farmer",
+    "location": "Chitwan"
+  }
+}
+```
+
+**Response (not logged in):**
+
+```json
+{
+  "success": false,
+  "message": "Not logged in"
+}
+```
+
+---
+
+### Include Mode — Using auth.php in Other Pages
+
+Include `auth.php` in any PHP page to access session helpers without triggering the endpoint logic:
+
+```php
+<?php
+// From a page at the project root:
+require_once __DIR__ . '/API/auth.php';
+
+// From inside the API/ folder:
+require_once __DIR__ . '/auth.php';
+
+// Session is already started. Use the helpers:
+if (isLoggedIn()) {
+    $user = getLoggedInUser();
+    echo "Hello, " . $user['name'];
+}
+
+// Block unauthenticated access (returns 401 JSON and exits):
+requireLogin();
+```
+
+**Available Helper Functions:**
+
+| Function               | Returns | Description                                                            |
+| ---------------------- | ------- | ---------------------------------------------------------------------- | -------------------------------------------------- |
+| `startSecureSession()` | `void`  | Starts session with secure cookie params (safe to call multiple times) |
+| `isLoggedIn()`         | `bool`  | Returns `true` if user is authenticated                                |
+| `getLoggedInUser()`    | `array  | null`                                                                  | Returns user data array or `null` if not logged in |
+| `requireLogin()`       | `void`  | Sends 401 response and exits if not logged in                          |
+
+**Session Data Available (when logged in):**
+
+| Key                      | Type   | Description                |
+| ------------------------ | ------ | -------------------------- |
+| `$_SESSION['user_id']`   | int    | User's primary key         |
+| `$_SESSION['username']`  | string | Login username             |
+| `$_SESSION['name']`      | string | Full display name          |
+| `$_SESSION['email']`     | string | Email address              |
+| `$_SESSION['type']`      | string | `"farmer"` or `"merchant"` |
+| `$_SESSION['location']`  | string | District/location          |
+| `$_SESSION['logged_in']` | bool   | Always `true`              |
+
+**Session Configuration:**
+
+| Setting  | Value              | Description                         |
+| -------- | ------------------ | ----------------------------------- |
+| Name     | `AGROPAN_SESSION`  | Custom session cookie name          |
+| Lifetime | `86400` (24 hours) | Session expires after 24 hours      |
+| HttpOnly | `true`             | JS cannot access the session cookie |
+| SameSite | `Lax`              | CSRF protection                     |
+| Secure   | `false`            | Set `true` in production with HTTPS |
+
+---
+
+---
+
 ## Error Handling
 
 All endpoints return errors in a consistent format:
@@ -1548,65 +1733,73 @@ All endpoints return errors in a consistent format:
 
 ### Common Error Messages
 
-| Error                          | Returned When                                                   |
-| ------------------------------ | --------------------------------------------------------------- |
-| `"Missing required fields"`    | A required field is absent from the request body                |
-| `"Invalid JSON input"`         | Request body is not valid JSON                                  |
-| `"Record not found"`           | The specified ID does not exist in the database                 |
-| `"Database connection failed"` | MySQL/MariaDB is not running or credentials are wrong           |
-| `"Duplicate entry"`            | Attempting to insert a record that violates a unique constraint |
+| Error                            | Returned When                                                   |
+| -------------------------------- | --------------------------------------------------------------- |
+| `"Missing required fields"`      | A required field is absent from the request body                |
+| `"Invalid JSON input"`           | Request body is not valid JSON                                  |
+| `"Record not found"`             | The specified ID does not exist in the database                 |
+| `"Database connection failed"`   | MySQL/MariaDB is not running or credentials are wrong           |
+| `"Duplicate entry"`              | Attempting to insert a record that violates a unique constraint |
+| `"Invalid username or password"` | Login failed — wrong credentials                                |
+| `"Authentication required"`      | Endpoint requires login but no active session exists            |
+| `"Method not allowed"`           | Non-POST request sent to a POST-only endpoint                   |
 
 ---
 
 ## Status Codes
 
-| HTTP Code | Meaning               | Used When                                |
-| --------- | --------------------- | ---------------------------------------- |
-| `200`     | OK                    | Successful read, update, or delete       |
-| `201`     | Created               | Successful record creation               |
-| `400`     | Bad Request           | Missing fields, invalid JSON             |
-| `404`     | Not Found             | Requested record ID doesn't exist        |
-| `500`     | Internal Server Error | Database failure or unexpected PHP error |
+| HTTP Code | Meaning               | Used When                                 |
+| --------- | --------------------- | ----------------------------------------- |
+| `200`     | OK                    | Successful read, update, delete, or login |
+| `201`     | Created               | Successful record creation                |
+| `400`     | Bad Request           | Missing fields, invalid JSON              |
+| `401`     | Unauthorized          | Login failed or session expired           |
+| `404`     | Not Found             | Requested record ID doesn't exist         |
+| `405`     | Method Not Allowed    | Non-POST request to a POST-only endpoint  |
+| `500`     | Internal Server Error | Database failure or unexpected PHP error  |
 
 ---
 
 ## Quick Reference — All Endpoints
 
-| Endpoint                | Method | Description             |
-| ----------------------- | ------ | ----------------------- |
-| `/create/users.php`     | POST   | Register a new user     |
-| `/read/users.php`       | POST   | Fetch user(s)           |
-| `/update/users.php`     | POST   | Update user details     |
-| `/delete/users.php`     | POST   | Delete a user           |
-| `/create/crops.php`     | POST   | Add a crop listing      |
-| `/read/crops.php`       | POST   | Fetch crop(s)           |
-| `/update/crops.php`     | POST   | Update crop data/price  |
-| `/delete/crops.php`     | POST   | Remove a crop           |
-| `/create/devices.php`   | POST   | Register an IoT device  |
-| `/read/devices.php`     | POST   | Fetch device(s)         |
-| `/update/devices.php`   | POST   | Update device info      |
-| `/delete/devices.php`   | POST   | Unregister a device     |
-| `/create/data.php`      | POST   | Upload sensor reading   |
-| `/read/data.php`        | POST   | Fetch sensor data       |
-| `/update/data.php`      | POST   | Correct a reading       |
-| `/delete/data.php`      | POST   | Delete a reading        |
-| `/create/questions.php` | POST   | Post a forum question   |
-| `/read/questions.php`   | POST   | Fetch question(s)       |
-| `/update/questions.php` | POST   | Edit/vote on a question |
-| `/delete/questions.php` | POST   | Delete a question       |
-| `/create/answers.php`   | POST   | Post an answer          |
-| `/read/answers.php`     | POST   | Fetch answer(s)         |
-| `/update/answers.php`   | POST   | Edit/vote on an answer  |
-| `/delete/answers.php`   | POST   | Delete an answer        |
-| `/create/warnings.php`  | POST   | Broadcast an alert      |
-| `/read/warnings.php`    | POST   | Fetch alert(s)          |
-| `/update/warnings.php`  | POST   | Update an alert         |
-| `/delete/warnings.php`  | POST   | Remove an alert         |
-| `/create/emails.php`    | POST   | Subscribe an email      |
-| `/read/emails.php`      | POST   | Fetch subscriber(s)     |
-| `/update/emails.php`    | POST   | Update/unsubscribe      |
-| `/delete/emails.php`    | POST   | Delete a subscriber     |
+| Endpoint                | Method | Description              |
+| ----------------------- | ------ | ------------------------ |
+| `/create/users.php`     | POST   | Register a new user      |
+| `/read/users.php`       | POST   | Fetch user(s)            |
+| `/update/users.php`     | POST   | Update user details      |
+| `/delete/users.php`     | POST   | Delete a user            |
+| `/create/crops.php`     | POST   | Add a crop listing       |
+| `/read/crops.php`       | POST   | Fetch crop(s)            |
+| `/update/crops.php`     | POST   | Update crop data/price   |
+| `/delete/crops.php`     | POST   | Remove a crop            |
+| `/create/devices.php`   | POST   | Register an IoT device   |
+| `/read/devices.php`     | POST   | Fetch device(s)          |
+| `/update/devices.php`   | POST   | Update device info       |
+| `/delete/devices.php`   | POST   | Unregister a device      |
+| `/create/data.php`      | POST   | Upload sensor reading    |
+| `/read/data.php`        | POST   | Fetch sensor data        |
+| `/update/data.php`      | POST   | Correct a reading        |
+| `/delete/data.php`      | POST   | Delete a reading         |
+| `/create/questions.php` | POST   | Post a forum question    |
+| `/read/questions.php`   | POST   | Fetch question(s)        |
+| `/update/questions.php` | POST   | Edit/vote on a question  |
+| `/delete/questions.php` | POST   | Delete a question        |
+| `/create/answers.php`   | POST   | Post an answer           |
+| `/read/answers.php`     | POST   | Fetch answer(s)          |
+| `/update/answers.php`   | POST   | Edit/vote on an answer   |
+| `/delete/answers.php`   | POST   | Delete an answer         |
+| `/create/warnings.php`  | POST   | Broadcast an alert       |
+| `/read/warnings.php`    | POST   | Fetch alert(s)           |
+| `/update/warnings.php`  | POST   | Update an alert          |
+| `/delete/warnings.php`  | POST   | Remove an alert          |
+| `/create/emails.php`    | POST   | Subscribe an email       |
+| `/read/emails.php`      | POST   | Fetch subscriber(s)      |
+| `/update/emails.php`    | POST   | Update/unsubscribe       |
+| `/delete/emails.php`    | POST   | Delete a subscriber      |
+| `/auth.php` (login)     | POST   | Login & start session    |
+| `/auth.php` (logout)    | POST   | Logout & destroy session |
+| `/auth.php` (status)    | POST   | Check session status     |
 
 ---
 
-_Document version: 3.0 · Last updated: February 2026_
+_Document version: 4.0 · Last updated: February 2026_
