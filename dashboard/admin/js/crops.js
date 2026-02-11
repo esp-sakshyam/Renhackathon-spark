@@ -9,19 +9,19 @@
     var allItems = [];
     var deleteId = null;
 
-    var tableBody     = document.getElementById('tableBody');
-    var searchInput   = document.getElementById('searchInput');
-    var filterType    = document.getElementById('filterType');
-    var rowCount      = document.getElementById('rowCount');
-    var addBtn        = document.getElementById('addBtn');
-    var formModal     = document.getElementById('formModal');
-    var modalTitle    = document.getElementById('modalTitle');
-    var modalClose    = document.getElementById('modalClose');
-    var modalCancel   = document.getElementById('modalCancel');
-    var modalSave     = document.getElementById('modalSave');
+    var tableBody = document.getElementById('tableBody');
+    var searchInput = document.getElementById('searchInput');
+    var filterType = document.getElementById('filterType');
+    var rowCount = document.getElementById('rowCount');
+    var addBtn = document.getElementById('addBtn');
+    var formModal = document.getElementById('formModal');
+    var modalTitle = document.getElementById('modalTitle');
+    var modalClose = document.getElementById('modalClose');
+    var modalCancel = document.getElementById('modalCancel');
+    var modalSave = document.getElementById('modalSave');
     var deleteConfirm = document.getElementById('deleteConfirm');
-    var deleteCancel  = document.getElementById('deleteCancel');
-    var deleteOk      = document.getElementById('deleteOk');
+    var deleteCancel = document.getElementById('deleteCancel');
+    var deleteOk = document.getElementById('deleteOk');
 
     function api(endpoint, body) {
         return fetch(API + endpoint, {
@@ -83,8 +83,8 @@
                 '<td style="font-size:var(--text-xs)">' + (c.image || '—') + '</td>' +
                 '<td style="font-size:var(--text-xs);color:var(--color-text-muted)">' + ts(c.last_updated) + '</td>' +
                 '<td><div class="actions-cell">' +
-                    '<button class="btn btn--icon-sm btn--ghost" title="Edit" data-edit="' + c.crop_id + '"><i class="fa-solid fa-pen"></i></button>' +
-                    '<button class="btn btn--icon-sm btn--danger" title="Delete" data-del="' + c.crop_id + '"><i class="fa-solid fa-trash"></i></button>' +
+                '<button class="btn btn--icon-sm btn--ghost" title="Edit" data-edit="' + c.crop_id + '"><i class="fa-solid fa-pen"></i></button>' +
+                '<button class="btn btn--icon-sm btn--danger" title="Delete" data-del="' + c.crop_id + '"><i class="fa-solid fa-trash"></i></button>' +
                 '</div></td></tr>';
         }).join('');
 
