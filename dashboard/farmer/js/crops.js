@@ -69,10 +69,10 @@
     function showEmpty(msg) {
         list.innerHTML =
             '<div style="text-align:center;padding:var(--space-3xl);color:var(--color-text-light);grid-column:1/-1">' +
-                '<div style="font-size:3rem;margin-bottom:var(--space-md)"><i class="fa-solid fa-wheat-awn"></i></div>' +
-                '<p style="font-size:var(--text-lg);font-weight:var(--weight-semibold);margin-bottom:var(--space-xs)">' + (msg || 'No crops listed') + '</p>' +
-                '<p style="margin-bottom:var(--space-lg)">List your first crop on the marketplace.</p>' +
-                '<button class="btn btn--primary btn--sm" onclick="document.getElementById(\'addCropBtn\').click()"><i class="fa-solid fa-plus"></i> List Crop</button>' +
+            '<div style="font-size:3rem;margin-bottom:var(--space-md)"><i class="fa-solid fa-wheat-awn"></i></div>' +
+            '<p style="font-size:var(--text-lg);font-weight:var(--weight-semibold);margin-bottom:var(--space-xs)">' + (msg || 'No crops listed') + '</p>' +
+            '<p style="margin-bottom:var(--space-lg)">List your first crop on the marketplace.</p>' +
+            '<button class="btn btn--primary btn--sm" onclick="document.getElementById(\'addCropBtn\').click()"><i class="fa-solid fa-plus"></i> List Crop</button>' +
             '</div>';
     }
 
@@ -85,14 +85,14 @@
                 '<div class="crop-card__name">' + escapeHtml(c.name) + '</div>' +
                 '<div class="crop-card__price">NPR ' + escapeHtml(String(c.price || 0)) + '/kg</div>' +
                 '<div class="crop-card__meta">' +
-                    '<span class="badge badge--neutral">' + escapeHtml(c.type || 'Other') + '</span>' +
-                    '<span style="margin-left:auto">' + ts(c.last_updated) + '</span>' +
+                '<span class="badge badge--neutral">' + escapeHtml(c.type || 'Other') + '</span>' +
+                '<span style="margin-left:auto">' + ts(c.last_updated) + '</span>' +
                 '</div>' +
                 '<div style="display:flex;gap:var(--space-xs);margin-top:var(--space-md)">' +
-                    '<button class="btn btn--ghost btn--sm" onclick="editCrop(' + c.crop_id + ')"><i class="fa-solid fa-pen"></i> Edit</button>' +
-                    '<button class="btn btn--ghost btn--sm" onclick="deleteCrop(' + c.crop_id + ')" style="color:var(--color-danger)"><i class="fa-solid fa-trash-can"></i> Delete</button>' +
+                '<button class="btn btn--ghost btn--sm" onclick="editCrop(' + c.crop_id + ')"><i class="fa-solid fa-pen"></i> Edit</button>' +
+                '<button class="btn btn--ghost btn--sm" onclick="deleteCrop(' + c.crop_id + ')" style="color:var(--color-danger)"><i class="fa-solid fa-trash-can"></i> Delete</button>' +
                 '</div>' +
-            '</div>';
+                '</div>';
         }).join('');
     }
 
