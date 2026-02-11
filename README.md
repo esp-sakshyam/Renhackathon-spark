@@ -1,8 +1,8 @@
 # 🌾 AgroPan — Smart Agriculture Platform for Nepal
 
-> **"AgroPan is not a website — it's a decision engine with a calm, intelligent interface, powered by real IoT hardware."**
+> **"AgroPan is not just a website — it's an agriculture ecosystem: monitor, trade, discuss, and stay safe — powered by real IoT hardware."**
 
-AgroPan is a Nepal-focused smart agriculture platform combining a **web-based decision simulator** with a **production-ready ESP32-S3 IoT sensor node**. It enables farmers to simulate crop outcomes before planting AND monitor real-time field conditions — soil moisture, air quality, temperature, and humidity.
+AgroPan is a Nepal-focused smart agriculture platform combining a **production-ready ESP32-S3 IoT sensor node** with a **digital marketplace**, **community forum**, and **emergency alert system**. It connects farmers, merchants, and administrators — enabling field monitoring, direct trade, knowledge sharing, and disaster preparedness.
 
 ---
 
@@ -22,7 +22,7 @@ AgroPan is a Nepal-focused smart agriculture platform combining a **web-based de
   - [First Boot & WiFi Setup](#8-first-boot--wifi-provisioning)
   - [Calibration](#9-sensor-calibration)
   - [Troubleshooting](#10-troubleshooting)
-- [Web Simulator](#web-simulator)
+- [Web Platform](#web-platform)
 - [Folder Structure](#folder-structure)
 - [Key Features](#key-features)
 - [Team](#team)
@@ -32,14 +32,16 @@ AgroPan is a Nepal-focused smart agriculture platform combining a **web-based de
 
 ## The Problem
 
-Nepal's 3.4 million farming households make planting decisions based on tradition, intuition, and fragmented information. When a monsoon arrives late, a crop fails, or market prices crash — the damage is already done. There is no accessible tool that lets a Nepali farmer see the probable outcome of their decision *before* they commit, nor any affordable way to monitor field conditions in real time.
+Nepal's 3.4 million farming households face fragmented access to market information, limited direct connections to buyers, no centralized forum for agricultural knowledge, and no affordable way to monitor field conditions or receive early warnings about disasters and disease outbreaks.
 
 ## The Solution
 
-AgroPan is a **two-part smart agriculture platform**:
+AgroPan is a **four-pillar smart agriculture platform**:
 
-1. **Web Decision Simulator** — Models 10 major Nepali crops across 10 districts, projecting yield, risk, and profit before planting.
-2. **IoT Sensor Node (AgroPan Hardware)** — An ESP32-S3 based field device that monitors soil moisture, temperature, humidity, and air quality in real time—sending data to a cloud dashboard.
+1. **IoT Field Device** — An ESP32-S3 based sensor node that monitors soil moisture, temperature, humidity, and air quality, sending data to a web API in real time.
+2. **Marketplace** — Farmers analyze crop prices, list produce, and connect directly with merchants. Both roles have dedicated accounts.
+3. **Community Forum** — A discussion space where registered farmers and merchants share knowledge on diseases, market trends, equipment, and seasonal strategies.
+4. **Emergency Alerts** — Administrators broadcast urgent alerts for disease outbreaks, pest invasions, landslides, and severe weather via the platform, SMS, and email.
 
 ---
 
@@ -48,24 +50,27 @@ AgroPan is a **two-part smart agriculture platform**:
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
 │                        AgroPan Platform                             │
-├─────────────────────────────┬───────────────────────────────────────┤
-│     Web Simulator           │       IoT Sensor Node                 │
-│  (Browser — Zero Deps)      │    (ESP32-S3 Hardware)                │
-│                             │                                       │
-│  • Crop yield modeling      │  • Soil moisture sensing              │
-│  • Risk assessment          │  • Temperature & humidity (DHT22)     │
-│  • Profit projection        │  • Air quality (MQ135 gas sensor)     │
-│  • District-specific data   │  • 1.3" OLED live display             │
-│                             │  • WiFi data upload (JSON API)        │
-│                             │  • Smart threshold alerts             │
-└─────────────────────────────┴───────────────────────────────────────┘
-                                        │
-                                        ▼
-                              ┌───────────────────┐
-                              │   Cloud Server     │
-                              │  /api/upload.php   │
-                              │  (JSON POST)       │
-                              └───────────────────┘
+├──────────────┬──────────────┬──────────────┬────────────────────────┤
+│  IoT Device  │  Marketplace │  Community   │  Emergency Alerts      │
+│  (ESP32-S3)  │              │  Forum       │  (Admin-driven)        │
+│              │              │              │                        │
+│ • Soil       │ • Price      │ • Crop       │ • Disease outbreaks    │
+│   moisture   │   analysis   │   diseases   │ • Pest invasions       │
+│ • Temp &     │ • Produce    │ • Market     │ • Landslides & floods  │
+│   humidity   │   listings   │   trends     │ • Severe weather       │
+│ • Air quality│ • Farmer ↔   │ • Equipment  │                        │
+│ • OLED       │   Merchant   │   tips       │ • Platform alerts      │
+│   display    │   contact    │ • Success    │ • SMS notifications    │
+│ • WiFi data  │              │   stories    │ • Email broadcasts     │
+│   upload     │              │              │                        │
+└──────┬───────┴──────────────┴──────────────┴────────────────────────┘
+       │
+       ▼
+┌───────────────────┐
+│   Cloud Server    │
+│  /api/upload.php  │
+│  (JSON POST)      │
+└───────────────────┘
 ```
 
 ---
@@ -560,7 +565,7 @@ void loop() {}
 
 ---
 
-# Web Simulator
+# Web Platform
 
 ## Design Philosophy
 
@@ -570,7 +575,7 @@ void loop() {}
 | **Data over decoration** | Every element communicates information, nothing is ornamental |
 | **Documentary-style** | Real Nepali agriculture photography, not stock images |
 | **Trustworthy** | Professional typography, policy-grade presentation |
-| **Nepal-first** | Crop names in Nepali script, district-specific data, monsoon modeling |
+| **Nepal-first** | Crop names, district-specific data, Nepali agriculture context |
 
 ---
 
@@ -592,16 +597,13 @@ void loop() {}
 
 ```
 agropan/
-├── index.html                ← Single-page app entry point
+├── index.html                ← Landing page (single-page, static)
 ├── css/
 │   ├── variables.css         ← Design tokens (colors, spacing, type)
-│   ├── base.css              ← CSS reset + element defaults
-│   ├── layout.css            ← Containers, grids, navbar
-│   └── components.css        ← Buttons, cards, sim panel, footer
+│   └── index.css             ← Unified stylesheet (reset → responsive)
 ├── js/
 │   ├── animations.js         ← Scroll reveal (Intersection Observer)
-│   ├── simulate.js           ← Simulation engine + crop/district data
-│   └── main.js               ← Nav, form handling, result rendering
+│   └── main.js               ← Nav, smooth scroll, counter animation
 ├── firmware/
 │   └── AgroPan.ino           ← ESP32-S3 IoT node firmware (Arduino)
 ├── gallery/                  ← Real Nepali agriculture photographs
@@ -612,7 +614,7 @@ agropan/
 
 ---
 
-## How to Run the Web Simulator
+## How to Run the Landing Page
 
 1. **Clone the repository**
    ```bash
@@ -635,23 +637,27 @@ agropan/
 
 ## Key Features
 
-### Simulation Engine
-- **10 crop profiles** — Rice, Maize, Wheat, Millet, Lentil, Mustard, Potato, Sugarcane, Tea, Cardamom (with Nepali names)
-- **10 district profiles** — Each with ecological zone, yield modifier, and risk modifier
-- **Season matching** — Crops planted in their optimal season get better projections; off-season planting increases risk
-- **Probabilistic outputs** — Yield ranges, not single numbers; profit ranges account for price volatility
-
-### Risk Assessment
-- Color-coded risk bars (Green → Amber → Red)
-- Numerical risk score (0–100)
-- Contextual recommendations based on crop × district × season interaction
-
 ### IoT Sensor Node
 - Real-time soil, air, temperature monitoring
 - 1.3" OLED field display with 3-screen rotation
 - Smart threshold alerts (Low Moisture, Heat, Gas)
 - WiFi auto-provisioning (zero-config setup)
 - JSON API data upload every 30 seconds
+
+### Marketplace
+- **Farmer accounts** — list produce, view market prices, connect with buyers
+- **Merchant accounts** — browse listings, compare prices across districts, contact farmers directly
+- Real-time crop price analysis for informed trading decisions
+
+### Community Forum
+- 6 topic categories: Crop Diseases, Market Trends, Weather Advisories, Equipment Tips, Success Stories, Seasonal Guides
+- Open to all registered farmers and merchants
+- Knowledge sharing across Nepal's diverse agricultural regions
+
+### Emergency Alerts
+- Admin-broadcast alerts for disease outbreaks, pest invasions, landslides, and severe weather
+- Multi-channel delivery: platform notifications, SMS, and email
+- Color-coded severity levels (Warning, Danger, Info)
 
 ### UI/UX
 - Mobile-first responsive design
